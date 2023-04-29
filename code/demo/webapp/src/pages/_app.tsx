@@ -1,14 +1,14 @@
-import "@/styles/globals.css";
-import type { AppProps } from "next/app";
 import "@/Wheel/App.css";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { getClient } from "@/gql/getApolloClient";
+import "@/styles/globals.css";
+import { ApolloProvider } from "@apollo/client";
+import type { AppProps } from "next/app";
 
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  uri: "/api/graphql",
-});
 
 export default function App({ Component, pageProps }: AppProps) {
+  const client = getClient(pageProps);
+
+  console.log({pageProps})
   return (
     <ApolloProvider client={client}>
       <Component {...pageProps} />

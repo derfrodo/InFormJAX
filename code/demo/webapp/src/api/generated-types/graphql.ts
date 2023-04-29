@@ -16,6 +16,12 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   firstname?: Maybe<Scalars['String']>;
+  wheelParts?: Maybe<Array<Maybe<WheelPart>>>;
+};
+
+export type WheelPart = {
+  __typename?: 'WheelPart';
+  name?: Maybe<Scalars['String']>;
 };
 
 
@@ -92,6 +98,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  WheelPart: ResolverTypeWrapper<WheelPart>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -99,13 +106,21 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Query: {};
   String: Scalars['String'];
+  WheelPart: WheelPart;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   firstname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  wheelParts?: Resolver<Maybe<Array<Maybe<ResolversTypes['WheelPart']>>>, ParentType, ContextType>;
+};
+
+export type WheelPartResolvers<ContextType = any, ParentType extends ResolversParentTypes['WheelPart'] = ResolversParentTypes['WheelPart']> = {
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
+  WheelPart?: WheelPartResolvers<ContextType>;
 };
 

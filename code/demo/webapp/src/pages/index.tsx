@@ -1,39 +1,36 @@
+"use client";
+
 import Head from "next/head";
 import App from "@/Wheel/App";
-import { WheelValue, getWheelValues } from "@/Wheel/constants/WHEELVALUES";
+import { getWheelValues } from "@/Wheel/constants/WHEELVALUES";
+import { WheelValue } from "@/Wheel/types/WheelValue";
 
-import { graphql } from '@/gql/gql';
+import { graphql } from "@/gql/generated-client/gql";
 import { useQuery } from "@apollo/client";
+import { getClient } from "@/gql/getApolloClient";
+import { AppContext } from "next/app";
 
-export async function getServerSideProps(context: any) {
-  // console.log("context", context)
-  // const res = await fetch(`api/hello`)
-  // const data = await res.json()
+export async function getServerSideProps(context: AppContext["ctx"]) {
+  const c = getClient();
+
+  const dat = await c.query({ query: getme });
+  const dat2 = await c.query({ query: getwheels });
+  console.log({ dat, e: c.extract() });
 
   const data = getWheelValues();
 
-  if (!data) {
-    return {
-      notFound: true,
-    };
-  }
-
   return {
-    props: { data }, // will be passed to the page component as props
+    props: { data, state: c.extract() }, // will be passed to the page component as props
   };
 }
 
-// export async function getStaticProps () {
-//   // `getStaticProps` is executed on the server side.
-//   const article = await getWheelValues()
-//   return {
-//     props: {
-//       fallback: {
-//         '/api/article': article
-//       }
-//     }
-//   }
-// }
+const getwheels = graphql(`
+  query wp {
+    wheelParts {
+      name
+    }
+  }
+`);
 
 const getme = graphql(/* GraphQL */ `
   query query {
@@ -44,7 +41,9 @@ const getme = graphql(/* GraphQL */ `
 export default function Home(props: { data: WheelValue[] }) {
   const { data } = props;
 
-  const {data:d} = useQuery(getme);
+  // const {data:d, loading, called} = useQuery(getme,{context:{revalidate:5}});
+  const { data: d, loading, called, client } = useQuery(getme);
+  console.log({ d, loading, called, state: client.extract() });
 
   return (
     <>
@@ -55,6 +54,7 @@ export default function Home(props: { data: WheelValue[] }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <span>{d?.as}</span>
         <App values={data} />
       </main>
     </>

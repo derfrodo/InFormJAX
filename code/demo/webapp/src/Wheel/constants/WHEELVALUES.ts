@@ -1,15 +1,6 @@
+// import Materna from "./../assets/Bild1.png";
+import { WheelValue } from "../types/WheelValue";
 
-import { StaticImageData } from "next/image";
-import Materna from "./../assets/Bild1.png";
-
-export type WheelValue = {
-  name: string;
-  win: boolean;
-  imageText?: string | null;
-  imagePath?: StaticImageData | string | null;
-  image: null | HTMLImageElement;
-  winText?: string;
-};
 export const getWheelValues: () => WheelValue[] = () =>
   WHEELVALUES.length !== 0 ? WHEELVALUES : MATERNA_WHEEL_VALUES;
 
@@ -18,7 +9,7 @@ const MATERNA_WHEEL_VALUES: WheelValue[] = [
     name: "Materna",
     winText: "Du bist ein Maternagewinn!",
     win: true,
-    imagePath: Materna,
+    // imagePath: Materna,
     image: null,
   },
   { name: "Leider nix", win: false, imageText: "😢", image: null },

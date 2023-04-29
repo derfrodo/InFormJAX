@@ -22,7 +22,7 @@ const config: CodegenConfig = {
         "typescript-resolvers",
       ],
     },
-    './src/gql/': {
+    './src/gql/generated-client/': {
       preset: 'client',
     },
   },

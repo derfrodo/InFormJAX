@@ -16,12 +16,17 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   firstname?: Maybe<Scalars['String']>;
-  wheelParts?: Maybe<Array<Maybe<WheelPart>>>;
+  wheelParts?: Maybe<Array<WheelPart>>;
 };
 
 export type WheelPart = {
   __typename?: 'WheelPart';
-  name?: Maybe<Scalars['String']>;
+  image?: Maybe<Scalars['String']>;
+  imagePath?: Maybe<Scalars['String']>;
+  imageText?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  win: Scalars['Boolean'];
+  winText?: Maybe<Scalars['String']>;
 };
 
 
@@ -111,11 +116,16 @@ export type ResolversParentTypes = {
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   firstname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  wheelParts?: Resolver<Maybe<Array<Maybe<ResolversTypes['WheelPart']>>>, ParentType, ContextType>;
+  wheelParts?: Resolver<Maybe<Array<ResolversTypes['WheelPart']>>, ParentType, ContextType>;
 };
 
 export type WheelPartResolvers<ContextType = any, ParentType extends ResolversParentTypes['WheelPart'] = ResolversParentTypes['WheelPart']> = {
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  imagePath?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  imageText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  win?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  winText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

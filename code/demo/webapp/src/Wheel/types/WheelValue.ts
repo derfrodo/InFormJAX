@@ -7,5 +7,5 @@ export type WheelValue = {
   imageText?: string | null;
   imagePath?: StaticImageData | string | null;
   image: null | HTMLImageElement;
-  winText?: string;
+  winText?: string|null
 };

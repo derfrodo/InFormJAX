@@ -22,17 +22,17 @@ const GRAPHICXWIDTH = 563;
 const GRAPHICXHEIGHT = 764;
 const GRAPHICXASPECT = GRAPHICXWIDTH / GRAPHICXHEIGHT;
 
-function useInitializeImages(values: WheelValue[]) {
+function useInitializeImages(values: Omit<WheelValue, "image">[]) {
   const [needUpdate, setNeedUpdate] = useState(true);
   useEffect(() => {
     for (const value of values) {
       const { imagePath } = value;
       if (imagePath) {
-        value.image = new Image();
-        value.image.src = imagePath.toString();
-        value.image.onload = () => {
-          setTimeout(() => setNeedUpdate(true), 500);
-        };
+        // value.image = new Image();
+        // value.image.src = imagePath.toString();
+        // value.image.onload = () => {
+        //   setTimeout(() => setNeedUpdate(true), 500);
+        // };
       }
     }
   }, [values]);
@@ -79,7 +79,7 @@ function isWinner(winChance: number) {
   return randomResult < winChance;
 }
 
-function App(props: { values: WheelValue[] }) {
+function App(props: { values: Omit<WheelValue, "image">[] }) {
   const [lastWin, setLastWin] = useState(0);
   const [roundDone, setRoundDone] = useState(true);
   const [playing, setPlaying] = useState(false);
@@ -401,47 +401,49 @@ function App(props: { values: WheelValue[] }) {
         {/* Lights */}
         {lightbulbs}
 
-        {bulbWidth && extraLights.map((point, index) => {
-          return (
-            <div
-              className="bulb"
-              key={`lighte_${index}_${point.x}_${point.y}`}
-              style={{
-                position: "absolute",
-                right: `calc(26vw - ${point.x}%)`,
-                top: `calc(26vw / ${GRAPHICXASPECT} - ${point.y}vw / ${GRAPHICXASPECT})`,
-                animationDelay: playing
-                  ? "initial"
-                  : `${offsett * (index % 2)}s`,
-                animationDuration: `${duration}s`,
-                animationName: "lightonoff",
-                animationIterationCount: "infinite",
-                animationTimingFunction: "linear",
-              }}
-            ></div>
-          );
-        })}
+        {bulbWidth &&
+          extraLights.map((point, index) => {
+            return (
+              <div
+                className="bulb"
+                key={`lighte_${index}_${point.x}_${point.y}`}
+                style={{
+                  position: "absolute",
+                  right: `calc(26vw - ${point.x}%)`,
+                  top: `calc(26vw / ${GRAPHICXASPECT} - ${point.y}vw / ${GRAPHICXASPECT})`,
+                  animationDelay: playing
+                    ? "initial"
+                    : `${offsett * (index % 2)}s`,
+                  animationDuration: `${duration}s`,
+                  animationName: "lightonoff",
+                  animationIterationCount: "infinite",
+                  animationTimingFunction: "linear",
+                }}
+              ></div>
+            );
+          })}
 
-        {bulbWidth && logoLights.map((point, index) => {
-          return (
-            <div
-              className="bulb"
-              key={`lightlogo_${index}`}
-              style={{
-                position: "absolute",
-                left: `calc(2vw + ${point.x}rem)`,
-                top: `${point.y}rem`,
-                animationDelay: playing
-                  ? "initial"
-                  : `${offsett * (index % 2)}s`,
-                animationDuration: `${duration}s`,
-                animationName: "lightonoff",
-                animationIterationCount: "infinite",
-                animationTimingFunction: "linear",
-              }}
-            ></div>
-          );
-        })}
+        {bulbWidth &&
+          logoLights.map((point, index) => {
+            return (
+              <div
+                className="bulb"
+                key={`lightlogo_${index}`}
+                style={{
+                  position: "absolute",
+                  left: `calc(2vw + ${point.x}rem)`,
+                  top: `${point.y}rem`,
+                  animationDelay: playing
+                    ? "initial"
+                    : `${offsett * (index % 2)}s`,
+                  animationDuration: `${duration}s`,
+                  animationName: "lightonoff",
+                  animationIterationCount: "infinite",
+                  animationTimingFunction: "linear",
+                }}
+              ></div>
+            );
+          })}
 
         {/* Controls */}
         <button
@@ -620,7 +622,7 @@ function AppWheel(props: {
   onClick: any;
   playing: boolean;
   lastWin: number;
-  values: WheelValue[];
+  values: Omit<WheelValue, "image">[];
 }) {
   const devicePixelRatio = useDevicePixelRatio();
   const { onClick, playing, values, lastWin } = props;

@@ -1,33 +1,33 @@
 "use client";
 
-import Head from "next/head";
 import App from "@/Wheel/App";
-import { getWheelValues } from "@/Wheel/constants/WHEELVALUES";
-import { WheelValue } from "@/Wheel/types/WheelValue";
+import Head from "next/head";
 
 import { graphql } from "@/gql/generated-client/gql";
-import { useQuery } from "@apollo/client";
 import { getClient } from "@/gql/getApolloClient";
+import { useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient();
 
-  const dat = await c.query({ query: getme });
-  const dat2 = await c.query({ query: getwheels });
-  console.log({ dat, e: c.extract() });
-
-  const data = getWheelValues();
+  // caching
+  await c.query({ query: getme });
+  await c.query({ query: getwheels });
 
   return {
-    props: { data, state: c.extract() }, // will be passed to the page component as props
+    props: { state: c.extract() }, // will be passed to the page component as props
   };
 }
 
 const getwheels = graphql(`
-  query wp {
+  query wheelParts {
     wheelParts {
       name
+      imagePath
+      imageText
+      win
+      winText
     }
   }
 `);
@@ -38,12 +38,10 @@ const getme = graphql(/* GraphQL */ `
   }
 `);
 
-export default function Home(props: { data: WheelValue[] }) {
-  const { data } = props;
-
+export default function Home() {
   // const {data:d, loading, called} = useQuery(getme,{context:{revalidate:5}});
-  const { data: d, loading, called, client } = useQuery(getme);
-  console.log({ d, loading, called, state: client.extract() });
+  const { data, loading, called, client } = useQuery(getwheels);
+  // console.log({ d, loading, called, state: client.extract() });
 
   return (
     <>
@@ -54,8 +52,7 @@ export default function Home(props: { data: WheelValue[] }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <span>{d?.as}</span>
-        <App values={data} />
+        <App values={data?.wheelParts ?? []} />
       </main>
     </>
   );

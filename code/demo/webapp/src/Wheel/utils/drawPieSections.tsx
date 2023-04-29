@@ -8,7 +8,7 @@ import { getDevicePixelRatio } from "./getDevicePixelRatio";
 export function drawPieSections(
   context: CanvasRenderingContext2D,
   canvas: HTMLCanvasElement,
-  values: WheelValue[],
+  values: Omit<WheelValue,"image">[],
   devicePixelRatio: number
 ) {
   context.clearRect(0, 0, canvas.width, canvas.height);
@@ -46,7 +46,7 @@ export function drawPieSections(
     const data = values[index];
     context.fillStyle = "#000000";
 
-    if (!data.image && data.imageText) {
+    if (data.imageText) {
       const fontSize = RADIUS / 4;
       context.font = `${fontSize}px arial`;
 
@@ -59,24 +59,26 @@ export function drawPieSections(
       context.translate(-measure.width / 2, 0);
 
       context.fillText(data.imageText, 0, 0);
-    } else if (data.image) {
-      context.imageSmoothingEnabled = true;
-      context.imageSmoothingQuality = "high";
-      context.translate(
-        RADIUS * devicePixelRatio -
-          (20 + RADIUS / 8) * devicePixelRatio,
-        -(RADIUS / 16) * devicePixelRatio
-      );
-      context.rotate(Math.PI / 2);
+    } 
+    // else if (data.image) {
+    //   context.imageSmoothingEnabled = true;
+    //   context.imageSmoothingQuality = "high";
+    //   context.translate(
+    //     RADIUS * devicePixelRatio -
+    //       (20 + RADIUS / 8) * devicePixelRatio,
+    //     -(RADIUS / 16) * devicePixelRatio
+    //   );
+    //   context.rotate(Math.PI / 2);
 
-      context.drawImage(
-        data.image,
-        0,
-        0,
-        (RADIUS / 8) * devicePixelRatio,
-        (RADIUS / 8) * devicePixelRatio
-      );
-    } else if (!data.image && !data.imageText) {
+    //   context.drawImage(
+    //     data.image,
+    //     0,
+    //     0,
+    //     (RADIUS / 8) * devicePixelRatio,
+    //     (RADIUS / 8) * devicePixelRatio
+    //   );
+    // }
+     else  {
       context.fillText(
         data.name,
         RADIUS * devicePixelRatio - 160 * devicePixelRatio,

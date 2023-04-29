@@ -208,7 +208,7 @@ function App(props: { values: WheelValue[] }) {
     ];
   }, []);
 
-  const duration = useMemo(() => (!playing ? 0.75 : 0.4), [playing]);
+  const duration = useMemo(() => (!playing ? 1.5 : 0.5), [playing]);
   const offsett = useMemo(() => duration / 2, [duration]);
 
   const lastItem = useMemo(() => {
@@ -229,7 +229,7 @@ function App(props: { values: WheelValue[] }) {
     }
   };
 
-  const l = useMemo(
+  const lightbulbs = useMemo(
     () =>
       lights.map((point, index) => {
         return (
@@ -399,9 +399,9 @@ function App(props: { values: WheelValue[] }) {
         </div>
 
         {/* Lights */}
-        {l}
+        {lightbulbs}
 
-        {extraLights.map((point, index) => {
+        {bulbWidth && extraLights.map((point, index) => {
           return (
             <div
               className="bulb"
@@ -422,7 +422,7 @@ function App(props: { values: WheelValue[] }) {
           );
         })}
 
-        {logoLights.map((point, index) => {
+        {bulbWidth && logoLights.map((point, index) => {
           return (
             <div
               className="bulb"

@@ -5,19 +5,30 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLList,
+  GraphQLBoolean,
+  GraphQLNonNull,
 } from "graphql";
 
 const wheelPartType = new GraphQLObjectType<WheelValue>({
   fields: {
     name: {
-      type: GraphQLString,
-      // async resolve(source, context, args) {
-      //   console.log(source.name);
-      //   await new Promise<void>((r) => setTimeout(() => r(), 2000));
-      //   return source.name;
-      // },
+      type: new GraphQLNonNull(GraphQLString),
     },
-
+    win: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    imageText: {
+      type: GraphQLString,
+    },
+    imagePath: {
+      type: GraphQLString,
+    },
+    winText: {
+      type: GraphQLString,
+    },
+    image: {
+      type: GraphQLString,
+    },
     // win: boolean;
     // imageText?: string | null;
     // imagePath?: StaticImageData | string | null;
@@ -32,7 +43,7 @@ export const schema = new GraphQLSchema({
     name: "Query",
     fields: {
       wheelParts: {
-        type: new GraphQLList(wheelPartType),
+        type: new GraphQLList(new GraphQLNonNull( wheelPartType)),
         async resolve() {
           await new Promise<void>((r) => setTimeout(() => r(), 2000));
           return getWheelValues();

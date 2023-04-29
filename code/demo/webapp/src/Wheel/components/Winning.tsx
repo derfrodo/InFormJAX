@@ -16,7 +16,7 @@ export const Winning = (props: {
   hide: boolean;
   selectedIndex: number;
   onWinningShowFinished: (index: number) => any | Promise<any>;
-  values: WheelValue[];
+  values: Omit<WheelValue,"image">[];
 }) => {
   const {
     selectedIndex,

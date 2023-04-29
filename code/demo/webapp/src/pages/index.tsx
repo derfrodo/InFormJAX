@@ -33,8 +33,8 @@ const getwheels = graphql(`
 `);
 
 const getme = graphql(/* GraphQL */ `
-  query query {
-    as: firstname
+  query me {
+    firstname
   }
 `);
 

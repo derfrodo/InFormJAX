@@ -1,0 +1,1 @@
+export const SPIN_INNER_DURATION = 6000;

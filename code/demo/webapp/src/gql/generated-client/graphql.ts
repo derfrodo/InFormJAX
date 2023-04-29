@@ -17,7 +17,18 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   firstname?: Maybe<Scalars['String']>;
+  wheelParts?: Maybe<Array<Maybe<WheelPart>>>;
 };
+
+export type WheelPart = {
+  __typename?: 'WheelPart';
+  name?: Maybe<Scalars['String']>;
+};
+
+export type WpQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type WpQuery = { __typename?: 'Query', wheelParts?: Array<{ __typename?: 'WheelPart', name?: string | null } | null> | null };
 
 export type QueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -25,4 +36,5 @@ export type QueryQueryVariables = Exact<{ [key: string]: never; }>;
 export type QueryQuery = { __typename?: 'Query', as?: string | null };
 
 
+export const WpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"wp"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wheelParts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<WpQuery, WpQueryVariables>;
 export const QueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"query"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"as"},"name":{"kind":"Name","value":"firstname"}}]}}]} as unknown as DocumentNode<QueryQuery, QueryQueryVariables>;

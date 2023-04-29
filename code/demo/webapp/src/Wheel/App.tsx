@@ -10,7 +10,7 @@ import { LIGHTSINCIRCLE } from "./constants/LIGHTSINCIRCLE";
 import { RADIUS } from "./constants/RADIUS";
 import { SPIN_DURATION } from "./constants/SPIN_DURATION";
 import { SPIN_INNER_DURATION } from "./constants/SPIN_INNER_DURATION";
-import { WheelValue } from "./constants/WHEELVALUES";
+import { WheelValue } from "./types/WheelValue";
 import { CHECK_CHANCE, WIN_CHANCE } from "./constants/WIN_CHANCE";
 import { anglePart } from "./constants/anglePart";
 import { drawPieSections } from "./utils/drawPieSections";

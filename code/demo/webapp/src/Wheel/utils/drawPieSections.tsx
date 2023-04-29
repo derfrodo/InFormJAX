@@ -1,5 +1,5 @@
 import { RADIUS } from "../constants/RADIUS";
-import { WheelValue } from "../constants/WHEELVALUES";
+import { WheelValue } from "../types/WheelValue";
 import { WHEELPARTS } from "../constants/WHEELPARTS";
 import { anglePart } from "../constants/anglePart";
 import { anglePartHalf } from "../constants/anglePartHalf";

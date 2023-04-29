@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useReward } from "react-rewards";
 import { RADIUS } from "../constants/RADIUS";
-import { WheelValue } from "../constants/WHEELVALUES";
+import { WheelValue } from "../types/WheelValue";
 
 // import cheer from "./../assets/cheer.mp3";
 // import lost from "./../assets/lost.mp3";

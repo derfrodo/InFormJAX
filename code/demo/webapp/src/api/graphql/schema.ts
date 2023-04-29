@@ -43,7 +43,7 @@ export const schema = new GraphQLSchema({
     name: "Query",
     fields: {
       wheelParts: {
-        type: new GraphQLList(new GraphQLNonNull( wheelPartType)),
+        type: new GraphQLList(new GraphQLNonNull(wheelPartType)),
         async resolve() {
           await new Promise<void>((r) => setTimeout(() => r(), 2000));
           return getWheelValues();

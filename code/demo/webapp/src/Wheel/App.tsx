@@ -24,18 +24,6 @@ const GRAPHICXASPECT = GRAPHICXWIDTH / GRAPHICXHEIGHT;
 
 function useInitializeImages(values: WheelValue[]) {
   const [needUpdate, setNeedUpdate] = useState(true);
-  useEffect(() => {
-    for (const value of values) {
-      const { imagePath } = value;
-      if (imagePath) {
-        // value.image = new Image();
-        // value.image.src = imagePath.toString();
-        // value.image.onload = () => {
-        //   setTimeout(() => setNeedUpdate(true), 500);
-        // };
-      }
-    }
-  }, [values]);
 
   return useMemo(() => ({ needUpdate, setNeedUpdate }), [needUpdate]);
 }
@@ -160,15 +148,15 @@ function App(props: { values: WheelValue[] }) {
     return bulbWidth === null
       ? []
       : new Array(LIGHTSINCIRCLE)
-          .fill(1)
-          .map((item, index) => stepsize * index)
-          .map((angle) =>
-            getPosition(
-              RADIUS,
-              angle,
-              -getAngleForRadianMeasure(bulbWidth / 2, RADIUS)
-            )
-          );
+        .fill(1)
+        .map((item, index) => stepsize * index)
+        .map((angle) =>
+          getPosition(
+            RADIUS,
+            angle,
+            -getAngleForRadianMeasure(bulbWidth / 2, RADIUS)
+          )
+        );
   }, [bulbWidth]);
 
   const extraLights = useMemo(() => {
@@ -246,8 +234,8 @@ function App(props: { values: WheelValue[] }) {
               animationDelay: playing
                 ? "initial"
                 : !roundDone && lastItem?.win
-                ? `${(duration / LIGHTSINCIRCLE) * index}s`
-                : `${offsett * (index % 2)}s`,
+                  ? `${(duration / LIGHTSINCIRCLE) * index}s`
+                  : `${offsett * (index % 2)}s`,
               animationDuration: `${duration}s`,
               animationName: "lightonoff",
               animationIterationCount: "infinite",

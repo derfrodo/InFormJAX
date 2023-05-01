@@ -37,7 +37,7 @@ export type QueryWheelPartsArgs = {
 
 export type WheelPart = {
   __typename?: 'WheelPart';
-  disabled?: Maybe<Scalars['Boolean']>;
+  disabled: Scalars['Boolean'];
   image?: Maybe<Scalars['String']>;
   imagePath?: Maybe<Scalars['String']>;
   imageText?: Maybe<Scalars['String']>;
@@ -149,7 +149,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type WheelPartResolvers<ContextType = any, ParentType extends ResolversParentTypes['WheelPart'] = ResolversParentTypes['WheelPart']> = {
-  disabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  disabled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   imagePath?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   imageText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

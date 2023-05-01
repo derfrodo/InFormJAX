@@ -37,7 +37,7 @@ export type QueryWheelPartsArgs = {
 
 export type WheelPart = {
   __typename?: 'WheelPart';
-  disabled?: Maybe<Scalars['Boolean']>;
+  disabled: Scalars['Boolean'];
   image?: Maybe<Scalars['String']>;
   imagePath?: Maybe<Scalars['String']>;
   imageText?: Maybe<Scalars['String']>;
@@ -60,14 +60,14 @@ export type WheelPartsQueryVariables = Exact<{
 }>;
 
 
-export type WheelPartsQuery = { __typename?: 'Query', wheelParts?: Array<{ __typename?: 'WheelPart', name: string, imagePath?: string | null, imageText?: string | null, win: boolean, winText?: string | null, disabled?: boolean | null }> | null };
+export type WheelPartsQuery = { __typename?: 'Query', wheelParts?: Array<{ __typename?: 'WheelPart', name: string, imagePath?: string | null, imageText?: string | null, win: boolean, winText?: string | null, disabled: boolean }> | null };
 
 export type ToggleDisableWheelValueMutationVariables = Exact<{
   name: Scalars['String'];
 }>;
 
 
-export type ToggleDisableWheelValueMutation = { __typename?: 'Mutation', toggleDisableWheelValue?: { __typename?: 'WheelPart', name: string, imagePath?: string | null, imageText?: string | null, win: boolean, winText?: string | null, disabled?: boolean | null } | null };
+export type ToggleDisableWheelValueMutation = { __typename?: 'Mutation', toggleDisableWheelValue?: { __typename?: 'WheelPart', name: string, imagePath?: string | null, imageText?: string | null, win: boolean, winText?: string | null, disabled: boolean } | null };
 
 
 export const MeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstname"}}]}}]} as unknown as DocumentNode<MeQuery, MeQueryVariables>;

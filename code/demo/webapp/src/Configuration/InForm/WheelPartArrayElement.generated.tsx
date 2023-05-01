@@ -21,7 +21,7 @@ export const WheelPartArrayElementTable = (props: {
         </tr>
     </thead>
     <tbody>
-{        props.items.map((item, index)=>
+        {props.items.map((item, index)=>
             <tr key={index} onClick={() => props.onRowClicked(item)}>
                     <BoolCell
                         item={item}
@@ -53,7 +53,7 @@ export const WheelPartArrayElementTable = (props: {
                         name={"winText"}
                         value={item.winText}
                     />
-            </tr>)
-}    </tbody>
+            </tr>)}
+    </tbody>
     </table>;
 }

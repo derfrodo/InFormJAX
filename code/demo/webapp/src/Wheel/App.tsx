@@ -22,7 +22,7 @@ const GRAPHICXWIDTH = 563;
 const GRAPHICXHEIGHT = 764;
 const GRAPHICXASPECT = GRAPHICXWIDTH / GRAPHICXHEIGHT;
 
-function useInitializeImages(values: Omit<WheelValue, "image">[]) {
+function useInitializeImages(values: WheelValue[]) {
   const [needUpdate, setNeedUpdate] = useState(true);
   useEffect(() => {
     for (const value of values) {
@@ -81,7 +81,7 @@ function isWinner(winChance: number) {
   return randomResult < winChance;
 }
 
-function App(props: { values: Omit<WheelValue, "image">[] }) {
+function App(props: { values: WheelValue[] }) {
   const [lastWin, setLastWin] = useState(0);
   const [roundDone, setRoundDone] = useState(true);
   const [playing, setPlaying] = useState(false);
@@ -624,7 +624,7 @@ function AppWheel(props: {
   onClick: any;
   playing: boolean;
   lastWin: number;
-  values: Omit<WheelValue, "image">[];
+  values: WheelValue[];
 }) {
   const devicePixelRatio = useDevicePixelRatio();
   const { onClick, playing, values, lastWin } = props;

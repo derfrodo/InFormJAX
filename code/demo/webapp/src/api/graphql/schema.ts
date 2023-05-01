@@ -1,14 +1,15 @@
-import type { WheelValue } from "../../Wheel/types/WheelValue";
-import { getWheelValues } from "../../Wheel/constants/WHEELVALUES";
 import {
-  GraphQLSchema,
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLList,
   GraphQLBoolean,
+  GraphQLInputObjectType,
+  GraphQLList,
   GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLString,
 } from "graphql";
-import { resolve } from "path";
+import { getWheelValues } from "../../Wheel/constants/WHEELVALUES";
+import type { WheelValue } from "../../Wheel/types/WheelValue";
+import { WheelPartFilter } from "../generated-types/graphql";
 
 const wheelPartType = new GraphQLObjectType<WheelValue>({
   fields: {
@@ -32,15 +33,24 @@ const wheelPartType = new GraphQLObjectType<WheelValue>({
     },
     disabled: {
       type: GraphQLBoolean,
-      resolve: (context) => {
-        return disabledWheelValues.some((item) => item.name === context.name);
+      resolve: (source) => {
+        console.log(disabledWheelValues);
+        return disabledWheelValues.some((item) => item.name === source.name);
       },
     },
   },
   name: "WheelPart",
 });
 
-const disabledWheelValues: WheelValue[] = [...getWheelValues()];
+const disabledWheelValues: WheelValue[] = [];
+
+const getFilteredWheelParts = async (filter: WheelPartFilter) => {
+  return (await getWheelValues()).filter((value) =>
+    filter.disabled === null || filter.disabled
+      ? disabledWheelValues.some((v) => v.name === value.name)
+      : disabledWheelValues.every((v) => v.name !== value.name)
+  );
+};
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -48,16 +58,31 @@ export const schema = new GraphQLSchema({
     fields: {
       wheelParts: {
         type: new GraphQLList(new GraphQLNonNull(wheelPartType)),
-        async resolve() {
-          await new Promise<void>((r) => setTimeout(() => r(), 2000));
-          return getWheelValues();
+
+        args: {
+          ["filter"]: {
+            type: new GraphQLInputObjectType({
+              name: "wheelPartFilter",
+              fields: {
+                disabled: {
+                  type: GraphQLBoolean,
+                },
+              },
+            }),
+          },
+        },
+
+        async resolve(source, args, context, info) {
+          const filter: WheelPartFilter = args["filter"];
+          await new Promise<void>((r) => setTimeout(() => r(), 100));
+          return !filter ? getWheelValues() : getFilteredWheelParts(filter);
         },
       },
 
       firstname: {
         type: GraphQLString,
         async resolve() {
-          await new Promise<void>((r) => setTimeout(() => r(), 2000));
+          await new Promise<void>((r) => setTimeout(() => r(), 100));
 
           return "Stefan";
         },
@@ -74,10 +99,12 @@ export const schema = new GraphQLSchema({
             type: new GraphQLNonNull(GraphQLString),
           },
         },
-        resolve: (source, args, context, info) => {
+        resolve: async (source, args, context, info) => {
           const name = args["name"];
 
-          const v = getWheelValues().find((value) => value.name === name);
+          const v = (await getWheelValues()).find(
+            (value) => value.name === name
+          );
           if (v) {
             const inext = disabledWheelValues.findIndex(
               (value) => value.name === v.name

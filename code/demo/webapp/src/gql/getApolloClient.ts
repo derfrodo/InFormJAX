@@ -16,10 +16,10 @@ import {
 
 let client: ApolloClient<any> | null = null;
 
-export const getClient = (pageProps?: any) => {
+export const getClient = (pageProps?: any, forceReset = false) => {
   // create a new client if there's no existing one
   // or if we are running on the server.
-  if (!client) {
+  if (!client || forceReset) {
     // also read this: https://www.apollographql.com/docs/react/caching/cache-configuration/#customizing-identifier-generation-globally
     const mc = new InMemoryCache({
       dataIdFromObject(responseObject) {

@@ -6,20 +6,11 @@ export const getWheelValues: () => Promise<WheelValue[]> = async () => {
   return [maternaValue, ...WHEELVALUES];
 };
 
-const MATERNA_WHEEL_VALUES: WheelValue[] = [
-  {
-    name: "Materna",
-    winText: "Du bist ein Maternagewinn!",
-    win: true,
-  },
-  { name: "Leider nix", win: false, imageText: "😢" },
-];
-
 const getMaternaValue: () => Promise<WheelValue> = async () => {
   const imagePath = await import("./../assets/Bild1.png");
   return {
     name: "Materna",
-    winText: "Du bist ein Maternagewinn!",
+    winText: "Gewinne mit Materna!",
     win: true,
     imagePath: imagePath.default.src,
     image: null,

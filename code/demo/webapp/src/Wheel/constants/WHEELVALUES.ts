@@ -1,4 +1,3 @@
-// import Materna from "./../assets/Bild1.png";
 import { WheelValue } from "../types/WheelValue";
 
 export const getWheelValues: () => Promise<WheelValue[]> = async () => {

@@ -1,6 +1,6 @@
 import { ReturnedWheelPartArrayElement } from "./WheelPartType"
 import { StringInput,  } from "./atoms/StringInput"
-import { StringCell,  } from "./atoms/StringCell"
+import { StringCell, ImageCell,  } from "./atoms/StringCell"
 import { BoolCell,  } from "./atoms/BoolCell"
 import { BoolInput,  } from "./atoms/BoolInput"
 
@@ -38,7 +38,7 @@ export const WheelPartArrayElementTable = (props: {
                         name={"name"}
                         value={item.name}
                     />
-                    <StringCell
+                    <ImageCell
                         item={item}
                         name={"imagePath"}
                         value={item.imagePath}

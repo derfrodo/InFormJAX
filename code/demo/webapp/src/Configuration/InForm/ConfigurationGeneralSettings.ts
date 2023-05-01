@@ -5,17 +5,26 @@ import type {
   InFormGeneralSettings,
   InFormPropertyMatcherRegexRegex,
 } from "@derfrodo/gen-in-form-runtime";
-import { StringCell } from "./atoms/StringCell";
+import { ImageCell, StringCell } from "./atoms/StringCell";
 import { BoolCell } from "./atoms/BoolCell";
 import { BoolInput } from "./atoms/BoolInput";
 import { StringInput } from "./atoms/StringInput";
 
-const identityCardExpires = /[A-Z]/;
+const image = /imagePath/i;
 
 /**
  * Mapping "input property types to keys and output types"
  */
 interface FM extends InFormDataTypes<string, string> {
+
+  ["IMAGECELL"]: InFormDataTypeWithDefaultValueAndComponent<
+  "ImageCELL",
+   string | null,
+    "", 
+    typeof ImageCell,
+    InFormPropertyMatcherRegexRegex<typeof image>>;
+
+
   ["STRINGSCALAR"]: InFormDataTypeWithDefaultValueAndComponent<
     "STRING",
     Scalars["String"],
@@ -97,4 +106,4 @@ interface FM extends InFormDataTypes<string, string> {
 }
 
 export interface ConfigurationGeneralSettings
-  extends InFormGeneralSettings<FM> {}
+  extends InFormGeneralSettings<FM> { }

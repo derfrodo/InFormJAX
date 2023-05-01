@@ -25,7 +25,7 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 }
 
 export default function AppComponent() {
-  const { data, called } = useQuery(getwheels, {
+  const { data, called, loading } = useQuery(getwheels, {
     variables: { filter: { disabled: false } },
     // pollInterval: 1000,
     fetchPolicy: "cache-and-network"
@@ -40,7 +40,7 @@ export default function AppComponent() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {!called ?
+        {!called || loading ?
           <></> :
           <App values={data?.wheelParts ?? []} />
         }

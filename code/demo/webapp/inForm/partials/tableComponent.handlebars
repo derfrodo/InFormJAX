@@ -2,7 +2,7 @@ export const {{name}}Table = (props: {
     items: {{inputTypeInfo.namedBinding}}[];
     onRowClicked: (item: {{inputTypeInfo.namedBinding}}) => Promise<void> | void
 }) => {
-    return <table>
+    return <table style={{#surroundWithCurlyBraces}}{{#surroundWithCurlyBraces}} borderSpacing: 4, {{/surroundWithCurlyBraces}}{{/surroundWithCurlyBraces}}>
     <thead>
         <tr>
         {{#each byOrdering}}

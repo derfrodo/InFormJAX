@@ -3,12 +3,11 @@
 import App from "@/Wheel/App";
 import Head from "next/head";
 
+import { getme } from "@/Wheel/gql/getme";
+import { getwheels } from "@/Wheel/gql/getwheels";
 import { getClient } from "@/gql/getApolloClient";
 import { useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
-import { getwheels } from "@/Wheel/gql/getwheels";
-import { getme } from "@/Wheel/gql/getme";
-import { useMemo } from "react";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -26,9 +25,10 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 }
 
 export default function AppComponent() {
-  // const {data:d, loading, called} = useQuery(getme,{context:{revalidate:5}});
-  const { data } = useQuery(getwheels, {
+  const { data, called } = useQuery(getwheels, {
     variables: { filter: { disabled: false } },
+    // pollInterval: 1000,
+    fetchPolicy: "cache-and-network"
   });
 
   return (
@@ -40,7 +40,10 @@ export default function AppComponent() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <App values={data?.wheelParts ?? []} />
+        {!called ?
+          <></> :
+          <App values={data?.wheelParts ?? []} />
+        }
       </main>
     </>
   );

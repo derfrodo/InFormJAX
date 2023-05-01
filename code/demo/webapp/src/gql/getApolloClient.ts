@@ -59,7 +59,11 @@ export const getClient = (pageProps?: any, forceReset = false) => {
           ? mc.restore(pageProps.state)
           : mc,
     });
+
+  
   }
+
+  console.log(client.extract())
 
   return client;
 };

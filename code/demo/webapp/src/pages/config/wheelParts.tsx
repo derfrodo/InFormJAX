@@ -8,12 +8,15 @@ import { toggleDisableWheelValue } from "@/Wheel/gql/toggleDisableWheelValue";
 import { getClient } from "@/gql/getApolloClient";
 import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
+import Link from "next/link";
+
+
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
   // caching
   await c.query({ query: getwheels });
-  console.log("CACHE SERVERSIDE", {e: c.extract()})
+  console.log("CACHE SERVERSIDE", { e: c.extract() })
 
   return {
     props: { state: c.extract() }, // will be passed to the page component as props
@@ -22,7 +25,7 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 
 export default function WheelParts() {
   const { data } = useQuery(getwheels);
-  const [toggleDisabled, {}] = useMutation(toggleDisableWheelValue);
+  const [toggleDisabled,] = useMutation(toggleDisableWheelValue);
 
   return (
     <>
@@ -40,6 +43,7 @@ export default function WheelParts() {
           items={data?.wheelParts || []}
         />
         {/* <App values={data?.wheelParts ?? []} /> */}
+        <Link href="/" >🏠</Link>
       </main>
     </>
   );

@@ -11,36 +11,7 @@ import { getWheelValues } from "../../Wheel/constants/WHEELVALUES";
 import type { WheelValue } from "../../Wheel/types/WheelValue";
 import { WheelPartFilter } from "../generated-types/graphql";
 
-const wheelPartType = new GraphQLObjectType<WheelValue>({
-  fields: {
-    name: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
-    win: {
-      type: new GraphQLNonNull(GraphQLBoolean),
-    },
-    imageText: {
-      type: GraphQLString,
-    },
-    imagePath: {
-      type: GraphQLString,
-    },
-    winText: {
-      type: GraphQLString,
-    },
-    image: {
-      type: GraphQLString,
-    },
-    disabled: {
-      type: GraphQLBoolean,
-      resolve: (source) => {
-        console.log(disabledWheelValues);
-        return disabledWheelValues.some((item) => item.name === source.name);
-      },
-    },
-  },
-  name: "WheelPart",
-});
+import { wheelPartType } from "./wheelPartType";
 
 const disabledWheelValues: WheelValue[] = [];
 

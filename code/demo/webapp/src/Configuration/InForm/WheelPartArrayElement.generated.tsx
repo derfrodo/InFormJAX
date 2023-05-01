@@ -9,7 +9,7 @@ export const WheelPartArrayElementTable = (props: {
     items: ReturnedWheelPartArrayElement[];
     onRowClicked: (item: ReturnedWheelPartArrayElement) => Promise<void> | void
 }) => {
-    return <table>
+    return <table style={{ borderSpacing: 4, }}>
     <thead>
         <tr>
             <th>win</th>

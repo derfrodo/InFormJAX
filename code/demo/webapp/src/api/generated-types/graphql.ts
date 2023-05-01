@@ -4,6 +4,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -11,6 +12,16 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  toggleDisableWheelValue?: Maybe<WheelPart>;
+};
+
+
+export type MutationToggleDisableWheelValueArgs = {
+  name: Scalars['String'];
 };
 
 export type Query = {
@@ -21,6 +32,7 @@ export type Query = {
 
 export type WheelPart = {
   __typename?: 'WheelPart';
+  disabled?: Maybe<Scalars['Boolean']>;
   image?: Maybe<Scalars['String']>;
   imagePath?: Maybe<Scalars['String']>;
   imageText?: Maybe<Scalars['String']>;
@@ -101,6 +113,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   WheelPart: ResolverTypeWrapper<WheelPart>;
@@ -109,9 +122,14 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
+  Mutation: {};
   Query: {};
   String: Scalars['String'];
   WheelPart: WheelPart;
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  toggleDisableWheelValue?: Resolver<Maybe<ResolversTypes['WheelPart']>, ParentType, ContextType, RequireFields<MutationToggleDisableWheelValueArgs, 'name'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -120,6 +138,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type WheelPartResolvers<ContextType = any, ParentType extends ResolversParentTypes['WheelPart'] = ResolversParentTypes['WheelPart']> = {
+  disabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   imagePath?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   imageText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -130,6 +149,7 @@ export type WheelPartResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type Resolvers<ContextType = any> = {
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   WheelPart?: WheelPartResolvers<ContextType>;
 };

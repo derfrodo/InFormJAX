@@ -7,9 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "graphql-codegen",
+    "generate": "npm run generateGql && npm run generateForms",
     "prestart": "npm run generate",
     "predev": "npm run generate",
+    "generateGql": "graphql-codegen",
     "generateForms": "gen-inform --srcFolder ./src --globalSettingsFilesPattern \"GeneralSettings.ts\" --mappingFilesPattern \"Mapping.ts\" --templatesPath \"./inForm/templates\" --templatePartialsPath \"./inForm/partials\""
   },
   "dependencies": {

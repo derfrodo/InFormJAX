@@ -8,6 +8,7 @@ import {
   GraphQLBoolean,
   GraphQLNonNull,
 } from "graphql";
+import { resolve } from "path";
 
 const wheelPartType = new GraphQLObjectType<WheelValue>({
   fields: {
@@ -29,14 +30,17 @@ const wheelPartType = new GraphQLObjectType<WheelValue>({
     image: {
       type: GraphQLString,
     },
-    // win: boolean;
-    // imageText?: string | null;
-    // imagePath?: StaticImageData | string | null;
-    // image: null | HTMLImageElement;
-    // winText?: string;
+    disabled: {
+      type: GraphQLBoolean,
+      resolve: (context) => {
+        return disabledWheelValues.some((item) => item.name === context.name);
+      },
+    },
   },
   name: "WheelPart",
 });
+
+const disabledWheelValues: WheelValue[] = [...getWheelValues()];
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -56,6 +60,37 @@ export const schema = new GraphQLSchema({
           await new Promise<void>((r) => setTimeout(() => r(), 2000));
 
           return "Stefan";
+        },
+      },
+    },
+  }),
+  mutation: new GraphQLObjectType({
+    name: "Mutation",
+    fields: {
+      toggleDisableWheelValue: {
+        type: wheelPartType,
+        args: {
+          ["name"]: {
+            type: new GraphQLNonNull(GraphQLString),
+          },
+        },
+        resolve: (source, args, context, info) => {
+          const name = args["name"];
+
+          const v = getWheelValues().find((value) => value.name === name);
+          if (v) {
+            const inext = disabledWheelValues.findIndex(
+              (value) => value.name === v.name
+            );
+            if (inext >= 0) {
+              disabledWheelValues.splice(inext, 1);
+              return v;
+            } else {
+              disabledWheelValues.push(v);
+              return v;
+            }
+          }
+          return null;
         },
       },
     },

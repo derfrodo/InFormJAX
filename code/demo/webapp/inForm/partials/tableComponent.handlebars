@@ -1,4 +1,7 @@
-export const {{name}}Table = (props: { items: {{inputTypeInfo.namedBinding}}[]; }) => {
+export const {{name}}Table = (props: { 
+    items: {{inputTypeInfo.namedBinding}}[];
+    onRowClicked: (item: {{inputTypeInfo.namedBinding}}) => Promise<void> | void
+}) => {
     return <table>
     <thead>
         <tr>
@@ -10,7 +13,7 @@ export const {{name}}Table = (props: { items: {{inputTypeInfo.namedBinding}}[]; 
     <tbody>
         {{#surroundWithCurlyBraces}}
         props.items.map((item, index)=>
-            <tr key={{#surroundWithCurlyBraces}}index{{/surroundWithCurlyBraces}}>
+            <tr key={{#surroundWithCurlyBraces}}index{{/surroundWithCurlyBraces}} onClick={{#surroundWithCurlyBraces}}() => props.onRowClicked(item){{/surroundWithCurlyBraces}}>
                 {{#each byOrdering}}
                 {{#findElementByPropertyValueAndRegex input.mappedBy "key" "CELL$"}}
                     <{{componentType.typeName}}

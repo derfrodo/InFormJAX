@@ -3,12 +3,12 @@
 import App from "@/Wheel/App";
 import Head from "next/head";
 
-import { graphql } from "@/gql/generated-client/gql";
 import { getClient } from "@/gql/getApolloClient";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { AppContext } from "next/app";
 import { getwheels } from "@/Wheel/gql/getwheels";
 import { WheelPartArrayElementTable } from "@/Configuration/InForm/WheelPartArrayElement.generated";
+import { toggleDisableWheelValue } from "@/Wheel/gql/toggleDisableWheelValue";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient();
@@ -23,6 +23,7 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 
 export default function WheelParts() {
   const { data, loading, called, client } = useQuery(getwheels);
+  const [toggleDisabled, { client: c2 }] = useMutation(toggleDisableWheelValue);
 
   return (
     <>
@@ -34,6 +35,11 @@ export default function WheelParts() {
       </Head>
       <main>
         <WheelPartArrayElementTable
+          onRowClicked={async (item) => {
+            await toggleDisabled({ variables: { name: item.name } });
+
+            console.log({ c1: client.extract(), c2: c2.extract() });
+          }}
           items={data?.wheelParts || []}
         />
         {/* <App values={data?.wheelParts ?? []} /> */}

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Digitalization from "./assets/Bild3.png";
 
 import { Winning } from "./components/Winning";
-import { LIGHTSINCIRCLE } from "./constants/LIGHTSINCIRCLE";
 import { RADIUS } from "./constants/RADIUS";
 import { WheelValue } from "./types/WheelValue";
 import { CHECK_CHANCE, WIN_CHANCE } from "./constants/WIN_CHANCE";
@@ -14,6 +13,8 @@ import { LitLogo } from "./components/LitLogo";
 import { WheelPointer } from "./components/WheelPointer";
 import { InnerWheel } from "./components/InnerWheel";
 import { AppWheel } from "./components/AppWheel";
+import Link from "next/link";
+import { WheelLights } from "./components/WheelLights";
 
 // const wofAudio = new Audio(wofSound);
 
@@ -42,7 +43,7 @@ export function strokeStar(
   ctx.beginPath();
   ctx.translate(x, y);
   ctx.moveTo(0, 0 - r);
-  for (var i = 0; i < n; i++) {
+  for (let i = 0; i < n; i++) {
     ctx.rotate(Math.PI / n);
     ctx.lineTo(0, 0 - r * inset);
     ctx.rotate(Math.PI / n);
@@ -135,37 +136,6 @@ function App(props: { values: WheelValue[] }) {
     return setBulbWidth(null);
   }, [gcs]);
 
-  const lights = useMemo(() => {
-    const stepsize = (Math.PI * 2) / LIGHTSINCIRCLE;
-    return bulbWidth === null
-      ? []
-      : new Array(LIGHTSINCIRCLE)
-        .fill(1)
-        .map((item, index) => stepsize * index)
-        .map((angle) =>
-          getPosition(
-            RADIUS,
-            angle,
-            -getAngleForRadianMeasure(bulbWidth / 2, RADIUS)
-          )
-        );
-  }, [bulbWidth]);
-
-  const extraLights = useMemo(() => {
-    return [
-      { x: 6, y: 26 },
-      { x: 7.5, y: 22 },
-      { x: 9, y: 18 },
-      { x: 10.5, y: 14 },
-      { x: 12, y: 10 },
-      { x: 13.5, y: 6 },
-      { x: 15, y: 2 },
-      { x: 20, y: 2.75 },
-      { x: 24.5, y: 3.5 },
-    ];
-  }, []);
-
-
   const duration = useMemo(() => (!playing ? 1.5 : 0.5), [playing]);
   const offset = useMemo(() => duration / 2, [duration]);
 
@@ -186,34 +156,6 @@ function App(props: { values: WheelValue[] }) {
       setLastWin(-1);
     }
   };
-
-  const lightbulbs = useMemo(
-    () =>
-      lights.map((point, index) => {
-        return (
-          <div
-            key={`lighte_${index}_${point.x}_${point.y}`}
-            id={`wheellighte_${index}_${point.x}_${point.y}`}
-            className={!roundDone && lastItem?.win ? "bulb won" : "bulb"}
-            style={{
-              position: "absolute",
-              top: `calc(50vh + ${point.y}px)`,
-              left: `calc(50vw + ${point.x}px)`,
-              animationDelay: playing
-                ? "initial"
-                : !roundDone && lastItem?.win
-                  ? `${(duration / LIGHTSINCIRCLE) * index}s`
-                  : `${offset * (index % 2)}s`,
-              animationDuration: `${duration}s`,
-              animationName: "lightonoff",
-              animationIterationCount: "infinite",
-              animationTimingFunction: "linear",
-            }}
-          ></div>
-        );
-      }),
-    [duration, lastItem?.win, lights, offset, playing, roundDone]
-  );
 
   return (
     <div
@@ -254,7 +196,6 @@ function App(props: { values: WheelValue[] }) {
         ></img>
 
         <LitGraphics
-
           duration={duration}
           offset={offset}
           playing={playing}
@@ -347,7 +288,15 @@ function App(props: { values: WheelValue[] }) {
         </div>
 
         {/* Lights */}
-        {lightbulbs}
+        <WheelLights
+          duration={duration}
+          offset={offset}
+          playing={playing}
+          showLights={bulbWidth !== null}
+          bulbWidth={bulbWidth}
+          roundDone={roundDone}
+          lastItem={lastItem}
+        />
 
         {/* Controls */}
         <button
@@ -389,24 +338,11 @@ function App(props: { values: WheelValue[] }) {
             right: "2vw",
           }}
         >
-          PRODly created by T. Lansing, S. Pauka & J. Neubauer
+          PRODly created by T. Lansing, S. Pauka & J. Neubauer <Link href="/config/wheelParts" >⚙️</Link>
         </div>
       </div>
     </div>
   );
-}
-
-function getAngleForRadianMeasure(radianMeasue: number, radius: number) {
-  const circumference = Math.PI * 2 * radius;
-
-  return (radianMeasue / circumference) * 2 * Math.PI;
-}
-
-function getPosition(radius: number, angle: number, angleOffset = 0) {
-  return {
-    x: Math.cos(angle + angleOffset) * radius,
-    y: Math.sin(angle + angleOffset) * radius,
-  };
 }
 
 export default App;

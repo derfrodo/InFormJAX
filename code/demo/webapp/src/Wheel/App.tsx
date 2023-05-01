@@ -41,6 +41,8 @@ function useInitializeImages(values: Omit<WheelValue, "image">[]) {
 }
 
 const MATERNA_GREY = "#334357";
+const MATERNA_GREY2 = "#44546A";
+
 const MATERNA_RED = "rgb(196,26,23)";
 const MATERNA_RED2 = "#c30a17";
 

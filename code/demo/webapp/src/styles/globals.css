@@ -7,6 +7,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   user-select: none;
   -webkit-user-select: none;
+
+
+  background-color: #44546A;
+  color: white;
 }
 
 code {

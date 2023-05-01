@@ -7,6 +7,8 @@ import { graphql } from "@/gql/generated-client/gql";
 import { getClient } from "@/gql/getApolloClient";
 import { useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
+import { getwheels } from "@/Wheel/gql/getwheels";
+import { getme } from "@/Wheel/gql/getme";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient();
@@ -20,28 +22,9 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
   };
 }
 
-const getwheels = graphql(`
-  query wheelParts {
-    wheelParts {
-      name
-      imagePath
-      imageText
-      win
-      winText
-    }
-  }
-`);
-
-const getme = graphql(/* GraphQL */ `
-  query me {
-    firstname
-  }
-`);
-
 export default function Home() {
   // const {data:d, loading, called} = useQuery(getme,{context:{revalidate:5}});
-  const { data, loading, called, client } = useQuery(getwheels);
-  // console.log({ d, loading, called, state: client.extract() });
+  const { data } = useQuery(getwheels);
 
   return (
     <>

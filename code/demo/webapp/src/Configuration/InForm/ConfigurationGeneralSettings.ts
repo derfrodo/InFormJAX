@@ -5,8 +5,10 @@ import type {
   InFormGeneralSettings,
   InFormPropertyMatcherRegexRegex,
 } from "@derfrodo/gen-in-form-runtime";
-import { StringInput } from "./atoms/StringInput";
+import { StringCell } from "./atoms/StringCell";
+import { BoolCell } from "./atoms/BoolCell";
 import { BoolInput } from "./atoms/BoolInput";
+import { StringInput } from "./atoms/StringInput";
 
 const identityCardExpires = /[A-Z]/;
 
@@ -27,6 +29,12 @@ interface FM extends InFormDataTypes<string, string> {
     "",
     typeof StringInput
   >;
+  ["StNullUndefCell"]: InFormDataTypeWithDefaultValueAndComponent<
+    "STRINGCELL",
+    string | null,
+    "",
+    typeof StringCell
+  >;
 
   ["String"]: InFormDataTypeWithDefaultValueAndComponent<
     "STRING",
@@ -34,6 +42,24 @@ interface FM extends InFormDataTypes<string, string> {
     "",
     typeof StringInput
   >;
+
+
+
+  ["StringCell"]: InFormDataTypeWithDefaultValueAndComponent<
+    "STRINGCELL",
+    string,
+    "",
+    typeof StringCell
+  >;
+
+  ["BooleanCell"]: InFormDataTypeWithDefaultValueAndComponent<
+    "BOOLCELL",
+    boolean,
+    false,
+    typeof BoolCell
+  >;
+
+
   ["Boolean"]: InFormDataTypeWithDefaultValueAndComponent<
     "BOOL",
     boolean,

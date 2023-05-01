@@ -1,5 +1,7 @@
 import { ReturnedWheelPartArrayElement } from "./WheelPartType"
 import { StringInput,  } from "./atoms/StringInput"
+import { StringCell,  } from "./atoms/StringCell"
+import { BoolCell,  } from "./atoms/BoolCell"
 import { BoolInput,  } from "./atoms/BoolInput"
 
 
@@ -17,27 +19,27 @@ export const WheelPartArrayElementTable = (props: { items: ReturnedWheelPartArra
     <tbody>
 {        props.items.map((item, index)=>
             <tr key={index}>
-                    <BoolInput
+                    <BoolCell
                         item={item}
                         name={"win"}
                         value={item.win}
                     />
-                    <StringInput
+                    <StringCell
                         item={item}
                         name={"name"}
                         value={item.name}
                     />
-                    <StringInput
+                    <StringCell
                         item={item}
                         name={"imagePath"}
                         value={item.imagePath}
                     />
-                    <StringInput
+                    <StringCell
                         item={item}
                         name={"imageText"}
                         value={item.imageText}
                     />
-                    <StringInput
+                    <StringCell
                         item={item}
                         name={"winText"}
                         value={item.winText}

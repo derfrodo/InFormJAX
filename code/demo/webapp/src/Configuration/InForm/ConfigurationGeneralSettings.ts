@@ -5,19 +5,8 @@ import type {
   InFormGeneralSettings,
   InFormPropertyMatcherRegexRegex,
 } from "@derfrodo/gen-in-form-runtime";
-import { StringInput } from "./StringInput";
-
-// const test: GroupAndOrderTypes<UpdateUserInput> = {
-//     fields: {
-//         id: { ordinal: 1, isHidden: true },
-//         firstName: { ordinal: 2 },
-//         lastName: { ordinal: 3 },
-//         gender: { ordinal: 3 },
-//         birthday: { ordinal: 4 },
-//         identityCardExpires: { ordinal: 5 },
-//         weight: { ordinal: 6 },
-//     },
-// };
+import { StringInput } from "./atoms/StringInput";
+import { BoolInput } from "./atoms/BoolInput";
 
 const identityCardExpires = /[A-Z]/;
 
@@ -25,12 +14,33 @@ const identityCardExpires = /[A-Z]/;
  * Mapping "input property types to keys and output types"
  */
 interface FM extends InFormDataTypes<string, string> {
-  ["STRING"]: InFormDataTypeWithDefaultValueAndComponent<
+  ["STRINGSCALAR"]: InFormDataTypeWithDefaultValueAndComponent<
     "STRING",
     Scalars["String"],
     "",
     typeof StringInput
   >;
+
+  ["StNullUndef"]: InFormDataTypeWithDefaultValueAndComponent<
+    "STRING",
+    string | null,
+    "",
+    typeof StringInput
+  >;
+
+  ["String"]: InFormDataTypeWithDefaultValueAndComponent<
+    "STRING",
+    string,
+    "",
+    typeof StringInput
+  >;
+  ["Boolean"]: InFormDataTypeWithDefaultValueAndComponent<
+    "BOOL",
+    boolean,
+    false,
+    typeof BoolInput
+  >;
+
   // Specific properties (resolve them using RegEx)
   // ["identityCardExpires"]: InFormDataTypeWithDefaultValueAndComponent<"ID", Scalars['DateTime'], "2022-11-09T00:00:00Z", typeof StringInput,
   // InFormPropertyMatcherRegexRegex<typeof identityCardExpires>>

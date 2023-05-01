@@ -34,15 +34,24 @@ export default function WheelParts() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main style={{ padding: 16 }}>
+
+        <h1>Einstellungen</h1>
+        <div style={{ marginBottom: 12 }}>
+          <Link href="/" >🏠 Zurück zum Rad</Link>
+        </div>
+
+        <h2>Abschnitte</h2>
         <WheelPartArrayElementTable
           onRowClicked={async (item) => {
             await toggleDisabled({ variables: { name: item.name } });
           }}
           items={data?.wheelParts || []}
         />
+
+
+
         {/* <App values={data?.wheelParts ?? []} /> */}
-        <Link href="/" >🏠</Link>
       </main>
     </>
   );

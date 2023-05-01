@@ -49,6 +49,7 @@ export const WHEELVALUES: WheelValue[] = [
   //     image: null,
   //   },
   { name: "Leider nix", win: false, imageText: "😢" },
+  { name: "Geiz ist sparsam", win: false, imagePath: "https://blog.derfrodo.de/assets/derfrodoLogoBlender_720p.png" }
 
   // Uncomment, if all over
   // { name: "Materna", winText: "Du bist ein Ehrengewinner!", win: true, imagePath: Materna, image: null },

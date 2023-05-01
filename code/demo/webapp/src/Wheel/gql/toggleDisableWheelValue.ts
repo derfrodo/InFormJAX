@@ -1,8 +1,8 @@
 import { graphql } from "@/gql/generated-client/gql";
 
-export const getwheels = graphql(`
-  query wheelParts {
-    wheelParts {
+export const toggleDisableWheelValue = graphql(`
+  mutation toggleDisableWheelValue($name: String!) {
+    toggleDisableWheelValue(name: $name) {
       name
       imagePath
       imageText

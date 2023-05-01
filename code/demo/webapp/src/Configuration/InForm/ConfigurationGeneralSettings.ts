@@ -43,8 +43,6 @@ interface FM extends InFormDataTypes<string, string> {
     typeof StringInput
   >;
 
-
-
   ["StringCell"]: InFormDataTypeWithDefaultValueAndComponent<
     "STRINGCELL",
     string,
@@ -59,10 +57,23 @@ interface FM extends InFormDataTypes<string, string> {
     typeof BoolCell
   >;
 
-
   ["Boolean"]: InFormDataTypeWithDefaultValueAndComponent<
     "BOOL",
     boolean,
+    false,
+    typeof BoolInput
+  >;
+
+  ["OptBooleanCell"]: InFormDataTypeWithDefaultValueAndComponent<
+    "BOOLCELL",
+    boolean | null,
+    false,
+    typeof BoolCell
+  >;
+
+  ["OptBoolean"]: InFormDataTypeWithDefaultValueAndComponent<
+    "BOOL",
+    boolean | null,
     false,
     typeof BoolInput
   >;

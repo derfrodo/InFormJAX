@@ -3,7 +3,6 @@
 import App from "@/Wheel/App";
 import Head from "next/head";
 
-import { graphql } from "@/gql/generated-client/gql";
 import { getClient } from "@/gql/getApolloClient";
 import { useQuery } from "@apollo/client";
 import { AppContext } from "next/app";

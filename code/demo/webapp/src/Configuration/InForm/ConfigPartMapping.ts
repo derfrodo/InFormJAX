@@ -12,6 +12,7 @@ const groupAndOrderFields: GroupAndOrderTypes<ReturnedWheelPartArrayElement> = {
     imageText: { ordinal: 10 },
     win: { ordinal: 1 },
     winText: { ordinal: 10 },
+    disabled: { ordinal: 2 },
   },
 };
 

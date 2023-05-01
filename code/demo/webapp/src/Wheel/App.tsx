@@ -22,12 +22,6 @@ const GRAPHICXWIDTH = 563;
 const GRAPHICXHEIGHT = 764;
 const GRAPHICXASPECT = GRAPHICXWIDTH / GRAPHICXHEIGHT;
 
-function useInitializeImages(values: WheelValue[]) {
-  const [needUpdate, setNeedUpdate] = useState(true);
-
-  return useMemo(() => ({ needUpdate, setNeedUpdate }), [needUpdate]);
-}
-
 const MATERNA_GREY = "#334357";
 const MATERNA_GREY2 = "#44546A";
 
@@ -77,7 +71,6 @@ function App(props: { values: WheelValue[] }) {
   const devicePixelRatio = useDevicePixelRatio();
 
   const { values } = props;
-  const { needUpdate, setNeedUpdate } = useInitializeImages(values);
 
   const calculateWinner = useCallback(() => {
     const winner = isWinner(WIN_CHANCE);
@@ -162,7 +155,6 @@ function App(props: { values: WheelValue[] }) {
   const extraLights = useMemo(() => {
     return [
       { x: 6, y: 26 },
-
       { x: 7.5, y: 22 },
       { x: 9, y: 18 },
       { x: 10.5, y: 14 },
@@ -174,32 +166,9 @@ function App(props: { values: WheelValue[] }) {
     ];
   }, []);
 
-  const logoLights = useMemo(() => {
-    const min = 0;
-    const max = 16;
-    const steps = 4;
-    const interval = (max - min) / steps;
-    return [
-      { x: min, y: 0 },
-      { x: min, y: 4 },
-      { x: min, y: 8 },
-      { x: min, y: 12 },
-      { x: min, y: 16 },
-
-      { x: min + interval * 1, y: 16 },
-      { x: min + interval * 2, y: 16 },
-      { x: min + interval * 3, y: 16 },
-
-      { x: max, y: 16 },
-      { x: max, y: 12 },
-      { x: max, y: 8 },
-      { x: max, y: 4 },
-      { x: max, y: 0 },
-    ];
-  }, []);
 
   const duration = useMemo(() => (!playing ? 1.5 : 0.5), [playing]);
-  const offsett = useMemo(() => duration / 2, [duration]);
+  const offset = useMemo(() => duration / 2, [duration]);
 
   const lastItem = useMemo(() => {
     if (lastWin >= 0 && values.length > lastWin) {
@@ -235,7 +204,7 @@ function App(props: { values: WheelValue[] }) {
                 ? "initial"
                 : !roundDone && lastItem?.win
                   ? `${(duration / LIGHTSINCIRCLE) * index}s`
-                  : `${offsett * (index % 2)}s`,
+                  : `${offset * (index % 2)}s`,
               animationDuration: `${duration}s`,
               animationName: "lightonoff",
               animationIterationCount: "infinite",
@@ -244,7 +213,7 @@ function App(props: { values: WheelValue[] }) {
           ></div>
         );
       }),
-    [duration, lastItem?.win, lights, offsett, playing, roundDone]
+    [duration, lastItem?.win, lights, offset, playing, roundDone]
   );
 
   return (
@@ -266,18 +235,12 @@ function App(props: { values: WheelValue[] }) {
           overflow: "hidden",
         }}
       >
-        <img
-          src={Materna.src}
-          alt="Logo"
-          style={{
-            position: "absolute",
-            background: "transparent",
-            width: "16rem",
-            height: "16rem",
-            left: `2vw`,
-            top: `0`,
-          }}
-        ></img>
+        <LitLogo
+          duration={duration}
+          offset={offset}
+          playing={playing}
+          showLights={bulbWidth !== null}
+        />
 
         <img
           src={Digitalization.src}
@@ -291,17 +254,13 @@ function App(props: { values: WheelValue[] }) {
           }}
         ></img>
 
-        <img
-          src={GraphicxStyle.src}
-          alt="Logo"
-          style={{
-            position: "absolute",
-            background: "transparent",
-            width: "26vw",
-            right: `0vw`,
-            top: `0vh`,
-          }}
-        ></img>
+        <LitGraphics
+
+          duration={duration}
+          offset={offset}
+          playing={playing}
+          showLights={bulbWidth !== null}
+        />
 
         <AppWheel
           key={devicePixelRatio}
@@ -391,49 +350,7 @@ function App(props: { values: WheelValue[] }) {
         {/* Lights */}
         {lightbulbs}
 
-        {bulbWidth &&
-          extraLights.map((point, index) => {
-            return (
-              <div
-                className="bulb"
-                key={`lighte_${index}_${point.x}_${point.y}`}
-                style={{
-                  position: "absolute",
-                  right: `calc(26vw - ${point.x}%)`,
-                  top: `calc(26vw / ${GRAPHICXASPECT} - ${point.y}vw / ${GRAPHICXASPECT})`,
-                  animationDelay: playing
-                    ? "initial"
-                    : `${offsett * (index % 2)}s`,
-                  animationDuration: `${duration}s`,
-                  animationName: "lightonoff",
-                  animationIterationCount: "infinite",
-                  animationTimingFunction: "linear",
-                }}
-              ></div>
-            );
-          })}
 
-        {bulbWidth &&
-          logoLights.map((point, index) => {
-            return (
-              <div
-                className="bulb"
-                key={`lightlogo_${index}`}
-                style={{
-                  position: "absolute",
-                  left: `calc(2vw + ${point.x}rem)`,
-                  top: `${point.y}rem`,
-                  animationDelay: playing
-                    ? "initial"
-                    : `${offsett * (index % 2)}s`,
-                  animationDuration: `${duration}s`,
-                  animationName: "lightonoff",
-                  animationIterationCount: "infinite",
-                  animationTimingFunction: "linear",
-                }}
-              ></div>
-            );
-          })}
 
         {/* Controls */}
         <button
@@ -480,6 +397,161 @@ function App(props: { values: WheelValue[] }) {
       </div>
     </div>
   );
+}
+function LitGraphics(
+  props: {
+    showLights: boolean;
+    offset: number;
+    duration: number;
+    playing: boolean;
+  }
+) {
+  const {
+    showLights,
+    offset,
+    duration,
+    playing,
+  } = props;
+
+  const extraLights = useMemo(() => {
+    return [
+      { x: 6, y: 26 },
+      { x: 7.5, y: 22 },
+      { x: 9, y: 18 },
+      { x: 10.5, y: 14 },
+      { x: 12, y: 10 },
+      { x: 13.5, y: 6 },
+      { x: 15, y: 2 },
+      { x: 20, y: 2.75 },
+      { x: 24.5, y: 3.5 },
+    ];
+  }, []);
+
+  return (<>
+
+    <img
+      src={GraphicxStyle.src}
+      alt="Logo"
+      style={{
+        position: "absolute",
+        background: "transparent",
+        width: "26vw",
+        right: `0vw`,
+        top: `0vh`,
+      }}
+    ></img>
+    {
+      showLights ?
+        extraLights.map((point, index) => {
+          return (
+            <div
+              className="bulb"
+              key={`lighte_${index}_${point.x}_${point.y}`}
+              style={{
+                position: "absolute",
+                right: `calc(26vw - ${point.x}%)`,
+                top: `calc(26vw / ${GRAPHICXASPECT} - ${point.y}vw / ${GRAPHICXASPECT})`,
+                animationDelay: playing
+                  ? "initial"
+                  : `${offset * (index % 2)}s`,
+                animationDuration: `${duration}s`,
+                animationName: "lightonoff",
+                animationIterationCount: "infinite",
+                animationTimingFunction: "linear",
+              }}
+            ></div>
+          );
+        }) :
+        <></>
+    }
+  </>)
+}
+
+function LitLogo(
+  props: {
+    showLights: boolean;
+    offset: number;
+    duration: number;
+    playing: boolean;
+  }
+) {
+
+  const {
+    showLights,
+    offset,
+    duration,
+    playing,
+
+
+  } = props;
+
+
+  const logoLights = useMemo(() => {
+    const min = 0;
+    const max = 16;
+    const steps = 4;
+    const interval = (max - min) / steps;
+    return [
+      { x: min, y: 0 },
+      { x: min, y: 4 },
+      { x: min, y: 8 },
+      { x: min, y: 12 },
+      { x: min, y: 16 },
+
+      { x: min + interval * 1, y: 16 },
+      { x: min + interval * 2, y: 16 },
+      { x: min + interval * 3, y: 16 },
+
+      { x: max, y: 16 },
+      { x: max, y: 12 },
+      { x: max, y: 8 },
+      { x: max, y: 4 },
+      { x: max, y: 0 },
+    ];
+  }, []);
+
+  return (
+    <>
+      <img
+        src={Materna.src}
+        alt="Logo"
+        style={{
+          position: "absolute",
+          background: "transparent",
+          width: "16rem",
+          height: "16rem",
+          left: `2vw`,
+          top: `0`,
+        }}
+      ></img>
+      {
+        showLights ?
+          logoLights.map((point, index) => {
+            return (
+              <div
+                className="bulb"
+                key={`lightlogo_${index}`}
+                style={{
+                  position: "absolute",
+                  left: `calc(2vw + ${point.x}rem)`,
+                  top: `${point.y}rem`,
+                  animationDelay: playing
+                    ? "initial"
+                    : `${offset * (index % 2)}s`,
+                  animationDuration: `${duration}s`,
+                  animationName: "lightonoff",
+                  animationIterationCount: "infinite",
+                  animationTimingFunction: "linear",
+                }}
+              ></div>
+            );
+          }) :
+          <></>
+      }
+
+    </>
+  );
+
 }
 
 function getAngleForRadianMeasure(radianMeasue: number, radius: number) {

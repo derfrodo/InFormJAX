@@ -1,35 +1,34 @@
 /* eslint-disable @next/next/no-img-element */
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-import Materna from "./assets/Bild1.png";
-import GraphicxStyle from "./assets/Bild2.png";
 import Digitalization from "./assets/Bild3.png";
 
 import { Winning } from "./components/Winning";
 import { LIGHTSINCIRCLE } from "./constants/LIGHTSINCIRCLE";
 import { RADIUS } from "./constants/RADIUS";
-import { SPIN_DURATION } from "./constants/SPIN_DURATION";
-import { SPIN_INNER_DURATION } from "./constants/SPIN_INNER_DURATION";
 import { WheelValue } from "./types/WheelValue";
 import { CHECK_CHANCE, WIN_CHANCE } from "./constants/WIN_CHANCE";
-import { anglePart } from "./constants/anglePart";
-import { drawPieSections } from "./utils/drawPieSections";
 import { useDevicePixelRatio } from "./utils/getDevicePixelRatio";
+import { LitGraphics } from "./components/LitGraphics";
+import { LitLogo } from "./components/LitLogo";
+import { WheelPointer } from "./components/WheelPointer";
+import { InnerWheel } from "./components/InnerWheel";
+import { AppWheel } from "./components/AppWheel";
 
 // const wofAudio = new Audio(wofSound);
 
 const GRAPHICXWIDTH = 563;
 const GRAPHICXHEIGHT = 764;
-const GRAPHICXASPECT = GRAPHICXWIDTH / GRAPHICXHEIGHT;
+export const GRAPHICXASPECT = GRAPHICXWIDTH / GRAPHICXHEIGHT;
 
-const MATERNA_GREY = "#334357";
+export const MATERNA_GREY = "#334357";
 const MATERNA_GREY2 = "#44546A";
 
-const MATERNA_RED = "rgb(196,26,23)";
-const MATERNA_RED2 = "#c30a17";
+export const MATERNA_RED = "rgb(196,26,23)";
+export const MATERNA_RED2 = "#c30a17";
 
 // kindly have a look at: https://stackoverflow.com/questions/25837158/how-to-draw-a-star-by-using-canvas-html5#25840319
-function strokeStar(
+export function strokeStar(
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
@@ -350,8 +349,6 @@ function App(props: { values: WheelValue[] }) {
         {/* Lights */}
         {lightbulbs}
 
-
-
         {/* Controls */}
         <button
           style={{
@@ -398,161 +395,6 @@ function App(props: { values: WheelValue[] }) {
     </div>
   );
 }
-function LitGraphics(
-  props: {
-    showLights: boolean;
-    offset: number;
-    duration: number;
-    playing: boolean;
-  }
-) {
-  const {
-    showLights,
-    offset,
-    duration,
-    playing,
-  } = props;
-
-  const extraLights = useMemo(() => {
-    return [
-      { x: 6, y: 26 },
-      { x: 7.5, y: 22 },
-      { x: 9, y: 18 },
-      { x: 10.5, y: 14 },
-      { x: 12, y: 10 },
-      { x: 13.5, y: 6 },
-      { x: 15, y: 2 },
-      { x: 20, y: 2.75 },
-      { x: 24.5, y: 3.5 },
-    ];
-  }, []);
-
-  return (<>
-
-    <img
-      src={GraphicxStyle.src}
-      alt="Logo"
-      style={{
-        position: "absolute",
-        background: "transparent",
-        width: "26vw",
-        right: `0vw`,
-        top: `0vh`,
-      }}
-    ></img>
-    {
-      showLights ?
-        extraLights.map((point, index) => {
-          return (
-            <div
-              className="bulb"
-              key={`lighte_${index}_${point.x}_${point.y}`}
-              style={{
-                position: "absolute",
-                right: `calc(26vw - ${point.x}%)`,
-                top: `calc(26vw / ${GRAPHICXASPECT} - ${point.y}vw / ${GRAPHICXASPECT})`,
-                animationDelay: playing
-                  ? "initial"
-                  : `${offset * (index % 2)}s`,
-                animationDuration: `${duration}s`,
-                animationName: "lightonoff",
-                animationIterationCount: "infinite",
-                animationTimingFunction: "linear",
-              }}
-            ></div>
-          );
-        }) :
-        <></>
-    }
-  </>)
-}
-
-function LitLogo(
-  props: {
-    showLights: boolean;
-    offset: number;
-    duration: number;
-    playing: boolean;
-  }
-) {
-
-  const {
-    showLights,
-    offset,
-    duration,
-    playing,
-
-
-  } = props;
-
-
-  const logoLights = useMemo(() => {
-    const min = 0;
-    const max = 16;
-    const steps = 4;
-    const interval = (max - min) / steps;
-    return [
-      { x: min, y: 0 },
-      { x: min, y: 4 },
-      { x: min, y: 8 },
-      { x: min, y: 12 },
-      { x: min, y: 16 },
-
-      { x: min + interval * 1, y: 16 },
-      { x: min + interval * 2, y: 16 },
-      { x: min + interval * 3, y: 16 },
-
-      { x: max, y: 16 },
-      { x: max, y: 12 },
-      { x: max, y: 8 },
-      { x: max, y: 4 },
-      { x: max, y: 0 },
-    ];
-  }, []);
-
-  return (
-    <>
-      <img
-        src={Materna.src}
-        alt="Logo"
-        style={{
-          position: "absolute",
-          background: "transparent",
-          width: "16rem",
-          height: "16rem",
-          left: `2vw`,
-          top: `0`,
-        }}
-      ></img>
-      {
-        showLights ?
-          logoLights.map((point, index) => {
-            return (
-              <div
-                className="bulb"
-                key={`lightlogo_${index}`}
-                style={{
-                  position: "absolute",
-                  left: `calc(2vw + ${point.x}rem)`,
-                  top: `${point.y}rem`,
-                  animationDelay: playing
-                    ? "initial"
-                    : `${offset * (index % 2)}s`,
-                  animationDuration: `${duration}s`,
-                  animationName: "lightonoff",
-                  animationIterationCount: "infinite",
-                  animationTimingFunction: "linear",
-                }}
-              ></div>
-            );
-          }) :
-          <></>
-      }
-
-    </>
-  );
-
-}
 
 function getAngleForRadianMeasure(radianMeasue: number, radius: number) {
   const circumference = Math.PI * 2 * radius;
@@ -565,189 +407,6 @@ function getPosition(radius: number, angle: number, angleOffset = 0) {
     x: Math.cos(angle + angleOffset) * radius,
     y: Math.sin(angle + angleOffset) * radius,
   };
-}
-
-function WheelPointer(props: { playing: boolean }) {
-  const { playing } = props;
-  const devicePixelRatio = useDevicePixelRatio();
-  const canvas2 = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    const current = canvas2.current;
-    if (current) {
-      current.setAttribute("height", `${(devicePixelRatio * RADIUS) / 2}px`);
-      current.setAttribute("width", `${(devicePixelRatio * RADIUS) / 2}px`);
-    }
-  }, [devicePixelRatio]);
-  useEffect(() => {
-    const current = canvas2.current;
-    if (current) {
-      const context = current.getContext("2d");
-      if (context) {
-        const lineWidth = 6;
-        context.strokeStyle = MATERNA_RED;
-        context.lineWidth = lineWidth;
-        context.fillStyle = MATERNA_GREY;
-        context.moveTo(lineWidth, lineWidth);
-        context.beginPath();
-        context.lineTo(lineWidth, lineWidth);
-        context.lineTo(current.width - lineWidth, lineWidth);
-        context.lineTo(
-          (current.width - lineWidth) / 2,
-          current.height - lineWidth
-        );
-        context.closePath();
-        context.fill();
-        context.stroke();
-
-        // context.fillRect(0, 0, 1000000, 1000000);
-      }
-    }
-  }, [devicePixelRatio]);
-  return (
-    <>
-      {/* Canvas inner Wheel */}
-      <canvas
-        style={{
-          position: "absolute",
-          width: "3rem",
-          height: "5rem",
-          left: `0`,
-          top: `0`,
-          transformOrigin: "1.5rem center",
-          animationDuration: playing ? `${SPIN_DURATION / 4}ms` : undefined,
-          animationName: "WheelSpin2",
-          animationIterationCount: "infinite",
-          animationTimingFunction: "linear",
-        }}
-        height={`5rem`}
-        width={`3rem`}
-        ref={canvas2}
-      ></canvas>
-    </>
-  );
-}
-
-function InnerWheel(props: { playing: boolean }) {
-  const { playing } = props;
-  const devicePixelRatio = useDevicePixelRatio();
-  const canvas2 = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    const current = canvas2.current;
-    if (current) {
-      current.setAttribute("height", `${(devicePixelRatio * RADIUS) / 2}px`);
-      current.setAttribute("width", `${(devicePixelRatio * RADIUS) / 2}px`);
-    }
-  }, [devicePixelRatio]);
-  useEffect(() => {
-    const current = canvas2.current;
-    if (current) {
-      const context = current.getContext("2d");
-      if (context) {
-        strokeStar(
-          context,
-          (devicePixelRatio * RADIUS) / 4,
-          (devicePixelRatio * RADIUS) / 4,
-          (devicePixelRatio * RADIUS) / 8,
-          12,
-          1.8
-        );
-      }
-    }
-  }, [devicePixelRatio]);
-  return (
-    <>
-      {/* Canvas inner Wheel */}
-      <canvas
-        style={{
-          position: "absolute",
-          height: RADIUS / 2,
-          width: RADIUS / 2,
-          left: `calc(50% - ${RADIUS / 4}px - 0px)`,
-          top: `calc(50% - ${RADIUS / 4}px - 0px)`,
-          animationDuration: !playing ? "10s" : `${SPIN_INNER_DURATION}ms`,
-          animationName: "WheelSpin",
-          animationIterationCount: "infinite",
-          animationDirection: "reverse",
-          animationTimingFunction: "linear",
-        }}
-        height={`${(devicePixelRatio * RADIUS) / 2}px`}
-        width={`${(devicePixelRatio * RADIUS) / 2}px`}
-        ref={canvas2}
-      ></canvas>
-    </>
-  );
-}
-
-function AppWheel(props: {
-  onClick: any;
-  playing: boolean;
-  lastWin: number;
-  values: WheelValue[];
-}) {
-  const devicePixelRatio = useDevicePixelRatio();
-  const { onClick, playing, values, lastWin } = props;
-
-  const canvas = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    const current = canvas.current;
-    if (current) {
-      current.setAttribute("height", `${devicePixelRatio * RADIUS * 2}px`);
-      current.setAttribute("width", `${devicePixelRatio * RADIUS * 2}px`);
-    }
-  }, [devicePixelRatio]);
-
-  useEffect(() => {
-    const current = canvas.current;
-    if (current) {
-      const context = current.getContext("2d");
-      if (context) {
-        drawPieSections(context, current, values, devicePixelRatio);
-      }
-    }
-  }, [devicePixelRatio, values]);
-
-  return (
-    <>
-      {/* Wheel */}
-      <div
-        style={{
-          position: "absolute",
-          height: RADIUS * 2,
-          width: RADIUS * 2,
-          borderRadius: RADIUS,
-          background: MATERNA_RED2,
-          left: `calc(50% - ${RADIUS}px)`,
-          top: `calc(50% - ${RADIUS}px)`,
-        }}
-      ></div>
-
-      {/* Wheel */}
-      <canvas
-        key={devicePixelRatio}
-        style={{
-          position: "absolute",
-          height: RADIUS * 2,
-          width: RADIUS * 2,
-          borderRadius: RADIUS,
-          // background: "pink",
-          left: `calc(50% - ${RADIUS}px)`,
-          top: `calc(50% - ${RADIUS}px)`,
-          animationDuration: playing ? `${SPIN_DURATION}ms` : undefined,
-          animationName: "WheelSpin",
-          animationIterationCount: "infinite",
-          animationTimingFunction: "linear",
-          rotate: `${-(lastWin * anglePart) - Math.PI / 2}rad`,
-        }}
-        height={`${devicePixelRatio * RADIUS * 2}px`}
-        width={`${devicePixelRatio * RADIUS * 2}px`}
-        ref={canvas}
-        onClick={onClick}
-      ></canvas>
-    </>
-  );
 }
 
 export default App;

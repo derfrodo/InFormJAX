@@ -8,22 +8,28 @@ import { useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
 import { getwheels } from "@/Wheel/gql/getwheels";
 import { getme } from "@/Wheel/gql/getme";
+import { useMemo } from "react";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
-  const c = getClient();
+  const c = getClient(null, true);
 
   // caching
   await c.query({ query: getme });
-  await c.query({ query: getwheels });
+  await c.query({
+    query: getwheels,
+    variables: { filter: { disabled: false } },
+  });
 
   return {
     props: { state: c.extract() }, // will be passed to the page component as props
   };
 }
 
-export default function Home() {
+export default function AppComponent() {
   // const {data:d, loading, called} = useQuery(getme,{context:{revalidate:5}});
-  const { data } = useQuery(getwheels);
+  const { data } = useQuery(getwheels, {
+    variables: { filter: { disabled: false } },
+  });
 
   return (
     <>

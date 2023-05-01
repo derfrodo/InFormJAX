@@ -1,19 +1,31 @@
 // import Materna from "./../assets/Bild1.png";
 import { WheelValue } from "../types/WheelValue";
 
-export const getWheelValues: () => WheelValue[] = () =>
-  WHEELVALUES.length !== 0 ? WHEELVALUES : MATERNA_WHEEL_VALUES;
+export const getWheelValues: () => Promise<WheelValue[]> = async () => {
+  const maternaValue = await getMaternaValue();
+  return [maternaValue, ...WHEELVALUES];
+};
 
 const MATERNA_WHEEL_VALUES: WheelValue[] = [
   {
     name: "Materna",
     winText: "Du bist ein Maternagewinn!",
     win: true,
-    // imagePath: Materna,
-    image: null,
   },
-  { name: "Leider nix", win: false, imageText: "😢", image: null },
+  { name: "Leider nix", win: false, imageText: "😢" },
 ];
+
+const getMaternaValue: () => Promise<WheelValue> = async () => {
+  const imagePath = await import("./../assets/Bild1.png");
+  return {
+    name: "Materna",
+    winText: "Du bist ein Maternagewinn!",
+    win: true,
+    imagePath: imagePath.default.src,
+    image: null,
+  };
+};
+
 export const WHEELVALUES: WheelValue[] = [
   // Comment, if all over
   //   {
@@ -28,7 +40,6 @@ export const WHEELVALUES: WheelValue[] = [
     winText: "Zauberhaft!",
     win: true,
     imageText: "🎲",
-    image: null,
   },
   //   { name: "Leider nix", win: false, imagePath: zonk, image: null },
   //   {
@@ -46,7 +57,7 @@ export const WHEELVALUES: WheelValue[] = [
   //     imagePath: buch,
   //     image: null,
   //   },
-  { name: "Leider nix", win: false, imageText: "😢", image: null },
+  { name: "Leider nix", win: false, imageText: "😢" },
 
   // Uncomment, if all over
   // { name: "Materna", winText: "Du bist ein Ehrengewinner!", win: true, imagePath: Materna, image: null },

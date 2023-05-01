@@ -1,20 +1,19 @@
 "use client";
 
-import App from "@/Wheel/App";
 import Head from "next/head";
 
-import { getClient } from "@/gql/getApolloClient";
-import { useQuery, useMutation } from "@apollo/client";
-import { AppContext } from "next/app";
-import { getwheels } from "@/Wheel/gql/getwheels";
 import { WheelPartArrayElementTable } from "@/Configuration/InForm/WheelPartArrayElement.generated";
+import { getwheels } from "@/Wheel/gql/getwheels";
 import { toggleDisableWheelValue } from "@/Wheel/gql/toggleDisableWheelValue";
+import { getClient } from "@/gql/getApolloClient";
+import { useMutation, useQuery } from "@apollo/client";
+import { AppContext } from "next/app";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
-  const c = getClient();
-
+  const c = getClient(null, true);
   // caching
   await c.query({ query: getwheels });
+  console.log("CACHE SERVERSIDE", {e: c.extract()})
 
   return {
     props: { state: c.extract() }, // will be passed to the page component as props
@@ -22,8 +21,8 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 }
 
 export default function WheelParts() {
-  const { data, loading, called, client } = useQuery(getwheels);
-  const [toggleDisabled, { client: c2 }] = useMutation(toggleDisableWheelValue);
+  const { data } = useQuery(getwheels);
+  const [toggleDisabled, {}] = useMutation(toggleDisableWheelValue);
 
   return (
     <>
@@ -37,8 +36,6 @@ export default function WheelParts() {
         <WheelPartArrayElementTable
           onRowClicked={async (item) => {
             await toggleDisabled({ variables: { name: item.name } });
-
-            console.log({ c1: client.extract(), c2: c2.extract() });
           }}
           items={data?.wheelParts || []}
         />

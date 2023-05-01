@@ -30,6 +30,11 @@ export type Query = {
   wheelParts?: Maybe<Array<WheelPart>>;
 };
 
+
+export type QueryWheelPartsArgs = {
+  filter?: InputMaybe<WheelPartFilter>;
+};
+
 export type WheelPart = {
   __typename?: 'WheelPart';
   disabled?: Maybe<Scalars['Boolean']>;
@@ -39,6 +44,10 @@ export type WheelPart = {
   name: Scalars['String'];
   win: Scalars['Boolean'];
   winText?: Maybe<Scalars['String']>;
+};
+
+export type WheelPartFilter = {
+  disabled?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -117,6 +126,7 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   WheelPart: ResolverTypeWrapper<WheelPart>;
+  wheelPartFilter: WheelPartFilter;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -126,6 +136,7 @@ export type ResolversParentTypes = {
   Query: {};
   String: Scalars['String'];
   WheelPart: WheelPart;
+  wheelPartFilter: WheelPartFilter;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -134,7 +145,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   firstname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  wheelParts?: Resolver<Maybe<Array<ResolversTypes['WheelPart']>>, ParentType, ContextType>;
+  wheelParts?: Resolver<Maybe<Array<ResolversTypes['WheelPart']>>, ParentType, ContextType, Partial<QueryWheelPartsArgs>>;
 };
 
 export type WheelPartResolvers<ContextType = any, ParentType extends ResolversParentTypes['WheelPart'] = ResolversParentTypes['WheelPart']> = {

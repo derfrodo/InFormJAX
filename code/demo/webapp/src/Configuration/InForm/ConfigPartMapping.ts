@@ -1,9 +1,9 @@
 import { InFormMapping } from "@derfrodo/gen-in-form-runtime";
-import { TT } from "./WheelPartType";
+import { ReturnedWheelPartArrayElement } from "./WheelPartType";
 
 export interface ConfigPartMapping
-  extends InFormMapping<TT> { //,
+  extends InFormMapping<ReturnedWheelPartArrayElement> { //,
   // GetUserDetailQuery["userDetail"] & {}
-  name: "UpdateUser";
+  name: "WheelPartArrayElement";
   // groupAndOrderFields: typeof test;
 }

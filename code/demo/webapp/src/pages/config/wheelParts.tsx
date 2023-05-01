@@ -16,7 +16,6 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
   // caching
   await c.query({ query: getwheels });
-  console.log("CACHE SERVERSIDE", { e: c.extract() })
 
   return {
     props: { state: c.extract() }, // will be passed to the page component as props

@@ -82,23 +82,23 @@ export async function drawPieSections(
       context.imageSmoothingEnabled = true;
       context.imageSmoothingQuality = "high";
 
+      const aspectRatio = image.image.height !== 0 ?
+        (image.image.width / image.image.height) :
+        1;
+
       const dvRad = RADIUS * devicePixelRatio;
       const distance =
         dvRad - (RADIUS / 8) * devicePixelRatio - 10 * devicePixelRatio;
       context.translate(distance, 0);
 
-      // context.translate(
-      //   RADIUS * devicePixelRatio - (20 + RADIUS / 8) * devicePixelRatio,
-      //   -(RADIUS / 16) * devicePixelRatio
-      // );
       context.rotate(Math.PI / 2);
-      context.translate(-(RADIUS / 16) * devicePixelRatio, 0);
+      context.translate(-(RADIUS / 16) * devicePixelRatio * aspectRatio, 0);
 
       context.drawImage(
         image.image,
         0,
         0,
-        (RADIUS / 8) * devicePixelRatio,
+        (RADIUS / 8) * devicePixelRatio * aspectRatio,
         (RADIUS / 8) * devicePixelRatio
       );
     } else {

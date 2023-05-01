@@ -8,20 +8,10 @@ import {
   GraphQLString,
 } from "graphql";
 import { getWheelValues } from "../../Wheel/constants/WHEELVALUES";
-import type { WheelValue } from "../../Wheel/types/WheelValue";
 import { WheelPartFilter } from "../generated-types/graphql";
 
-import { wheelPartType } from "./wheelPartType";
-
-const disabledWheelValues: WheelValue[] = [];
-
-const getFilteredWheelParts = async (filter: WheelPartFilter) => {
-  return (await getWheelValues()).filter((value) =>
-    filter.disabled === null || filter.disabled
-      ? disabledWheelValues.some((v) => v.name === value.name)
-      : disabledWheelValues.every((v) => v.name !== value.name)
-  );
-};
+import { wheelPartType } from "../graphql/wheelPartType";
+import { getFilteredWheelParts, disabledWheelValues } from "../data/disabledWheelValues";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({

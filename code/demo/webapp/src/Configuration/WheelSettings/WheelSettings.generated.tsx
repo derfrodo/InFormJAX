@@ -1,5 +1,5 @@
 import { UpdateWheelSettingsInputType } from "./UpdateWheelSettingsMutationReturnType"
-import { IntCell, IntInput,  } from "./../InForm/atoms/IntCell"
+import { IntInput, IntCell,  } from "./../InForm/atoms/IntCell"
 import { Scalars,  } from "./../../gql/generated-client/graphql"
 import { useState, useEffect } from "react"
 import { UpdateWheelSettingsMutationReturnType } from "./UpdateWheelSettingsMutationReturnType"
@@ -35,6 +35,30 @@ export const UpdateWheelSettingsForm = (props: {
     }, [item]);
 
     return <form style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+        <IntInput
+            onChange={(next) => setCurrent(p => ({ ...p, radius: next }))}
+            item={item}
+            name={"radius"}
+            value={current.radius}
+        />
+        <IntInput
+            onChange={(next) => setCurrent(p => ({ ...p, rotationDurationInner: next }))}
+            item={item}
+            name={"rotationDurationInner"}
+            value={current.rotationDurationInner}
+        />
+        <IntInput
+            onChange={(next) => setCurrent(p => ({ ...p, rotationDurationNotPlaying: next }))}
+            item={item}
+            name={"rotationDurationNotPlaying"}
+            value={current.rotationDurationNotPlaying}
+        />
+        <IntInput
+            onChange={(next) => setCurrent(p => ({ ...p, rotationDurationPlaying: next }))}
+            item={item}
+            name={"rotationDurationPlaying"}
+            value={current.rotationDurationPlaying}
+        />
       <button
         onClick={async (e) => {
           e.preventDefault();

@@ -130,7 +130,7 @@ export const schema = new GraphQLSchema({
               sessionWheelSettings.rotationDurationPlaying;
           }
 
-          return sessionDisplaySettings;
+          return sessionWheelSettings;
         },
       },
 

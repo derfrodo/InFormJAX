@@ -40,7 +40,16 @@ export const UpdateDisplaySettingsForm = (props: {
     setCurrent({ ...item });
     }, [item]);
 
-    return <form style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+    return <form style={{ 
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+        flexWrap: "wrap",
+        borderRadius: 4,
+        padding: 8,
+        border: "1px solid black",
+
+    }}>
         <IntInput
             onChange={(next) => setCurrent(p => ({ ...p, showResultAfterMS: next }))}
             item={item}

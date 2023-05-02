@@ -28,6 +28,9 @@ export const getClient = (pageProps?: any, forceReset = false) => {
             return `WheelPart:${responseObject.name}`;
           case "DisplaySettings":
             return `DisplaySettings`;
+          case "WheelSettings":
+            return `WheelSettings`;
+
           default:
             return defaultDataIdFromObject(responseObject);
         }

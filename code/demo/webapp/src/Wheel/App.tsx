@@ -3,18 +3,18 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import Digitalization from "./assets/Bild3.png";
 
-import { Winning } from "./components/Winning";
-import { RADIUS } from "./constants/RADIUS";
-import { WheelValue } from "./types/WheelValue";
-import { CHECK_CHANCE, WIN_CHANCE } from "./constants/WIN_CHANCE";
-import { useDevicePixelRatio } from "./utils/getDevicePixelRatio";
+import { useGetWheelSettings } from "@/Configuration/WheelSettings/useGetWheelSettings";
+import Link from "next/link";
+import { AppWheel } from "./components/AppWheel";
+import { InnerWheel } from "./components/InnerWheel";
 import { LitGraphics } from "./components/LitGraphics";
 import { LitLogo } from "./components/LitLogo";
-import { WheelPointer } from "./components/WheelPointer";
-import { InnerWheel } from "./components/InnerWheel";
-import { AppWheel } from "./components/AppWheel";
-import Link from "next/link";
 import { WheelLights } from "./components/WheelLights";
+import { WheelPointer } from "./components/WheelPointer";
+import { Winning } from "./components/Winning";
+import { CHECK_CHANCE, WIN_CHANCE } from "./constants/WIN_CHANCE";
+import { WheelValue } from "./types/WheelValue";
+import { useDevicePixelRatio } from "./utils/getDevicePixelRatio";
 
 // const wofAudio = new Audio(wofSound);
 
@@ -64,6 +64,8 @@ function isWinner(winChance: number) {
 }
 
 function App(props: { values: WheelValue[] }) {
+  const { radius } = useGetWheelSettings();
+
   const [lastWin, setLastWin] = useState(0);
   const [roundDone, setRoundDone] = useState(true);
   const [playing, setPlaying] = useState(false);
@@ -229,12 +231,12 @@ function App(props: { values: WheelValue[] }) {
         <div
           style={{
             position: "absolute",
-            height: `calc( ${RADIUS * 2}px - 4rem)`,
-            width: `calc( ${RADIUS * 2}px - 4rem)`,
-            borderRadius: RADIUS * 2,
+            height: `calc( ${radius * 2}px - 4rem)`,
+            width: `calc( ${radius * 2}px - 4rem)`,
+            borderRadius: radius * 2,
             background: "transparent",
-            left: `calc(50% - ${RADIUS}px - 2rem)`,
-            top: `calc(50% - ${RADIUS}px - 2rem)`,
+            left: `calc(50% - ${radius}px - 2rem)`,
+            top: `calc(50% - ${radius}px - 2rem)`,
             borderWidth: "4rem",
             borderStyle: "solid",
             borderColor: MATERNA_GREY,
@@ -246,12 +248,12 @@ function App(props: { values: WheelValue[] }) {
         <div
           style={{
             position: "absolute",
-            height: `calc( ${RADIUS * 2}px - 4rem)`,
-            width: `calc( ${RADIUS * 2}px - 4rem)`,
-            borderRadius: RADIUS * 2,
+            height: `calc( ${radius * 2}px - 4rem)`,
+            width: `calc( ${radius * 2}px - 4rem)`,
+            borderRadius: radius * 2,
             background: "transparent",
-            left: `calc(50% - ${RADIUS}px - 2rem)`,
-            top: `calc(50% - ${RADIUS}px - 2rem)`,
+            left: `calc(50% - ${radius}px - 2rem)`,
+            top: `calc(50% - ${radius}px - 2rem)`,
             borderWidth: "4rem",
             borderStyle: "solid",
             borderColor: "#334357",
@@ -263,12 +265,12 @@ function App(props: { values: WheelValue[] }) {
         <div
           style={{
             position: "absolute",
-            height: `calc( ${RADIUS * 2}px - 3rem)`,
-            width: `calc( ${RADIUS * 2}px - 3rem)`,
-            borderRadius: RADIUS * 2,
+            height: `calc( ${radius * 2}px - 3rem)`,
+            width: `calc( ${radius * 2}px - 3rem)`,
+            borderRadius: radius * 2,
             background: "transparent",
-            left: `calc(50% - ${RADIUS}px - 1.5rem)`,
-            top: `calc(50% - ${RADIUS}px - 1.5rem)`,
+            left: `calc(50% - ${radius}px - 1.5rem)`,
+            top: `calc(50% - ${radius}px - 1.5rem)`,
             borderWidth: "3rem",
             borderStyle: "solid",
             borderColor: "#C30A17",
@@ -281,7 +283,7 @@ function App(props: { values: WheelValue[] }) {
             position: "absolute",
             height: "5rem",
             left: `calc(50% - 1.5rem)`,
-            top: `calc(50% - ${RADIUS}px - 2rem)`,
+            top: `calc(50% - ${radius}px - 2rem)`,
           }}
         >
           <WheelPointer playing={playing} />
@@ -338,7 +340,8 @@ function App(props: { values: WheelValue[] }) {
             right: "2vw",
           }}
         >
-          PRODly created by T. Lansing, S. Pauka & J. Neubauer <Link href="/config" >⚙️</Link>
+          PRODly created by T. Lansing, S. Pauka & J. Neubauer{" "}
+          <Link href="/config">⚙️</Link>
         </div>
       </div>
     </div>

@@ -1,22 +1,22 @@
+import { useGetWheelSettings } from "@/Configuration/WheelSettings/useGetWheelSettings";
 import { useEffect, useRef } from "react";
-import { RADIUS } from "../constants/RADIUS";
-import { SPIN_INNER_DURATION } from "../constants/SPIN_INNER_DURATION";
-import { useDevicePixelRatio } from "../utils/getDevicePixelRatio";
 import { strokeStar } from "../App";
+import { useDevicePixelRatio } from "../utils/getDevicePixelRatio";
 
 
 export function InnerWheel(props: { playing: boolean; }) {
   const { playing } = props;
+  const { radius, rotationDurationPlaying } = useGetWheelSettings();
   const devicePixelRatio = useDevicePixelRatio();
   const canvas2 = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     const current = canvas2.current;
     if (current) {
-      current.setAttribute("height", `${(devicePixelRatio * RADIUS) / 2}px`);
-      current.setAttribute("width", `${(devicePixelRatio * RADIUS) / 2}px`);
+      current.setAttribute("height", `${(devicePixelRatio * radius) / 2}px`);
+      current.setAttribute("width", `${(devicePixelRatio * radius) / 2}px`);
     }
-  }, [devicePixelRatio]);
+  }, [devicePixelRatio, radius]);
   useEffect(() => {
     const current = canvas2.current;
     if (current) {
@@ -24,33 +24,33 @@ export function InnerWheel(props: { playing: boolean; }) {
       if (context) {
         strokeStar(
           context,
-          (devicePixelRatio * RADIUS) / 4,
-          (devicePixelRatio * RADIUS) / 4,
-          (devicePixelRatio * RADIUS) / 8,
+          (devicePixelRatio * radius) / 4,
+          (devicePixelRatio * radius) / 4,
+          (devicePixelRatio * radius) / 8,
           12,
           1.8
         );
       }
     }
-  }, [devicePixelRatio]);
+  }, [devicePixelRatio, radius]);
   return (
     <>
       {/* Canvas inner Wheel */}
       <canvas
         style={{
           position: "absolute",
-          height: RADIUS / 2,
-          width: RADIUS / 2,
-          left: `calc(50% - ${RADIUS / 4}px - 0px)`,
-          top: `calc(50% - ${RADIUS / 4}px - 0px)`,
-          animationDuration: !playing ? "10s" : `${SPIN_INNER_DURATION}ms`,
+          height: radius / 2,
+          width: radius / 2,
+          left: `calc(50% - ${radius / 4}px - 0px)`,
+          top: `calc(50% - ${radius / 4}px - 0px)`,
+          animationDuration: !playing ? "10s" : `${rotationDurationPlaying}ms`,
           animationName: "WheelSpin",
           animationIterationCount: "infinite",
           animationDirection: "reverse",
           animationTimingFunction: "linear",
         }}
-        height={`${(devicePixelRatio * RADIUS) / 2}px`}
-        width={`${(devicePixelRatio * RADIUS) / 2}px`}
+        height={`${(devicePixelRatio * radius) / 2}px`}
+        width={`${(devicePixelRatio * radius) / 2}px`}
         ref={canvas2}
       ></canvas>
     </>

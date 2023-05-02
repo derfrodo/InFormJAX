@@ -1,4 +1,3 @@
-import { RADIUS } from "../constants/RADIUS";
 import { WHEELPARTS } from "../constants/WHEELPARTS";
 import { anglePart } from "../constants/anglePart";
 import { anglePartHalf } from "../constants/anglePartHalf";
@@ -8,7 +7,8 @@ export async function drawPieSections(
   context: CanvasRenderingContext2D,
   canvas: HTMLCanvasElement,
   values: WheelValue[],
-  devicePixelRatio: number
+  devicePixelRatio: number,
+  radius: number
 ) {
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.font = "12pt arial";
@@ -41,11 +41,11 @@ export async function drawPieSections(
     context.beginPath();
     context.strokeStyle = "#fff";
     context.lineWidth = 3;
-    context.moveTo(RADIUS * devicePixelRatio, RADIUS * devicePixelRatio);
+    context.moveTo(radius * devicePixelRatio, radius * devicePixelRatio);
     context.arc(
-      RADIUS * devicePixelRatio,
-      RADIUS * devicePixelRatio,
-      RADIUS * devicePixelRatio,
+      radius * devicePixelRatio,
+      radius * devicePixelRatio,
+      radius * devicePixelRatio,
       angle,
       angle + anglePart,
       false
@@ -55,7 +55,7 @@ export async function drawPieSections(
     context.fill();
 
     context.save();
-    context.translate(RADIUS * devicePixelRatio, RADIUS * devicePixelRatio);
+    context.translate(radius * devicePixelRatio, radius * devicePixelRatio);
     context.rotate(angle + anglePartHalf);
 
     const index = i % values.length;
@@ -65,10 +65,10 @@ export async function drawPieSections(
     const image = images[index];
 
     if (data.imageText) {
-      const fontSize = RADIUS / 4;
+      const fontSize = radius / 4;
       context.font = `${fontSize}px arial`;
 
-      const dvRad = RADIUS * devicePixelRatio;
+      const dvRad = radius * devicePixelRatio;
       const measure = context.measureText(data.imageText);
 
       const distance =
@@ -82,29 +82,28 @@ export async function drawPieSections(
       context.imageSmoothingEnabled = true;
       context.imageSmoothingQuality = "high";
 
-      const aspectRatio = image.image.height !== 0 ?
-        (image.image.width / image.image.height) :
-        1;
+      const aspectRatio =
+        image.image.height !== 0 ? image.image.width / image.image.height : 1;
 
-      const dvRad = RADIUS * devicePixelRatio;
+      const dvRad = radius * devicePixelRatio;
       const distance =
-        dvRad - (RADIUS / 8) * devicePixelRatio - 10 * devicePixelRatio;
+        dvRad - (radius / 8) * devicePixelRatio - 10 * devicePixelRatio;
       context.translate(distance, 0);
 
       context.rotate(Math.PI / 2);
-      context.translate(-(RADIUS / 16) * devicePixelRatio * aspectRatio, 0);
+      context.translate(-(radius / 16) * devicePixelRatio * aspectRatio, 0);
 
       context.drawImage(
         image.image,
         0,
         0,
-        (RADIUS / 8) * devicePixelRatio * aspectRatio,
-        (RADIUS / 8) * devicePixelRatio
+        (radius / 8) * devicePixelRatio * aspectRatio,
+        (radius / 8) * devicePixelRatio
       );
     } else {
       context.fillText(
         data.name,
-        RADIUS * devicePixelRatio - 160 * devicePixelRatio,
+        radius * devicePixelRatio - 160 * devicePixelRatio,
         0
       );
     }

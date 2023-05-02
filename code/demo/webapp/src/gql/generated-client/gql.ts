@@ -14,6 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\nquery DisplaySettings {\n    displaySettings {\n        showResultAfterMS\n        showResultForMS\n    }\n  }\n": types.DisplaySettingsDocument,
+    "\n  query wheelSettings {\n    wheelSettings {\n      radius\n      rotationDurationNotPlaying\n      rotationDurationPlaying\n      rotationDurationInner\n    }\n  }\n": types.WheelSettingsDocument,
     "\n  mutation UpdateSettings($input: DisplaySettingsInput!) {\n    updateDisplaySettings(input: $input) {\n        showResultAfterMS\n        showResultForMS\n    }\n  }\n": types.UpdateSettingsDocument,
     "\nmutation UpdateWheelSettings($input: WheelSettingsInput!) {\n  updateWheelSettings(input: $input) {\n    radius\n    rotationDurationInner\n    rotationDurationNotPlaying\n    rotationDurationPlaying\n  }\n}\n": types.UpdateWheelSettingsDocument,
     "\n  query me {\n    firstname\n  }\n": types.MeDocument,
@@ -39,6 +40,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nquery DisplaySettings {\n    displaySettings {\n        showResultAfterMS\n        showResultForMS\n    }\n  }\n"): (typeof documents)["\nquery DisplaySettings {\n    displaySettings {\n        showResultAfterMS\n        showResultForMS\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query wheelSettings {\n    wheelSettings {\n      radius\n      rotationDurationNotPlaying\n      rotationDurationPlaying\n      rotationDurationInner\n    }\n  }\n"): (typeof documents)["\n  query wheelSettings {\n    wheelSettings {\n      radius\n      rotationDurationNotPlaying\n      rotationDurationPlaying\n      rotationDurationInner\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

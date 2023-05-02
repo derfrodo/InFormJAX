@@ -1,8 +1,9 @@
 export const Update{{name}}Form = (props: { 
+    title?: React.ReactNode;
     item: {{#if detailsTypeInfo}}{{detailsTypeInfo.namedBinding}}{{else}}{{inputTypeInfo.namedBinding}}{{/if}}
     onSave?: (next: {{inputTypeInfo.namedBinding}}) => Promise<void> | void
 }) => {
-    const { item, onSave = () => {} } = props;
+    const { title, item, onSave = () => {} } = props;
     const [current, setCurrent] = useState({ ...item });
     useEffect(() => {
     setCurrent({ ...item });
@@ -16,8 +17,12 @@ export const Update{{name}}Form = (props: {
         borderRadius: 4,
         padding: 8,
         border: "1px solid black",
-
+        marginTop: 8,
     }{{/surroundWithCurlyBraces}}>
+    {typeof title === "string" ? <h2 style={{#surroundWithCurlyBraces}}{ 
+        marginTop: -4,
+        marginBottom: -8,
+    }{{/surroundWithCurlyBraces}} >{title}</h2> : title}
     {{#each byOrdering}}
     {{#findElementByPropertyValueAndRegex input.mappedBy "key" "[^(CELL)]$"}}
         <{{componentType.typeName}}

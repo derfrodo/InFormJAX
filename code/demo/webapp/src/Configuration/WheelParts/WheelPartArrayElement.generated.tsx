@@ -59,10 +59,11 @@ export const WheelPartArrayElementTable = (props: {
     </table>;
 }
 export const UpdateWheelPartArrayElementForm = (props: { 
+    title?: React.ReactNode;
     item: ReturnedWheelPartArrayElement
     onSave?: (next: ReturnedWheelPartArrayElement) => Promise<void> | void
 }) => {
-    const { item, onSave = () => {} } = props;
+    const { title, item, onSave = () => {} } = props;
     const [current, setCurrent] = useState({ ...item });
     useEffect(() => {
     setCurrent({ ...item });
@@ -76,8 +77,12 @@ export const UpdateWheelPartArrayElementForm = (props: {
         borderRadius: 4,
         padding: 8,
         border: "1px solid black",
-
+        marginTop: 8,
     }}>
+    {typeof title === "string" ? <h2 style={{ 
+        marginTop: -4,
+        marginBottom: -8,
+    }} >{title}</h2> : title}
         <StringInput
             onChange={(next) => setCurrent(p => ({ ...p, name: next }))}
             item={item}
@@ -108,6 +113,11 @@ export const UpdateWheelPartArrayElementForm = (props: {
           const next = current;
           await onSave(next);
         }}
+        style={{ 
+        width: 150,
+        borderRadius: 4,
+        padding: 8,
+    }}
       >Save</button>
     </form>;
 }

@@ -19,6 +19,7 @@ export function IntInput<
     <div>
       <label htmlFor={id}>{typeof name === "string" ? name : ""}</label>
       <input
+      type="number"
         id={id}
         value={value ?? ""}
         onChange={(e) =>

@@ -31,10 +31,11 @@ export const DisplaySettingsTable = (props: {
     </table>;
 }
 export const UpdateDisplaySettingsForm = (props: { 
+    title?: React.ReactNode;
     item: UpdateDisplaySettingsMutationReturnType
     onSave?: (next: UpdateDisplaySettingsMutationReturnType) => Promise<void> | void
 }) => {
-    const { item, onSave = () => {} } = props;
+    const { title, item, onSave = () => {} } = props;
     const [current, setCurrent] = useState({ ...item });
     useEffect(() => {
     setCurrent({ ...item });
@@ -48,8 +49,12 @@ export const UpdateDisplaySettingsForm = (props: {
         borderRadius: 4,
         padding: 8,
         border: "1px solid black",
-
+        marginTop: 8,
     }}>
+    {typeof title === "string" ? <h2 style={{ 
+        marginTop: -4,
+        marginBottom: -8,
+    }} >{title}</h2> : title}
         <IntInput
             onChange={(next) => setCurrent(p => ({ ...p, showResultAfterMS: next }))}
             item={item}
@@ -68,6 +73,11 @@ export const UpdateDisplaySettingsForm = (props: {
           const next = current;
           await onSave(next);
         }}
+        style={{ 
+        width: 150,
+        borderRadius: 4,
+        padding: 8,
+    }}
       >Save</button>
     </form>;
 }

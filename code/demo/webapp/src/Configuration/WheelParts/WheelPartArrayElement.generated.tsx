@@ -1,6 +1,7 @@
 import { ReturnedWheelPartArrayElement } from "./ReturnedWheelPartArrayElement"
 import { StringInput,  } from "./../InForm/atoms/StringInput"
-import { StringCell, ImageCell,  } from "./../InForm/atoms/StringCell"
+import { StringCell,  } from "./../InForm/atoms/StringCell"
+import { ImageCell,  } from "./../InForm/atoms/ImageCell"
 import { BoolCell,  } from "./../InForm/atoms/BoolCell"
 import { BoolInput,  } from "./../InForm/atoms/BoolInput"
 import { useState, useEffect } from "react"

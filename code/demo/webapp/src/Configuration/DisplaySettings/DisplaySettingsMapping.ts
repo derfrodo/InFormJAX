@@ -14,7 +14,7 @@ const groupAndOrderFields: GroupAndOrderTypes<UpdateDisplaySettingsMutationRetur
     },
   };
 
-export interface ConfigPartMapping
+export interface DisplaySettingsMapping
   extends InFormMapping<UpdateDisplaySettingsMutationReturnType> {
   name: "DisplaySettings";
   groupAndOrderFields: typeof groupAndOrderFields;

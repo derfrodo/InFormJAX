@@ -1,9 +1,8 @@
 import { UpdateDisplaySettingsMutationReturnType } from "@/Configuration/DisplaySettings/UpdateDisplaySettingsMutationReturnType";
-import {
-  CONFETTI_DELAY,
-  AFTER_CONFETTI_DELAY,
-} from "@/Wheel/components/Winning";
 
+
+export const CONFETTI_DELAY = 500;
+export const AFTER_CONFETTI_DELAY = 4000;
 export const sessionDisplaySettings: UpdateDisplaySettingsMutationReturnType = {
   showResultAfterMS: CONFETTI_DELAY,
   showResultForMS: AFTER_CONFETTI_DELAY,

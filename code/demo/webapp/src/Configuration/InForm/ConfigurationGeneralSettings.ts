@@ -1,15 +1,15 @@
-import { Scalars } from "../../gql/generated-client/graphql";
 import type {
   InFormDataTypes,
   InFormDataTypeWithDefaultValueAndComponent,
   InFormGeneralSettings,
   InFormPropertyMatcherRegexRegex,
 } from "@derfrodo/gen-in-form-runtime";
-import { ImageCell, StringCell } from "./atoms/StringCell";
 import { BoolCell } from "./atoms/BoolCell";
 import { BoolInput } from "./atoms/BoolInput";
-import { StringInput } from "./atoms/StringInput";
 import { IntCell, IntInput } from "./atoms/IntCell";
+import { StringCell } from "./atoms/StringCell";
+import { ImageCell } from "./atoms/ImageCell";
+import { StringInput } from "./atoms/StringInput";
 
 const image = /imagePath/i;
 

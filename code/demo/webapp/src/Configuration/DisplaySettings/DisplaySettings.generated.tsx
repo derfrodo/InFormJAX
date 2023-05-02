@@ -31,7 +31,7 @@ export const DisplaySettingsTable = (props: {
     </table>;
 }
 export const UpdateDisplaySettingsForm = (props: { 
-    item: UpdateDisplaySettingsMutationReturnType;
+    item: UpdateDisplaySettingsMutationReturnType
     onSave?: (next: UpdateDisplaySettingsMutationReturnType) => Promise<void> | void
 }) => {
     const { item, onSave = () => {} } = props;
@@ -56,7 +56,8 @@ export const UpdateDisplaySettingsForm = (props: {
       <button
         onClick={async (e) => {
           e.preventDefault();
-          await onSave(current);
+          const next = current;
+          await onSave(next);
         }}
       >Save</button>
     </form>;

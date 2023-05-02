@@ -25,7 +25,7 @@ export const WheelSettingsTable = (props: {
     </table>;
 }
 export const UpdateWheelSettingsForm = (props: { 
-    item: UpdateWheelSettingsInputType;
+    item: UpdateWheelSettingsMutationReturnType
     onSave?: (next: UpdateWheelSettingsInputType) => Promise<void> | void
 }) => {
     const { item, onSave = () => {} } = props;
@@ -38,7 +38,8 @@ export const UpdateWheelSettingsForm = (props: {
       <button
         onClick={async (e) => {
           e.preventDefault();
-          await onSave(current);
+          const next = projectToWheelSettingsInput(current);
+          await onSave(next);
         }}
       >Save</button>
     </form>;

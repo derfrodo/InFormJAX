@@ -1,6 +1,6 @@
 import {
-  UpdateWheelSettingsMutation,
-  WheelSettingsInput,
+    UpdateWheelSettingsMutation,
+    WheelSettingsInput
 } from "../../gql/generated-client/graphql";
 
 export type UpdateWheelSettingsMutationReturnType =

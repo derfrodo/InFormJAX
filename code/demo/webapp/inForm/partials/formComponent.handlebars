@@ -1,5 +1,5 @@
 export const Update{{name}}Form = (props: { 
-    item: {{inputTypeInfo.namedBinding}};
+    item: {{#if detailsTypeInfo}}{{detailsTypeInfo.namedBinding}}{{else}}{{inputTypeInfo.namedBinding}}{{/if}}
     onSave?: (next: {{inputTypeInfo.namedBinding}}) => Promise<void> | void
 }) => {
     const { item, onSave = () => {} } = props;
@@ -22,7 +22,8 @@ export const Update{{name}}Form = (props: {
       <button
         onClick={{#surroundWithCurlyBraces}}async (e) => {
           e.preventDefault();
-          await onSave(current);
+          const next = {{#if detailsTypeInfo}}projectTo{{name}}Input(current){{else}}current{{/if}};
+          await onSave(next);
         }{{/surroundWithCurlyBraces}}
       >Save</button>
     </form>;

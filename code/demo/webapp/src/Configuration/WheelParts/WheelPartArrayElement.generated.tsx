@@ -59,7 +59,7 @@ export const WheelPartArrayElementTable = (props: {
     </table>;
 }
 export const UpdateWheelPartArrayElementForm = (props: { 
-    item: ReturnedWheelPartArrayElement;
+    item: ReturnedWheelPartArrayElement
     onSave?: (next: ReturnedWheelPartArrayElement) => Promise<void> | void
 }) => {
     const { item, onSave = () => {} } = props;
@@ -96,7 +96,8 @@ export const UpdateWheelPartArrayElementForm = (props: {
       <button
         onClick={async (e) => {
           e.preventDefault();
-          await onSave(current);
+          const next = current;
+          await onSave(next);
         }}
       >Save</button>
     </form>;

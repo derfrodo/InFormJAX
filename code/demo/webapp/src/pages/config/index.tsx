@@ -3,7 +3,7 @@
 import Head from "next/head";
 
 import { WheelPartArrayElementTable } from "@/Configuration/WheelParts/WheelPartArrayElement.generated";
-import { queryDisplaysettings } from "@/Configuration/mutations/updateDisplaySettings";
+
 import { getwheels } from "@/Wheel/gql/getwheels";
 import { toggleDisableWheelValue } from "@/Wheel/gql/toggleDisableWheelValue";
 import { getClient } from "@/gql/getApolloClient";
@@ -11,11 +11,14 @@ import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
 import Link from "next/link";
 import { UpdateDisplaySettingsForm } from "@/Configuration/DisplaySettings/DisplaySettings.generated";
+import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
+import { updateDisplaysettings } from "@/Configuration/mutations/updateDisplaySettings";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
   // caching
   await c.query({ query: getwheels });
+  await c.query({ query: queryDisplaysettings });
 
   return {
     props: { state: c.extract() }, // will be passed to the page component as props
@@ -26,6 +29,7 @@ export default function WheelParts() {
   const { data } = useQuery(getwheels);
   const [toggleDisabled] = useMutation(toggleDisableWheelValue);
   const { data: displaySettings } = useQuery(queryDisplaysettings);
+  const [updateDisplaySettings] = useMutation(updateDisplaysettings);
 
   return (
     <>
@@ -54,7 +58,10 @@ export default function WheelParts() {
         {displaySettings?.displaySettings ? (
           <UpdateDisplaySettingsForm
             item={displaySettings.displaySettings}
-            onSave={()=>{}}
+            onSave={(next) => {
+              const { __typename, ...rest } = next;
+              updateDisplaySettings({ variables: { input: rest } });
+            }}
           />
         ) : (
           <></>

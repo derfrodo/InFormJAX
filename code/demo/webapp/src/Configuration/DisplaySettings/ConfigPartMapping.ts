@@ -9,7 +9,8 @@ const groupAndOrderFields: GroupAndOrderTypes<UpdateDisplaySettingsMutationRetur
     fields: {
       __typename: { ordinal: 10, isHidden: true },
 
-      showResultInMS: { ordinal: 1 },
+      showResultAfterMS: { ordinal: 1 },
+      showResultForMS: { ordinal: 2 },
     },
   };
 

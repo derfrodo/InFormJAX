@@ -16,11 +16,13 @@ export type Scalars = {
 
 export type DisplaySettings = {
   __typename?: 'DisplaySettings';
-  showResultInMS: Scalars['Int'];
+  showResultAfterMS: Scalars['Int'];
+  showResultForMS: Scalars['Int'];
 };
 
 export type DisplaySettingsInput = {
-  name: Scalars['Int'];
+  showResultAfterMS: Scalars['Int'];
+  showResultForMS: Scalars['Int'];
 };
 
 export type Mutation = {
@@ -162,7 +164,8 @@ export type ResolversParentTypes = {
 };
 
 export type DisplaySettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['DisplaySettings'] = ResolversParentTypes['DisplaySettings']> = {
-  showResultInMS?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  showResultAfterMS?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  showResultForMS?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

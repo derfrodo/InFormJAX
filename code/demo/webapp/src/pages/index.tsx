@@ -8,6 +8,7 @@ import { getwheels } from "@/Wheel/gql/getwheels";
 import { getClient } from "@/gql/getApolloClient";
 import { useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
+import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -18,6 +19,7 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
     query: getwheels,
     variables: { filter: { disabled: false } },
   });
+  await c.query({ query: queryDisplaysettings });
 
   return {
     props: { state: c.extract() }, // will be passed to the page component as props

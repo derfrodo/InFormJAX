@@ -2,15 +2,15 @@
 
 import Head from "next/head";
 
-import { WheelPartArrayElementTable } from "@/Configuration/InForm/WheelPartArrayElement.generated";
+import { WheelPartArrayElementTable } from "@/Configuration/WheelParts/WheelPartArrayElement.generated";
+import { queryDisplaysettings } from "@/Configuration/mutations/updateDisplaySettings";
 import { getwheels } from "@/Wheel/gql/getwheels";
 import { toggleDisableWheelValue } from "@/Wheel/gql/toggleDisableWheelValue";
 import { getClient } from "@/gql/getApolloClient";
 import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
 import Link from "next/link";
-
-
+import { UpdateDisplaySettingsForm } from "@/Configuration/DisplaySettings/DisplaySettings.generated";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -24,7 +24,8 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 
 export default function WheelParts() {
   const { data } = useQuery(getwheels);
-  const [toggleDisabled,] = useMutation(toggleDisableWheelValue);
+  const [toggleDisabled] = useMutation(toggleDisableWheelValue);
+  const { data: displaySettings } = useQuery(queryDisplaysettings);
 
   return (
     <>
@@ -35,10 +36,9 @@ export default function WheelParts() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main style={{ padding: 16 }}>
-
         <h1>Einstellungen</h1>
         <div style={{ marginBottom: 12 }}>
-          <Link href="/" >🏠 Zurück zum Rad</Link>
+          <Link href="/">🏠 Zurück zum Rad</Link>
         </div>
 
         <h2>Abschnitte</h2>
@@ -49,8 +49,16 @@ export default function WheelParts() {
           items={data?.wheelParts || []}
         />
 
+        <h2>Anzeigeeinstellungen</h2>
 
-
+        {displaySettings?.displaySettings ? (
+          <UpdateDisplaySettingsForm
+            item={displaySettings.displaySettings}
+            onSave={()=>{}}
+          />
+        ) : (
+          <></>
+        )}
         {/* <App values={data?.wheelParts ?? []} /> */}
       </main>
     </>

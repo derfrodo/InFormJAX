@@ -1,0 +1,29 @@
+export const Update{{name}}Form = (props: { 
+    item: {{inputTypeInfo.namedBinding}};
+    onSave?: (next: {{inputTypeInfo.namedBinding}}) => Promise<void> | void
+}) => {
+    const { item, onSave = () => {} } = props;
+    const [current, setCurrent] = useState({ ...item });
+    useEffect(() => {
+    setCurrent({ ...item });
+    }, [item]);
+
+    return <form style={{#surroundWithCurlyBraces}}{ display: "flex", gap: 16, flexWrap: "wrap" }{{/surroundWithCurlyBraces}}>
+    {{#each byOrdering}}
+    {{#findElementByPropertyValueAndRegex input.mappedBy "key" "[^(CELL)]$"}}
+        <{{componentType.typeName}}
+            onChange={{#surroundWithCurlyBraces}}(next) => setCurrent(p => ({ ...p, {{../input.name}}: next })){{/surroundWithCurlyBraces}}
+            item={{surroundWithCurlyBraces "item"}}
+            name={{#surroundWithCurlyBraces}}"{{../input.name}}"{{/surroundWithCurlyBraces}}
+            value={{#surroundWithCurlyBraces}}current.{{../input.name}}{{/surroundWithCurlyBraces}}
+        />
+    {{/findElementByPropertyValueAndRegex}}
+    {{/each}}
+      <button
+        onClick={{#surroundWithCurlyBraces}}async (e) => {
+          e.preventDefault();
+          await onSave(current);
+        }{{/surroundWithCurlyBraces}}
+      >Save</button>
+    </form>;
+}

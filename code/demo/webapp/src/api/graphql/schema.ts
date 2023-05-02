@@ -10,8 +10,15 @@ import {
 import { getWheelValues } from "../../Wheel/constants/WHEELVALUES";
 import { WheelPartFilter } from "../generated-types/graphql";
 
-import { wheelPartType } from "../graphql/wheelPartType";
-import { getFilteredWheelParts, disabledWheelValues } from "../data/disabledWheelValues";
+import {
+  displaySettingsInputType,
+  displaySettingsType,
+  wheelPartType,
+} from "./types/wheelPartType";
+import {
+  getFilteredWheelParts,
+  disabledWheelValues,
+} from "../data/disabledWheelValues";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -39,6 +46,15 @@ export const schema = new GraphQLSchema({
           return !filter ? getWheelValues() : getFilteredWheelParts(filter);
         },
       },
+      displaySettings: {
+        type: displaySettingsType,
+
+        async resolve() {
+          await new Promise<void>((r) => setTimeout(() => r(), 100));
+
+          return { showResultInMS: 3 };
+        },
+      },
 
       firstname: {
         type: GraphQLString,
@@ -53,6 +69,20 @@ export const schema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: "Mutation",
     fields: {
+      updateSettings: {
+        type: displaySettingsType,
+        args: {
+          input: {
+            type: new GraphQLNonNull(displaySettingsInputType),
+          },
+        },
+        resolve: async (source, args, context, info) => {
+          const input = args["input"];
+
+          return input;
+        },
+      },
+
       toggleDisableWheelValue: {
         type: wheelPartType,
         args: {

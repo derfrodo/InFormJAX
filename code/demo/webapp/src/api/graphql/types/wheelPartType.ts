@@ -1,12 +1,14 @@
 import {
     GraphQLBoolean,
+    GraphQLInputObjectType,
+    GraphQLInt,
     GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString
 } from "graphql";
-import type { WheelValue } from "../../Wheel/types/WheelValue";
+import type { WheelValue } from "../../../Wheel/types/WheelValue";
 import { resolve } from "path";
-import { resolveDisabledWheelValue } from "../data/disabledWheelValues";
+import { resolveDisabledWheelValue } from "../../data/disabledWheelValues";
 
 export const wheelPartType = new GraphQLObjectType<WheelValue>({
     fields: {
@@ -36,4 +38,23 @@ export const wheelPartType = new GraphQLObjectType<WheelValue>({
         }
     },
     name: "WheelPart",
+});
+
+
+export const displaySettingsType = new GraphQLObjectType({
+    name:"DisplaySettings",
+    fields: {
+        showResultInMS: {
+            type: new GraphQLNonNull(GraphQLInt),
+        },
+    }
+});
+
+export const displaySettingsInputType = new GraphQLInputObjectType({
+    name:"DisplaySettingsInput",
+    fields: {
+        name: {
+            type: new GraphQLNonNull(GraphQLInt),
+        },
+    }
 });

@@ -9,6 +9,7 @@ import { ImageCell, StringCell } from "./atoms/StringCell";
 import { BoolCell } from "./atoms/BoolCell";
 import { BoolInput } from "./atoms/BoolInput";
 import { StringInput } from "./atoms/StringInput";
+import { IntCell, IntInput } from "./atoms/IntCell";
 
 const image = /imagePath/i;
 
@@ -16,14 +17,26 @@ const image = /imagePath/i;
  * Mapping "input property types to keys and output types"
  */
 interface FM extends InFormDataTypes<string, string> {
-
   ["IMAGECELL"]: InFormDataTypeWithDefaultValueAndComponent<
-  "ImageCELL",
-   string | null,
-    "", 
+    "ImageCELL",
+    string | null,
+    "",
     typeof ImageCell,
-    InFormPropertyMatcherRegexRegex<typeof image>>;
+    InFormPropertyMatcherRegexRegex<typeof image>
+  >;
 
+  ["NUMBERCELL"]: InFormDataTypeWithDefaultValueAndComponent<
+    "NUMBERCELL",
+    number,
+    0,
+    typeof IntCell
+  >;
+  ["NUMBER"]: InFormDataTypeWithDefaultValueAndComponent<
+    "NUMBER",
+    number,
+    "",
+    typeof IntInput
+  >;
 
   ["STRINGSCALAR"]: InFormDataTypeWithDefaultValueAndComponent<
     "STRING",
@@ -106,4 +119,4 @@ interface FM extends InFormDataTypes<string, string> {
 }
 
 export interface ConfigurationGeneralSettings
-  extends InFormGeneralSettings<FM> { }
+  extends InFormGeneralSettings<FM> {}

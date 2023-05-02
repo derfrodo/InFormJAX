@@ -1,10 +1,12 @@
 import { graphql } from "@/gql/generated-client/gql";
 
 export const queryDisplaysettings = graphql(`
-query DisplaySettings {
-    displaySettings {
-        showResultAfterMS
-        showResultForMS
+  query wheelSettings {
+    wheelSettings {
+      radius
+      rotationDurationNotPlaying
+      rotationDurationPlaying
+      rotationDurationInner
     }
   }
 `);

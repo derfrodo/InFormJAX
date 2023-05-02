@@ -8,17 +8,21 @@ import {
   GraphQLString,
 } from "graphql";
 import { getWheelValues } from "../../Wheel/constants/WHEELVALUES";
-import { WheelPartFilter } from "../generated-types/graphql";
+import {
+  DisplaySettingsInput,
+  WheelPartFilter,
+} from "../generated-types/graphql";
 
+import {
+  disabledWheelValues,
+  getFilteredWheelParts,
+} from "../data/disabledWheelValues";
+import { sessionDisplaySettings } from "../data/sessionDisplaySettings";
 import {
   displaySettingsInputType,
   displaySettingsType,
   wheelPartType,
 } from "./types/wheelPartType";
-import {
-  getFilteredWheelParts,
-  disabledWheelValues,
-} from "../data/disabledWheelValues";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -52,7 +56,7 @@ export const schema = new GraphQLSchema({
         async resolve() {
           await new Promise<void>((r) => setTimeout(() => r(), 100));
 
-          return { showResultInMS: 3 };
+          return sessionDisplaySettings;
         },
       },
 
@@ -77,9 +81,16 @@ export const schema = new GraphQLSchema({
           },
         },
         resolve: async (source, args, context, info) => {
-          const input = args["input"];
+          const input: DisplaySettingsInput = args["input"];
+          if (input) {
+            sessionDisplaySettings.showResultAfterMS =
+              input.showResultAfterMS ??
+              sessionDisplaySettings.showResultAfterMS;
+            sessionDisplaySettings.showResultForMS =
+              input.showResultForMS ?? sessionDisplaySettings.showResultForMS;
+          }
 
-          return input;
+          return sessionDisplaySettings;
         },
       },
 

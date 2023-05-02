@@ -10,7 +10,8 @@ export const DisplaySettingsTable = (props: {
     return <table style={{ borderSpacing: 4, }}>
     <thead>
         <tr>
-            <th>showResultInMS</th>
+            <th>showResultAfterMS</th>
+            <th>showResultForMS</th>
         </tr>
     </thead>
     <tbody>
@@ -18,8 +19,13 @@ export const DisplaySettingsTable = (props: {
             <tr key={index} onClick={() => props.onRowClicked && props.onRowClicked(item)}>
                     <IntCell
                         item={item}
-                        name={"showResultInMS"}
-                        value={item.showResultInMS}
+                        name={"showResultAfterMS"}
+                        value={item.showResultAfterMS}
+                    />
+                    <IntCell
+                        item={item}
+                        name={"showResultForMS"}
+                        value={item.showResultForMS}
                     />
             </tr>)}
     </tbody>
@@ -37,10 +43,16 @@ export const UpdateDisplaySettingsForm = (props: {
 
     return <form style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
         <IntInput
-            onChange={(next) => setCurrent(p => ({ ...p, showResultInMS: next }))}
+            onChange={(next) => setCurrent(p => ({ ...p, showResultAfterMS: next }))}
             item={item}
-            name={"showResultInMS"}
-            value={current.showResultInMS}
+            name={"showResultAfterMS"}
+            value={current.showResultAfterMS}
+        />
+        <IntInput
+            onChange={(next) => setCurrent(p => ({ ...p, showResultForMS: next }))}
+            item={item}
+            name={"showResultForMS"}
+            value={current.showResultForMS}
         />
       <button
         onClick={async (e) => {

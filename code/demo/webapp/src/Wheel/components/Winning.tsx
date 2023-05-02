@@ -2,12 +2,14 @@ import { useEffect, useMemo, useRef } from "react";
 import { useReward } from "react-rewards";
 import { RADIUS } from "../constants/RADIUS";
 import { WheelValue } from "../types/WheelValue";
+import { useQuery } from "@apollo/client";
+import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
 
 // import cheer from "./../assets/cheer.mp3";
 // import lost from "./../assets/lost.mp3";
 
-const CONFETTI_DELAY = 500;
-const AFTER_CONFETTI_DELAY = 4000;
+export const CONFETTI_DELAY = 500;
+export const AFTER_CONFETTI_DELAY = 4000;
 
 // const cheersAudio = new Audio(cheer);
 // const lostAudio = new Audio(lost);
@@ -18,6 +20,7 @@ export const Winning = (props: {
   onWinningShowFinished: (index: number) => any | Promise<any>;
   values: WheelValue[];
 }) => {
+  const { data: displaySettings } = useQuery(queryDisplaysettings);
   const {
     selectedIndex,
     hide,
@@ -82,17 +85,31 @@ export const Winning = (props: {
         //     lostAudio.play();
         // }
 
-        await new Promise((r) => setTimeout(r, CONFETTI_DELAY));
+        await new Promise((r) =>
+          setTimeout(
+            r,
+            displaySettings?.displaySettings?.showResultAfterMS ?? 0
+          )
+        );
         if (winLooseNone === "win") {
           performRewards.current();
         } else {
           performSad.current();
         }
-        await new Promise((r) => setTimeout(r, AFTER_CONFETTI_DELAY));
+        await new Promise((r) =>
+          setTimeout(r, displaySettings?.displaySettings?.showResultForMS ?? 0)
+        );
         onResultCB.current(selectedIndex);
       })();
     }
-  }, [hide, onResult, selectedIndex, winLooseNone]);
+  }, [
+    displaySettings?.displaySettings?.showResultAfterMS,
+    displaySettings?.displaySettings?.showResultForMS,
+    hide,
+    onResult,
+    selectedIndex,
+    winLooseNone,
+  ]);
 
   return (
     <div

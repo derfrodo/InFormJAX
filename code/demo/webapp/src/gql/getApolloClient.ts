@@ -26,6 +26,8 @@ export const getClient = (pageProps?: any, forceReset = false) => {
         switch (responseObject.__typename) {
           case "WheelPart":
             return `WheelPart:${responseObject.name}`;
+          case "DisplaySettings":
+            return `DisplaySettings`;
           default:
             return defaultDataIdFromObject(responseObject);
         }
@@ -59,8 +61,6 @@ export const getClient = (pageProps?: any, forceReset = false) => {
           ? mc.restore(pageProps.state)
           : mc,
     });
-
-  
   }
 
   // console.log(client.extract())

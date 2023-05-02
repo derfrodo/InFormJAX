@@ -44,7 +44,10 @@ export const wheelPartType = new GraphQLObjectType<WheelValue>({
 export const displaySettingsType = new GraphQLObjectType({
     name:"DisplaySettings",
     fields: {
-        showResultInMS: {
+        showResultAfterMS: {
+            type: new GraphQLNonNull(GraphQLInt),
+        },
+        showResultForMS: {
             type: new GraphQLNonNull(GraphQLInt),
         },
     }
@@ -53,7 +56,10 @@ export const displaySettingsType = new GraphQLObjectType({
 export const displaySettingsInputType = new GraphQLInputObjectType({
     name:"DisplaySettingsInput",
     fields: {
-        name: {
+        showResultAfterMS: {
+            type: new GraphQLNonNull(GraphQLInt),
+        },
+        showResultForMS: {
             type: new GraphQLNonNull(GraphQLInt),
         },
     }

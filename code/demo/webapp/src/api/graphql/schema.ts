@@ -11,6 +11,7 @@ import { getWheelValues } from "../../Wheel/constants/WHEELVALUES";
 import {
   DisplaySettingsInput,
   WheelPartFilter,
+  WheelSettingsInput,
 } from "../generated-types/graphql";
 
 import {
@@ -22,7 +23,10 @@ import {
   displaySettingsInputType,
   displaySettingsType,
   wheelPartType,
+  wheelSettingsInputType,
+  wheelSettingsType,
 } from "./types/wheelPartType";
+import { sessionWheelSettings } from "../data/sessionWheelSettings";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -59,6 +63,15 @@ export const schema = new GraphQLSchema({
           return sessionDisplaySettings;
         },
       },
+      wheelSettings: {
+        type: wheelSettingsType,
+
+        async resolve() {
+          await new Promise<void>((r) => setTimeout(() => r(), 100));
+
+          return sessionWheelSettings;
+        },
+      },
 
       firstname: {
         type: GraphQLString,
@@ -73,7 +86,7 @@ export const schema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: "Mutation",
     fields: {
-      updateSettings: {
+      updateDisplaySettings: {
         type: displaySettingsType,
         args: {
           input: {
@@ -88,6 +101,33 @@ export const schema = new GraphQLSchema({
               sessionDisplaySettings.showResultAfterMS;
             sessionDisplaySettings.showResultForMS =
               input.showResultForMS ?? sessionDisplaySettings.showResultForMS;
+          }
+
+          return sessionDisplaySettings;
+        },
+      },
+
+      updateWheelSettings: {
+        type: wheelSettingsType,
+        args: {
+          input: {
+            type: new GraphQLNonNull(wheelSettingsInputType),
+          },
+        },
+        resolve: async (source, args, context, info) => {
+          const input: WheelSettingsInput = args["input"];
+          if (input) {
+            sessionWheelSettings.radius =
+              input.radius ?? sessionWheelSettings.radius;
+            sessionWheelSettings.rotationDurationInner =
+              input.rotationDurationInner ??
+              sessionWheelSettings.rotationDurationInner;
+            sessionWheelSettings.rotationDurationNotPlaying =
+              input.rotationDurationNotPlaying ??
+              sessionWheelSettings.rotationDurationNotPlaying;
+            sessionWheelSettings.rotationDurationPlaying =
+              input.rotationDurationPlaying ??
+              sessionWheelSettings.rotationDurationPlaying;
           }
 
           return sessionDisplaySettings;

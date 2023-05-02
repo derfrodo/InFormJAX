@@ -40,18 +40,25 @@ export default function WheelParts() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main style={{ padding: 16 }}>
-        <h1>Einstellungen</h1>
-        <div style={{ marginBottom: 12 }}>
-          <Link href="/">🏠 Zurück zum Rad</Link>
-        </div>
-
-        <h2>Abschnitte</h2>
-        <WheelPartArrayElementTable
-          onRowClicked={async (item) => {
-            await toggleDisabled({ variables: { name: item.name } });
+        <div
+          style={{
+            display: "flex",
           }}
-          items={data?.wheelParts || []}
-        />
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              flexDirection: "column",
+            }}
+          >
+            <h1>⚙️ Einstellungen</h1>
+            <div style={{ marginBottom: 12, marginTop: -24 }}>
+              <Link href="/">🏠 Zurück zum Rad</Link>
+            </div>
+          </div>
+          <div style={{ flex: 1 }} />
+        </div>
 
         <h2>Anzeigeeinstellungen</h2>
 
@@ -66,7 +73,14 @@ export default function WheelParts() {
         ) : (
           <></>
         )}
-        {/* <App values={data?.wheelParts ?? []} /> */}
+
+        <h2>Abschnitte</h2>
+        <WheelPartArrayElementTable
+          onRowClicked={async (item) => {
+            await toggleDisabled({ variables: { name: item.name } });
+          }}
+          items={data?.wheelParts || []}
+        />
       </main>
     </>
   );

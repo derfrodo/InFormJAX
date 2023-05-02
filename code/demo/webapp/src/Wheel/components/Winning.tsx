@@ -8,8 +8,6 @@ import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysett
 // import cheer from "./../assets/cheer.mp3";
 // import lost from "./../assets/lost.mp3";
 
-export const CONFETTI_DELAY = 500;
-export const AFTER_CONFETTI_DELAY = 4000;
 
 // const cheersAudio = new Audio(cheer);
 // const lostAudio = new Audio(lost);

@@ -28,7 +28,8 @@ export type DisplaySettingsInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   toggleDisableWheelValue?: Maybe<WheelPart>;
-  updateSettings?: Maybe<DisplaySettings>;
+  updateDisplaySettings?: Maybe<DisplaySettings>;
+  updateWheelSettings?: Maybe<WheelSettings>;
 };
 
 
@@ -37,14 +38,20 @@ export type MutationToggleDisableWheelValueArgs = {
 };
 
 
-export type MutationUpdateSettingsArgs = {
+export type MutationUpdateDisplaySettingsArgs = {
   input: DisplaySettingsInput;
+};
+
+
+export type MutationUpdateWheelSettingsArgs = {
+  input: WheelSettingsInput;
 };
 
 export type Query = {
   __typename?: 'Query';
   displaySettings?: Maybe<DisplaySettings>;
   firstname?: Maybe<Scalars['String']>;
+  sessionWheelSettings?: Maybe<WheelSettings>;
   wheelParts?: Maybe<Array<WheelPart>>;
 };
 
@@ -62,6 +69,21 @@ export type WheelPart = {
   name: Scalars['String'];
   win: Scalars['Boolean'];
   winText?: Maybe<Scalars['String']>;
+};
+
+export type WheelSettings = {
+  __typename?: 'WheelSettings';
+  radius: Scalars['Int'];
+  rotationDurationInner: Scalars['Int'];
+  rotationDurationNotPlaying: Scalars['Int'];
+  rotationDurationPlaying: Scalars['Int'];
+};
+
+export type WheelSettingsInput = {
+  radius: Scalars['Int'];
+  rotationDurationInner: Scalars['Int'];
+  rotationDurationNotPlaying: Scalars['Int'];
+  rotationDurationPlaying: Scalars['Int'];
 };
 
 export type WheelPartFilter = {
@@ -147,6 +169,8 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   WheelPart: ResolverTypeWrapper<WheelPart>;
+  WheelSettings: ResolverTypeWrapper<WheelSettings>;
+  WheelSettingsInput: WheelSettingsInput;
   wheelPartFilter: WheelPartFilter;
 };
 
@@ -160,6 +184,8 @@ export type ResolversParentTypes = {
   Query: {};
   String: Scalars['String'];
   WheelPart: WheelPart;
+  WheelSettings: WheelSettings;
+  WheelSettingsInput: WheelSettingsInput;
   wheelPartFilter: WheelPartFilter;
 };
 
@@ -171,12 +197,14 @@ export type DisplaySettingsResolvers<ContextType = any, ParentType extends Resol
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   toggleDisableWheelValue?: Resolver<Maybe<ResolversTypes['WheelPart']>, ParentType, ContextType, RequireFields<MutationToggleDisableWheelValueArgs, 'name'>>;
-  updateSettings?: Resolver<Maybe<ResolversTypes['DisplaySettings']>, ParentType, ContextType, RequireFields<MutationUpdateSettingsArgs, 'input'>>;
+  updateDisplaySettings?: Resolver<Maybe<ResolversTypes['DisplaySettings']>, ParentType, ContextType, RequireFields<MutationUpdateDisplaySettingsArgs, 'input'>>;
+  updateWheelSettings?: Resolver<Maybe<ResolversTypes['WheelSettings']>, ParentType, ContextType, RequireFields<MutationUpdateWheelSettingsArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   displaySettings?: Resolver<Maybe<ResolversTypes['DisplaySettings']>, ParentType, ContextType>;
   firstname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  sessionWheelSettings?: Resolver<Maybe<ResolversTypes['WheelSettings']>, ParentType, ContextType>;
   wheelParts?: Resolver<Maybe<Array<ResolversTypes['WheelPart']>>, ParentType, ContextType, Partial<QueryWheelPartsArgs>>;
 };
 
@@ -191,10 +219,19 @@ export type WheelPartResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type WheelSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['WheelSettings'] = ResolversParentTypes['WheelSettings']> = {
+  radius?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  rotationDurationInner?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  rotationDurationNotPlaying?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  rotationDurationPlaying?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   DisplaySettings?: DisplaySettingsResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   WheelPart?: WheelPartResolvers<ContextType>;
+  WheelSettings?: WheelSettingsResolvers<ContextType>;
 };
 

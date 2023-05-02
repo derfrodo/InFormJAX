@@ -1,6 +1,6 @@
 import { graphql } from "@/gql/generated-client/gql";
 
-export const queryDisplaysettings = graphql(`
+export const queryWheelSettings = graphql(`
   query wheelSettings {
     wheelSettings {
       radius

@@ -2,7 +2,6 @@ import { UpdateDisplaySettingsMutationReturnType } from "./UpdateDisplaySettings
 import { IntCell, IntInput,  } from "./../InForm/atoms/IntCell"
 import { useState, useEffect } from "react"
 
-
 export const DisplaySettingsTable = (props: { 
     items: UpdateDisplaySettingsMutationReturnType[];
     onRowClicked?: (item: UpdateDisplaySettingsMutationReturnType) => Promise<void> | void
@@ -62,3 +61,4 @@ export const UpdateDisplaySettingsForm = (props: {
       >Save</button>
     </form>;
 }
+

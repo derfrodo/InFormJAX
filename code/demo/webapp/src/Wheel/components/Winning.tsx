@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useReward } from "react-rewards";
-import { RADIUS } from "../constants/RADIUS";
 import { WheelValue } from "../types/WheelValue";
 import { useQuery } from "@apollo/client";
 import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
+import { useGetWheelSettings } from "@/Configuration/WheelSettings/useGetWheelSettings";
 
 // import cheer from "./../assets/cheer.mp3";
 // import lost from "./../assets/lost.mp3";
-
 
 // const cheersAudio = new Audio(cheer);
 // const lostAudio = new Audio(lost);
@@ -18,6 +17,7 @@ export const Winning = (props: {
   onWinningShowFinished: (index: number) => any | Promise<any>;
   values: WheelValue[];
 }) => {
+  const { radius, rotationDurationPlaying } = useGetWheelSettings();
   const { data: displaySettings } = useQuery(queryDisplaysettings);
   const {
     selectedIndex,
@@ -128,7 +128,7 @@ export const Winning = (props: {
         style={{
           position: "absolute",
           top: "calc(50% - 6rem)",
-          left: `calc(50% - ${RADIUS}px - 8rem)`,
+          left: `calc(50% - ${radius}px - 8rem)`,
           fontSize: "8rem",
           height: "8rem",
           width: "8rem",
@@ -148,10 +148,10 @@ export const Winning = (props: {
         style={{
           position: "absolute",
           top: "calc(50% - 6rem)",
-          left: `calc(50% - ${RADIUS}px)`,
+          left: `calc(50% - ${radius}px)`,
           fontSize: "2.5rem",
           height: "12rem",
-          width: RADIUS * 2,
+          width: radius * 2,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -165,7 +165,7 @@ export const Winning = (props: {
         style={{
           position: "absolute",
           top: "calc(50% - 6rem)",
-          left: `calc(50% + ${RADIUS}px)`,
+          left: `calc(50% + ${radius}px)`,
           fontSize: "8rem",
           height: "8rem",
           width: "8rem",

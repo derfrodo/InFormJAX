@@ -6,7 +6,6 @@ import { BoolCell,  } from "./../InForm/atoms/BoolCell"
 import { BoolInput,  } from "./../InForm/atoms/BoolInput"
 import { useState, useEffect } from "react"
 
-
 export const WheelPartArrayElementTable = (props: { 
     items: ReturnedWheelPartArrayElement[];
     onRowClicked?: (item: ReturnedWheelPartArrayElement) => Promise<void> | void
@@ -102,3 +101,4 @@ export const UpdateWheelPartArrayElementForm = (props: {
       >Save</button>
     </form>;
 }
+

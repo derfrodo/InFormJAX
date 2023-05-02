@@ -1,11 +1,10 @@
 import { useEffect, useRef } from "react";
-import { RADIUS } from "../constants/RADIUS";
-import { SPIN_DURATION } from "../constants/SPIN_DURATION";
 import { useDevicePixelRatio } from "../utils/getDevicePixelRatio";
 import { MATERNA_RED, MATERNA_GREY } from "../App";
+import { useGetWheelSettings } from "@/Configuration/WheelSettings/useGetWheelSettings";
 
-
-export function WheelPointer(props: { playing: boolean; }) {
+export function WheelPointer(props: { playing: boolean }) {
+  const { radius, rotationDurationPlaying } = useGetWheelSettings();
   const { playing } = props;
   const devicePixelRatio = useDevicePixelRatio();
   const canvas2 = useRef<HTMLCanvasElement | null>(null);
@@ -13,10 +12,10 @@ export function WheelPointer(props: { playing: boolean; }) {
   useEffect(() => {
     const current = canvas2.current;
     if (current) {
-      current.setAttribute("height", `${(devicePixelRatio * RADIUS) / 2}px`);
-      current.setAttribute("width", `${(devicePixelRatio * RADIUS) / 2}px`);
+      current.setAttribute("height", `${(devicePixelRatio * radius) / 2}px`);
+      current.setAttribute("width", `${(devicePixelRatio * radius) / 2}px`);
     }
-  }, [devicePixelRatio]);
+  }, [devicePixelRatio, radius]);
   useEffect(() => {
     const current = canvas2.current;
     if (current) {
@@ -53,7 +52,9 @@ export function WheelPointer(props: { playing: boolean; }) {
           left: `0`,
           top: `0`,
           transformOrigin: "1.5rem center",
-          animationDuration: playing ? `${SPIN_DURATION / 4}ms` : undefined,
+          animationDuration: playing
+            ? `${rotationDurationPlaying / 4}ms`
+            : undefined,
           animationName: "WheelSpin2",
           animationIterationCount: "infinite",
           animationTimingFunction: "linear",

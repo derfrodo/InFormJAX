@@ -51,8 +51,8 @@ export type Query = {
   __typename?: 'Query';
   displaySettings?: Maybe<DisplaySettings>;
   firstname?: Maybe<Scalars['String']>;
-  sessionWheelSettings?: Maybe<WheelSettings>;
   wheelParts?: Maybe<Array<WheelPart>>;
+  wheelSettings?: Maybe<WheelSettings>;
 };
 
 
@@ -204,8 +204,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   displaySettings?: Resolver<Maybe<ResolversTypes['DisplaySettings']>, ParentType, ContextType>;
   firstname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  sessionWheelSettings?: Resolver<Maybe<ResolversTypes['WheelSettings']>, ParentType, ContextType>;
   wheelParts?: Resolver<Maybe<Array<ResolversTypes['WheelPart']>>, ParentType, ContextType, Partial<QueryWheelPartsArgs>>;
+  wheelSettings?: Resolver<Maybe<ResolversTypes['WheelSettings']>, ParentType, ContextType>;
 };
 
 export type WheelPartResolvers<ContextType = any, ParentType extends ResolversParentTypes['WheelPart'] = ResolversParentTypes['WheelPart']> = {

@@ -2,7 +2,7 @@ import {
   GroupAndOrderTypes,
   InFormMapping,
 } from "@derfrodo/gen-in-form-runtime";
-import { ReturnedWheelPartArrayElement } from "./WheelPartType";
+import { ReturnedWheelPartArrayElement } from "./ReturnedWheelPartArrayElement";
 
 const groupAndOrderFields: GroupAndOrderTypes<ReturnedWheelPartArrayElement> = {
   fields: {

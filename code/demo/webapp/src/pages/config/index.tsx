@@ -13,6 +13,9 @@ import Link from "next/link";
 import { UpdateDisplaySettingsForm } from "@/Configuration/DisplaySettings/DisplaySettings.generated";
 import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
 import { updateDisplaysettings } from "@/Configuration/mutations/updateDisplaySettings";
+import { UpdateWheelSettingsForm } from "@/Configuration/WheelSettings/WheelSettings.generated";
+import { queryWheelSettings } from "@/Configuration/mutations/queryWheelSettings";
+import { updateWheelSettings } from "@/Configuration/mutations/updateWheelSettings";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -30,6 +33,8 @@ export default function WheelParts() {
   const [toggleDisabled] = useMutation(toggleDisableWheelValue);
   const { data: displaySettings } = useQuery(queryDisplaysettings);
   const [updateDisplaySettings] = useMutation(updateDisplaysettings);
+  const { data: wheelSettings } = useQuery(queryWheelSettings);
+  const [updateWheelsettings] = useMutation(updateWheelSettings);
 
   return (
     <>
@@ -59,6 +64,19 @@ export default function WheelParts() {
           </div>
           <div style={{ flex: 1 }} />
         </div>
+
+        <h2>Einstellungen am Rad</h2>
+
+        {wheelSettings?.wheelSettings ? (
+          <UpdateWheelSettingsForm
+            item={wheelSettings?.wheelSettings}
+            onSave={(next) => {
+              updateWheelsettings({ variables: { input: next } });
+            }}
+          />
+        ) : (
+          <></>
+        )}
 
         <h2>Anzeigeeinstellungen</h2>
 

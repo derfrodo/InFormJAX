@@ -10,6 +10,7 @@ import { IntCell, IntInput } from "./atoms/IntCell";
 import { StringCell } from "./atoms/StringCell";
 import { ImageCell } from "./atoms/ImageCell";
 import { StringInput } from "./atoms/StringInput";
+import { Scalars } from "../../gql/generated-client/graphql";
 
 const image = /imagePath/i;
 
@@ -34,7 +35,13 @@ interface FM extends InFormDataTypes<string, string> {
   ["NUMBER"]: InFormDataTypeWithDefaultValueAndComponent<
     "NUMBER",
     number,
-    "",
+    0,
+    typeof IntInput
+  >;
+  ["NUMBERS"]: InFormDataTypeWithDefaultValueAndComponent<
+    "NUMBER",
+    Scalars['Int'],
+    0,
     typeof IntInput
   >;
 

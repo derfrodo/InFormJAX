@@ -8,7 +8,16 @@ export const Update{{name}}Form = (props: {
     setCurrent({ ...item });
     }, [item]);
 
-    return <form style={{#surroundWithCurlyBraces}}{ display: "flex", gap: 16, flexWrap: "wrap" }{{/surroundWithCurlyBraces}}>
+    return <form style={{#surroundWithCurlyBraces}}{ 
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+        flexWrap: "wrap",
+        borderRadius: 4,
+        padding: 8,
+        border: "1px solid black",
+
+    }{{/surroundWithCurlyBraces}}>
     {{#each byOrdering}}
     {{#findElementByPropertyValueAndRegex input.mappedBy "key" "[^(CELL)]$"}}
         <{{componentType.typeName}}
@@ -25,6 +34,11 @@ export const Update{{name}}Form = (props: {
           const next = {{#if detailsTypeInfo}}projectTo{{name}}Input(current){{else}}current{{/if}};
           await onSave(next);
         }{{/surroundWithCurlyBraces}}
+        style={{#surroundWithCurlyBraces}}{ 
+        width: 150,
+        borderRadius: 4,
+        padding: 8,
+    }{{/surroundWithCurlyBraces}}
       >Save</button>
     </form>;
 }

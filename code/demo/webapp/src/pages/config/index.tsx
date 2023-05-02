@@ -65,10 +65,9 @@ export default function WheelParts() {
           <div style={{ flex: 1 }} />
         </div>
 
-        <h2>Einstellungen am Rad</h2>
-
         {wheelSettings?.wheelSettings ? (
           <UpdateWheelSettingsForm
+            title={"Einstellungen am Rad"}
             item={wheelSettings?.wheelSettings}
             onSave={(next) => {
               updateWheelsettings({ variables: { input: next } });
@@ -78,10 +77,9 @@ export default function WheelParts() {
           <></>
         )}
 
-        <h2>Anzeigeeinstellungen</h2>
-
         {displaySettings?.displaySettings ? (
           <UpdateDisplaySettingsForm
+            title={"Anzeigeeinstellungen"}
             item={displaySettings.displaySettings}
             onSave={(next) => {
               const { __typename, ...rest } = next;

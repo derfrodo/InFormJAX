@@ -22,3 +22,7 @@ a {
   color: #fff;
   text-decoration: none;
 }
+
+label{
+  margin-right: 12px;
+}

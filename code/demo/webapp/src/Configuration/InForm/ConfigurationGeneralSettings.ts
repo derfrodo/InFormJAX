@@ -40,11 +40,11 @@ interface FM extends InFormDataTypes<string, string> {
   >;
   ["NUMBERS"]: InFormDataTypeWithDefaultValueAndComponent<
     "NUMBER",
-    Scalars['Int'],
+    Scalars["Int"],
     0,
     typeof IntInput
   >;
-
+  
   ["StNullUndef"]: InFormDataTypeWithDefaultValueAndComponent<
     "STRING",
     string | null,

@@ -8,6 +8,7 @@ export const toggleDisableWheelValue = graphql(`
       imageText
       win
       winText
+      winChance
       disabled
     }
   }

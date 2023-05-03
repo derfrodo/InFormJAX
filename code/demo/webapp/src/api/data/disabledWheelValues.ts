@@ -1,5 +1,5 @@
-import { getWheelValues } from "../../Wheel/constants/WHEELVALUES";
-import type { WheelValue } from "../../Wheel/types/WheelValue";
+import { getWheelValues } from "./WHEELVALUES";
+import type { WheelValue } from "./types/WheelValue";
 import { WheelPartFilter } from "../generated-types/graphql";
 
 

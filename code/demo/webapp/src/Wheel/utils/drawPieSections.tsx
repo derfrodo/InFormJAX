@@ -1,7 +1,7 @@
 import { WHEELPARTS } from "../constants/WHEELPARTS";
 import { anglePart } from "../constants/anglePart";
 import { anglePartHalf } from "../constants/anglePartHalf";
-import { WheelValue } from "../types/WheelValue";
+import { WheelValue } from "../../api/data/types/WheelValue";
 
 export async function drawPieSections(
   context: CanvasRenderingContext2D,

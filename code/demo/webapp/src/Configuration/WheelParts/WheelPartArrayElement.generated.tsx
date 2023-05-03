@@ -4,6 +4,7 @@ import { StringCell,  } from "./../InForm/atoms/StringCell"
 import { ImageCell,  } from "./../InForm/atoms/ImageCell"
 import { BoolCell,  } from "./../InForm/atoms/BoolCell"
 import { BoolInput,  } from "./../InForm/atoms/BoolInput"
+import { IntCell, IntInput,  } from "./../InForm/atoms/IntCell"
 import { useState, useEffect } from "react"
 
 export const WheelPartArrayElementTable = (props: { 

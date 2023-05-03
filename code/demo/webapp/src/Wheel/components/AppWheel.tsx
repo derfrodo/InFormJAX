@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { WheelValue } from "../types/WheelValue";
+import { WheelValue } from "../../api/data/types/WheelValue";
 import { anglePart } from "../constants/anglePart";
 import { drawPieSections } from "../utils/drawPieSections";
 import { useDevicePixelRatio } from "../utils/getDevicePixelRatio";

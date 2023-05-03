@@ -8,6 +8,7 @@ export const getwheels = graphql(`
       imageText
       win
       winText
+      winChance
       disabled
     }
   }

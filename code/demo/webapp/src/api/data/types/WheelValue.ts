@@ -4,4 +4,7 @@ export type WheelValue = {
   imageText?: string | null;
   imagePath?: string | null;
   winText?: string | null;
+
+
+  winChance: number;
 };

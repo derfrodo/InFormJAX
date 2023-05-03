@@ -1,7 +1,7 @@
 import { useGetWheelSettings } from "@/Configuration/WheelSettings/useGetWheelSettings";
 import { useMemo } from "react";
 import { LIGHTSINCIRCLE } from "../constants/LIGHTSINCIRCLE";
-import { WheelValue } from "../types/WheelValue";
+import { WheelValue } from "../../api/data/types/WheelValue";
 
 function getAngleForRadianMeasure(radianMeasue: number, radius: number) {
   const circumference = Math.PI * 2 * radius;

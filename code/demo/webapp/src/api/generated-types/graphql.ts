@@ -68,6 +68,7 @@ export type WheelPart = {
   imageText?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   win: Scalars['Boolean'];
+  winChance: Scalars['Float'];
   winText?: Maybe<Scalars['String']>;
 };
 
@@ -164,6 +165,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   DisplaySettings: ResolverTypeWrapper<DisplaySettings>;
   DisplaySettingsInput: DisplaySettingsInput;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
@@ -179,6 +181,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   DisplaySettings: DisplaySettings;
   DisplaySettingsInput: DisplaySettingsInput;
+  Float: Scalars['Float'];
   Int: Scalars['Int'];
   Mutation: {};
   Query: {};
@@ -215,6 +218,7 @@ export type WheelPartResolvers<ContextType = any, ParentType extends ResolversPa
   imageText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   win?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  winChance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   winText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

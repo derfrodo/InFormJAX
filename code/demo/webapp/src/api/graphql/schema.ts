@@ -7,7 +7,7 @@ import {
   GraphQLSchema,
   GraphQLString,
 } from "graphql";
-import { getWheelValues } from "../../Wheel/constants/WHEELVALUES";
+import { getWheelValues } from "../data/WHEELVALUES";
 import {
   DisplaySettingsInput,
   WheelPartFilter,

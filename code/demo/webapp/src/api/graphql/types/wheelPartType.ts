@@ -1,10 +1,11 @@
 import {
   GraphQLBoolean,
+  GraphQLFloat,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLString
+  GraphQLString,
 } from "graphql";
-import type { WheelValue } from "../../../Wheel/types/WheelValue";
+import type { WheelValue } from "../../data/types/WheelValue";
 import { resolveDisabledWheelValue } from "../../data/disabledWheelValues";
 
 export const wheelPartType = new GraphQLObjectType<WheelValue>({
@@ -27,6 +28,9 @@ export const wheelPartType = new GraphQLObjectType<WheelValue>({
     image: {
       type: GraphQLString,
     },
+    winChance: {
+      type: new GraphQLNonNull(GraphQLFloat),
+    },
     disabled: {
       type: new GraphQLNonNull(GraphQLBoolean),
       resolve: function (source) {
@@ -36,5 +40,3 @@ export const wheelPartType = new GraphQLObjectType<WheelValue>({
   },
   name: "WheelPart",
 });
-
-  

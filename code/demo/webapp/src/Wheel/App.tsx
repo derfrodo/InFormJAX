@@ -13,7 +13,7 @@ import { WheelLights } from "./components/WheelLights";
 import { WheelPointer } from "./components/WheelPointer";
 import { Winning } from "./components/Winning";
 import { CHECK_CHANCE, WIN_CHANCE } from "./constants/WIN_CHANCE";
-import { WheelValue } from "./types/WheelValue";
+import { WheelValue } from "../api/data/types/WheelValue";
 import { useDevicePixelRatio } from "./utils/getDevicePixelRatio";
 
 // const wofAudio = new Audio(wofSound);
@@ -341,7 +341,9 @@ function App(props: { values: WheelValue[] }) {
           }}
         >
           PRODly created by T. Lansing, S. Pauka & J. Neubauer{" "}
-          <Link href="/config">⚙️</Link>
+          <Link href="/config" style={{marginLeft: 8}}>⚙️</Link>
+          <Link href="/highscore" style={{marginLeft: 8}}>🏆</Link>
+          
         </div>
       </div>
     </div>

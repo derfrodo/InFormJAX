@@ -3,27 +3,23 @@
 import App from "@/Wheel/App";
 import Head from "next/head";
 
-import { getme } from "@/Wheel/gql/getme";
+import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
+import { queryWheelSettings } from "@/Configuration/mutations/queryWheelSettings";
 import { getwheels } from "@/Wheel/gql/getwheels";
 import { getClient } from "@/gql/getApolloClient";
 import { useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
-import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
-import { queryWheelSettings } from "@/Configuration/mutations/queryWheelSettings";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
 
   // caching
-  await c.query({ query: getme });
   await c.query({
     query: getwheels,
     variables: { filter: { disabled: false } },
   });
   await c.query({ query: queryDisplaysettings });
   await c.query({ query: queryWheelSettings });
-
-  
 
   return {
     props: { state: c.extract() }, // will be passed to the page component as props
@@ -33,7 +29,7 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 export default function AppComponent() {
   const { data, called, loading } = useQuery(getwheels, {
     variables: { filter: { disabled: false } },
-    fetchPolicy: "cache-and-network"
+    fetchPolicy: "cache-and-network",
   });
 
   return (
@@ -45,10 +41,7 @@ export default function AppComponent() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {!called || loading ?
-          <></> :
-          <App values={data?.wheelParts ?? []} />
-        }
+        {!called || loading ? <></> : <App values={data?.wheelParts ?? []} />}
       </main>
     </>
   );

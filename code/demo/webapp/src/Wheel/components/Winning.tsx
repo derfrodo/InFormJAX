@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useReward } from "react-rewards";
-import { WheelValue } from "../types/WheelValue";
+import { WheelValue } from "../../api/data/types/WheelValue";
 import { useQuery } from "@apollo/client";
 import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
 import { useGetWheelSettings } from "@/Configuration/WheelSettings/useGetWheelSettings";

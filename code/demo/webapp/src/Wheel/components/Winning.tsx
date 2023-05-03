@@ -141,7 +141,7 @@ export const Winning = (props: {
         {winLooseNone === "win"
           ? "🎉"
           : winLooseNone === "loose"
-          ? "😭"
+          ? "😢"
           : undefined}
       </div>
       <div
@@ -178,7 +178,7 @@ export const Winning = (props: {
         {winLooseNone === "win"
           ? "🎉"
           : winLooseNone === "loose"
-          ? "😭"
+          ? "😢"
           : undefined}
       </div>
     </div>

@@ -33,7 +33,6 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 export default function AppComponent() {
   const { data, called, loading } = useQuery(getwheels, {
     variables: { filter: { disabled: false } },
-    // pollInterval: 1000,
     fetchPolicy: "cache-and-network"
   });
 

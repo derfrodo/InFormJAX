@@ -58,7 +58,7 @@ export default function Config() {
             left: 0,
             height: "100vh",
             width: "100vw",
-            overflow: "scroll",
+            overflow: "hidden",
             opacity: 0.05,
             pointerEvents: "none",
           }}

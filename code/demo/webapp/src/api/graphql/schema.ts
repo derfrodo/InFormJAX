@@ -7,7 +7,7 @@ import {
   GraphQLSchema,
   GraphQLString,
 } from "graphql";
-import { getWheelValues } from "../data/WHEELVALUES";
+import { getWheelValues } from "../data/getWheelValues";
 import {
   DisplaySettingsInput,
   WheelPartFilter,
@@ -25,6 +25,7 @@ import { displaySettingsInputType } from "./types/displaySettingsInputType";
 import { displaySettingsType } from "./types/displaySettingsType";
 import { wheelSettingsInputType } from "./types/wheelSettingsInputType";
 import { wheelSettingsType } from "./types/wheelSettingsType";
+import { gameSettingsType } from "./types/gameSettingsType";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -68,6 +69,13 @@ export const schema = new GraphQLSchema({
           await new Promise<void>((r) => setTimeout(() => r(), 100));
 
           return sessionWheelSettings;
+        },
+      },
+
+      gameSettings: {
+        type: gameSettingsType,
+        resolve() {
+          return {};
         },
       },
 

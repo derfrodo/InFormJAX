@@ -20,6 +20,7 @@ export const WheelPartArrayElementTable = (props: {
             <th>imagePath</th>
             <th>imageText</th>
             <th>winText</th>
+            <th>winChance</th>
         </tr>
     </thead>
     <tbody>
@@ -54,6 +55,11 @@ export const WheelPartArrayElementTable = (props: {
                         item={item}
                         name={"winText"}
                         value={item.winText}
+                    />
+                    <IntCell
+                        item={item}
+                        name={"winChance"}
+                        value={item.winChance}
                     />
             </tr>)}
     </tbody>
@@ -107,6 +113,12 @@ export const UpdateWheelPartArrayElementForm = (props: {
             item={item}
             name={"winText"}
             value={current.winText}
+        />
+        <IntInput
+            onChange={(next) => setCurrent(p => ({ ...p, winChance: next }))}
+            item={item}
+            name={"winChance"}
+            value={current.winChance}
         />
       <button
         onClick={async (e) => {

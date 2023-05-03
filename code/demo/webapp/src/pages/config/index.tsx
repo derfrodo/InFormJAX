@@ -16,6 +16,7 @@ import { updateDisplaysettings } from "@/Configuration/mutations/updateDisplaySe
 import { UpdateWheelSettingsForm } from "@/Configuration/WheelSettings/WheelSettings.generated";
 import { queryWheelSettings } from "@/Configuration/mutations/queryWheelSettings";
 import { updateWheelSettings } from "@/Configuration/mutations/updateWheelSettings";
+import App from "@/Wheel/App";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -35,7 +36,7 @@ export default function WheelParts() {
   const [updateDisplaySettings] = useMutation(updateDisplaysettings);
   const { data: wheelSettings } = useQuery(queryWheelSettings);
   const [updateWheelsettings] = useMutation(updateWheelSettings);
-
+  const { data: values } = useQuery(getwheels, {});
   return (
     <>
       <Head>
@@ -44,59 +45,94 @@ export default function WheelParts() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main style={{ padding: 16 }}>
+      <main style={{ padding: 16, position: "relative" }}>
         <div
           style={{
-            display: "flex",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            height: "100vh",
+            width: "100vw",
+            overflow: "scroll",
+            opacity: 0.05,
+            pointerEvents: "none",
+          }}
+        >
+          {values?.wheelParts ? (
+            <App values={values.wheelParts.filter((v) => !v.disabled)} />
+          ) : (
+            <></>
+          )}
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            height: "calc(100vh - 32px)",
+            width: "calc(100vw - 32px)",
+            overflow: "auto",
+            padding: 16,
           }}
         >
           <div
             style={{
               display: "flex",
-              alignItems: "flex-end",
-              flexDirection: "column",
             }}
           >
-            <h1>⚙️ Einstellungen</h1>
-            <div style={{ marginBottom: 12, marginTop: -24 }}>
-              <Link href="/">🏠 Zurück zum Rad</Link>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "flex-end",
+                flexDirection: "column",
+              }}
+            >
+              <h1>⚙️ Einstellungen</h1>
+              <div style={{ marginBottom: 12, marginTop: -24 }}>
+                <Link href="/">🏠 Zurück zum Rad</Link>
+              </div>
+            </div>
+            <div style={{ flex: 1 }} />
+          </div>
+
+          <div style={{ display: "flex", gap: 32 }}>
+            <div style={{ flex: 1 }}>
+              {wheelSettings?.wheelSettings ? (
+                <UpdateWheelSettingsForm
+                  title={"Einstellungen am Rad"}
+                  item={wheelSettings?.wheelSettings}
+                  onSave={(next) => {
+                    updateWheelsettings({ variables: { input: next } });
+                  }}
+                />
+              ) : (
+                <></>
+              )}
+
+              {displaySettings?.displaySettings ? (
+                <UpdateDisplaySettingsForm
+                  title={"Anzeigeeinstellungen"}
+                  item={displaySettings.displaySettings}
+                  onSave={(next) => {
+                    const { __typename, ...rest } = next;
+                    updateDisplaySettings({ variables: { input: rest } });
+                  }}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
+            <div style={{ flex: 1 }}>
+              <h2>Abschnitte</h2>
+              <WheelPartArrayElementTable
+                onRowClicked={async (item) => {
+                  await toggleDisabled({ variables: { name: item.name } });
+                }}
+                items={data?.wheelParts || []}
+              />
             </div>
           </div>
-          <div style={{ flex: 1 }} />
         </div>
-
-        {wheelSettings?.wheelSettings ? (
-          <UpdateWheelSettingsForm
-            title={"Einstellungen am Rad"}
-            item={wheelSettings?.wheelSettings}
-            onSave={(next) => {
-              updateWheelsettings({ variables: { input: next } });
-            }}
-          />
-        ) : (
-          <></>
-        )}
-
-        {displaySettings?.displaySettings ? (
-          <UpdateDisplaySettingsForm
-            title={"Anzeigeeinstellungen"}
-            item={displaySettings.displaySettings}
-            onSave={(next) => {
-              const { __typename, ...rest } = next;
-              updateDisplaySettings({ variables: { input: rest } });
-            }}
-          />
-        ) : (
-          <></>
-        )}
-
-        <h2>Abschnitte</h2>
-        <WheelPartArrayElementTable
-          onRowClicked={async (item) => {
-            await toggleDisabled({ variables: { name: item.name } });
-          }}
-          items={data?.wheelParts || []}
-        />
       </main>
     </>
   );

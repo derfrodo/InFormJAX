@@ -19,14 +19,12 @@ import {
   getFilteredWheelParts,
 } from "../data/disabledWheelValues";
 import { sessionDisplaySettings } from "../data/sessionDisplaySettings";
-import {
-  displaySettingsInputType,
-  displaySettingsType,
-  wheelPartType,
-  wheelSettingsInputType,
-  wheelSettingsType,
-} from "./types/wheelPartType";
+import { wheelPartType } from "./types/wheelPartType";
 import { sessionWheelSettings } from "../data/sessionWheelSettings";
+import { displaySettingsInputType } from "./types/displaySettingsInputType";
+import { displaySettingsType } from "./types/displaySettingsType";
+import { wheelSettingsInputType } from "./types/wheelSettingsInputType";
+import { wheelSettingsType } from "./types/wheelSettingsType";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({

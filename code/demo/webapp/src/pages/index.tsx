@@ -5,21 +5,23 @@ import Head from "next/head";
 
 import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
 import { queryWheelSettings } from "@/Configuration/mutations/queryWheelSettings";
-import { getwheels } from "@/Wheel/gql/getwheels";
+import { queryWheelParts } from "@/Wheel/gql/queryWheelParts";
 import { getClient } from "@/gql/getApolloClient";
 import { useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
+import { queryGameSettings } from "@/Wheel/gql/queryGameSettings";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
 
   // caching
   await c.query({
-    query: getwheels,
+    query: queryWheelParts,
     variables: { filter: { disabled: false } },
   });
   await c.query({ query: queryDisplaysettings });
   await c.query({ query: queryWheelSettings });
+  await c.query({ query: queryGameSettings });
 
   return {
     props: { state: c.extract() }, // will be passed to the page component as props
@@ -27,7 +29,7 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 }
 
 export default function AppComponent() {
-  const { data, called, loading } = useQuery(getwheels, {
+  const { data, called, loading } = useQuery(queryWheelParts, {
     variables: { filter: { disabled: false } },
     fetchPolicy: "cache-and-network",
   });

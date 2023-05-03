@@ -4,8 +4,8 @@ import Head from "next/head";
 
 import { WheelPartArrayElementTable } from "@/Configuration/WheelParts/WheelPartArrayElement.generated";
 
-import { getwheels } from "@/Wheel/gql/getwheels";
-import { toggleDisableWheelValue } from "@/Wheel/gql/toggleDisableWheelValue";
+import { queryWheelParts } from "@/Wheel/gql/queryWheelParts";
+import { mutateToggleDisableWheelValue } from "@/Wheel/gql/mutateToggleDisableWheelValue";
 import { getClient } from "@/gql/getApolloClient";
 import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
@@ -17,13 +17,15 @@ import { UpdateWheelSettingsForm } from "@/Configuration/WheelSettings/WheelSett
 import { queryWheelSettings } from "@/Configuration/mutations/queryWheelSettings";
 import { updateWheelSettings } from "@/Configuration/mutations/updateWheelSettings";
 import App from "@/Wheel/App";
+import { queryGameSettings } from "@/Wheel/gql/queryGameSettings";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
   // caching
-  await c.query({ query: getwheels });
+  await c.query({ query: queryWheelParts });
   await c.query({ query: queryDisplaysettings });
   await c.query({ query: queryWheelSettings });
+  await c.query({ query: queryGameSettings });
 
   return {
     props: { state: c.extract() }, // will be passed to the page component as props
@@ -31,11 +33,12 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 }
 
 export default function Config() {
-  const { data: values } = useQuery(getwheels);
+  const { data: values } = useQuery(queryWheelParts);
   const { data: displaySettings } = useQuery(queryDisplaysettings);
   const { data: wheelSettings } = useQuery(queryWheelSettings);
+  const { refetch: refetchGameSettings } = useQuery(queryGameSettings);
 
-  const [toggleDisabled] = useMutation(toggleDisableWheelValue);
+  const [toggleDisabled] = useMutation(mutateToggleDisableWheelValue);
   const [updateDisplaySettings] = useMutation(updateDisplaysettings);
   const [updateWheelsettings] = useMutation(updateWheelSettings);
 
@@ -129,6 +132,7 @@ export default function Config() {
               <WheelPartArrayElementTable
                 onRowClicked={async (item) => {
                   await toggleDisabled({ variables: { name: item.name } });
+                  await refetchGameSettings();
                 }}
                 items={values?.wheelParts || []}
               />

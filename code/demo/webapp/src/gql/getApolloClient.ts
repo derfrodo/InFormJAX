@@ -30,6 +30,8 @@ export const getClient = (pageProps?: any, forceReset = false) => {
             return `DisplaySettings`;
           case "WheelSettings":
             return `WheelSettings`;
+            case "gameSettings":
+              return `GameSettings`;
 
           default:
             return defaultDataIdFromObject(responseObject);

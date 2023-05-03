@@ -12,9 +12,11 @@ import { LitLogo } from "./components/LitLogo";
 import { WheelLights } from "./components/WheelLights";
 import { WheelPointer } from "./components/WheelPointer";
 import { Winning } from "./components/Winning";
-import { CHECK_CHANCE, WIN_CHANCE } from "./constants/WIN_CHANCE";
+import { CHECK_CHANCE } from "./constants/WIN_CHANCE";
 import { WheelValue } from "../api/data/types/WheelValue";
 import { useDevicePixelRatio } from "./utils/getDevicePixelRatio";
+import { useQuery } from "@apollo/client";
+import { queryGameSettings } from "./gql/queryGameSettings";
 
 // const wofAudio = new Audio(wofSound);
 
@@ -65,6 +67,7 @@ function isWinner(winChance: number) {
 
 function App(props: { values: WheelValue[] }) {
   const { radius } = useGetWheelSettings();
+  const { data } = useQuery(queryGameSettings);
 
   const [lastWin, setLastWin] = useState(0);
   const [roundDone, setRoundDone] = useState(true);
@@ -73,15 +76,18 @@ function App(props: { values: WheelValue[] }) {
   const devicePixelRatio = useDevicePixelRatio();
 
   const { values } = props;
+  const winChance = data?.gameSettings?.chanceToWin ?? 0;
 
   const calculateWinner = useCallback(() => {
-    const winner = isWinner(WIN_CHANCE);
+    console.log(winChance);
+
+    const winner = isWinner(winChance);
 
     if (CHECK_CHANCE) {
       let won = 0;
       let lost = 0;
       for (let i = 0; i < 1000000; i++) {
-        if (isWinner(WIN_CHANCE)) {
+        if (isWinner(winChance)) {
           won++;
         } else {
           lost++;
@@ -91,7 +97,7 @@ function App(props: { values: WheelValue[] }) {
         won,
         lost,
         all: won + lost,
-        WIN_CHANCE,
+        winChance,
         actual: won / (won + lost),
       });
     }
@@ -115,7 +121,7 @@ function App(props: { values: WheelValue[] }) {
       setLastWin(lostIndex);
       setRoundDone(false);
     }
-  }, [values]);
+  }, [values, winChance]);
 
   const updatePlaying = useCallback(() => {
     setPlaying((p) => {
@@ -341,9 +347,12 @@ function App(props: { values: WheelValue[] }) {
           }}
         >
           PRODly created by T. Lansing, S. Pauka & J. Neubauer{" "}
-          <Link href="/config" style={{marginLeft: 8}}>⚙️</Link>
-          <Link href="/highscore" style={{marginLeft: 8}}>🏆</Link>
-          
+          <Link href="/config" style={{ marginLeft: 8 }}>
+            ⚙️
+          </Link>
+          <Link href="/highscore" style={{ marginLeft: 8 }}>
+            🏆
+          </Link>
         </div>
       </div>
     </div>

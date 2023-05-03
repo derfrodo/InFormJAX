@@ -25,6 +25,13 @@ export type DisplaySettingsInput = {
   showResultForMS: Scalars['Int'];
 };
 
+export type GameSettingsType = {
+  __typename?: 'GameSettingsType';
+  chanceToWin: Scalars['Float'];
+  sumOfChances: Scalars['Float'];
+  sumOfWinChance: Scalars['Float'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   toggleDisableWheelValue?: Maybe<WheelPart>;
@@ -51,6 +58,7 @@ export type Query = {
   __typename?: 'Query';
   displaySettings?: Maybe<DisplaySettings>;
   firstname?: Maybe<Scalars['String']>;
+  gameSettings?: Maybe<GameSettingsType>;
   wheelParts?: Maybe<Array<WheelPart>>;
   wheelSettings?: Maybe<WheelSettings>;
 };
@@ -166,6 +174,7 @@ export type ResolversTypes = {
   DisplaySettings: ResolverTypeWrapper<DisplaySettings>;
   DisplaySettingsInput: DisplaySettingsInput;
   Float: ResolverTypeWrapper<Scalars['Float']>;
+  GameSettingsType: ResolverTypeWrapper<GameSettingsType>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
@@ -182,6 +191,7 @@ export type ResolversParentTypes = {
   DisplaySettings: DisplaySettings;
   DisplaySettingsInput: DisplaySettingsInput;
   Float: Scalars['Float'];
+  GameSettingsType: GameSettingsType;
   Int: Scalars['Int'];
   Mutation: {};
   Query: {};
@@ -198,6 +208,13 @@ export type DisplaySettingsResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GameSettingsTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['GameSettingsType'] = ResolversParentTypes['GameSettingsType']> = {
+  chanceToWin?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  sumOfChances?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  sumOfWinChance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   toggleDisableWheelValue?: Resolver<Maybe<ResolversTypes['WheelPart']>, ParentType, ContextType, RequireFields<MutationToggleDisableWheelValueArgs, 'name'>>;
   updateDisplaySettings?: Resolver<Maybe<ResolversTypes['DisplaySettings']>, ParentType, ContextType, RequireFields<MutationUpdateDisplaySettingsArgs, 'input'>>;
@@ -207,6 +224,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   displaySettings?: Resolver<Maybe<ResolversTypes['DisplaySettings']>, ParentType, ContextType>;
   firstname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  gameSettings?: Resolver<Maybe<ResolversTypes['GameSettingsType']>, ParentType, ContextType>;
   wheelParts?: Resolver<Maybe<Array<ResolversTypes['WheelPart']>>, ParentType, ContextType, Partial<QueryWheelPartsArgs>>;
   wheelSettings?: Resolver<Maybe<ResolversTypes['WheelSettings']>, ParentType, ContextType>;
 };
@@ -233,6 +251,7 @@ export type WheelSettingsResolvers<ContextType = any, ParentType extends Resolve
 
 export type Resolvers<ContextType = any> = {
   DisplaySettings?: DisplaySettingsResolvers<ContextType>;
+  GameSettingsType?: GameSettingsTypeResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   WheelPart?: WheelPartResolvers<ContextType>;

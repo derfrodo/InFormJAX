@@ -4,8 +4,8 @@ import Head from "next/head";
 
 import { WheelPartArrayElementTable } from "@/Configuration/WheelParts/WheelPartArrayElement.generated";
 
-import { getwheels } from "@/Wheel/gql/getwheels";
-import { toggleDisableWheelValue } from "@/Wheel/gql/toggleDisableWheelValue";
+import { queryWheelParts } from "@/Wheel/gql/queryWheelParts";
+import { mutateToggleDisableWheelValue } from "@/Wheel/gql/mutateToggleDisableWheelValue";
 import { getClient } from "@/gql/getApolloClient";
 import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
@@ -21,7 +21,7 @@ import App from "@/Wheel/App";
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
   // caching
-  await c.query({ query: getwheels });
+  await c.query({ query: queryWheelParts });
   await c.query({ query: queryDisplaysettings });
   await c.query({ query: queryWheelSettings });
 
@@ -31,11 +31,11 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 }
 
 export default function Highscore() {
-  const { data: values } = useQuery(getwheels);
+  const { data: values } = useQuery(queryWheelParts);
   const { data: displaySettings } = useQuery(queryDisplaysettings);
   const { data: wheelSettings } = useQuery(queryWheelSettings);
 
-  const [toggleDisabled] = useMutation(toggleDisableWheelValue);
+  const [toggleDisabled] = useMutation(mutateToggleDisableWheelValue);
   const [updateDisplaySettings] = useMutation(updateDisplaysettings);
   const [updateWheelsettings] = useMutation(updateWheelSettings);
 

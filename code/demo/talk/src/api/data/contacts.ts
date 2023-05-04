@@ -1,4 +1,4 @@
-import { User as Contact } from "../generated-types/graphql";
+import { Contact } from "../generated-types/graphql";
 
 export const contacts: Contact[] = [];
 

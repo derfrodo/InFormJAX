@@ -14,6 +14,19 @@ export type Scalars = {
   Float: number;
 };
 
+export type Contact = {
+  __typename?: 'Contact';
+  displayName: Scalars['String'];
+  firstName: Scalars['String'];
+  id: Scalars['ID'];
+  lastName: Scalars['String'];
+};
+
+export type CreateContactInput = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+};
+
 export type CreateUserInput = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -22,13 +35,25 @@ export type CreateUserInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createContact: Contact;
   createUser: User;
+  updateContact: Contact;
   updateUser: User;
+};
+
+
+export type MutationCreateContactArgs = {
+  input: CreateContactInput;
 };
 
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
+};
+
+
+export type MutationUpdateContactArgs = {
+  input: UpdateContactInput;
 };
 
 
@@ -38,7 +63,14 @@ export type MutationUpdateUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  contacts?: Maybe<Array<Contact>>;
   users?: Maybe<Array<User>>;
+};
+
+export type UpdateContactInput = {
+  firstName: Scalars['String'];
+  id: Scalars['ID'];
+  lastName: Scalars['String'];
 };
 
 export type UpdateUserInput = {

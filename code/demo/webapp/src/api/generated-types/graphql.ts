@@ -29,6 +29,7 @@ export type GameSettingsType = {
   __typename?: 'GameSettingsType';
   chanceToWin: Scalars['Float'];
   sumOfChances: Scalars['Float'];
+  sumOfLooseChance: Scalars['Float'];
   sumOfWinChance: Scalars['Float'];
 };
 
@@ -211,6 +212,7 @@ export type DisplaySettingsResolvers<ContextType = any, ParentType extends Resol
 export type GameSettingsTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['GameSettingsType'] = ResolversParentTypes['GameSettingsType']> = {
   chanceToWin?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   sumOfChances?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  sumOfLooseChance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   sumOfWinChance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

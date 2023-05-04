@@ -42,5 +42,18 @@ export const gameSettingsType = new GraphQLObjectType({
         return winChance;
       },
     },
+    sumOfLooseChance: {
+      type: new GraphQLNonNull(GraphQLFloat),
+      async resolve() {
+        const activeParts = await getFilteredWheelParts({ disabled: false });
+
+        const winChance = activeParts
+          .filter((w) => !w.win)
+          .map((p) => p.winChance)
+          .reduce((p, c) => p + c, 0);
+
+        return winChance;
+      },
+    },
   },
 });

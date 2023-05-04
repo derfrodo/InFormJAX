@@ -6,6 +6,7 @@ export const queryGameSettings = graphql(`
       chanceToWin
       sumOfChances
       sumOfWinChance
+      sumOfLooseChance
     }
   }
 `);

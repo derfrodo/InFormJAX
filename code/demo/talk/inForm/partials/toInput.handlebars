@@ -1,0 +1,10 @@
+{{#if detailsTypeInfo}}
+export function projectTo{{name}}Input(details: {{detailsTypeInfo.namedBinding}}): {{inputTypeInfo.namedBinding}} {
+  return {
+  {{#each matchingMembers}}
+    {{input.name}}: details.{{detail.name}},
+  {{/each}}
+  }
+}
+
+{{/if}}

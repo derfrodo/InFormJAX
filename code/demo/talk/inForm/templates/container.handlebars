@@ -1,0 +1,14 @@
+import { {{inputTypeInfo.namedBinding}} } from "{{inputTypeInfo.file}}"
+{{#each mergedImports}}
+import { {{#each typeNames}}{{this}}, {{/each}} } from "{{relativeImport}}"
+{{/each}}
+import { useState, useEffect } from "react"
+{{#if detailsTypeInfo}}
+import { {{detailsTypeInfo.namedBinding}} } from "{{detailsTypeInfo.file}}"
+{{/if}}
+
+{{>tableComponent this}}
+
+{{>formComponent this}}
+
+{{>toInput this}}

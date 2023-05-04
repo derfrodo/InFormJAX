@@ -24,6 +24,7 @@ export const Update{{name}}Form = (props: {
         marginBottom: -8,
     }{{/surroundWithCurlyBraces}} >{title}</h2> : title}
     {{#each byOrdering}}
+    {{#if input}}
     {{#findElementByPropertyValueAndRegex input.mappedBy "key" "[^(CELL)]$"}}
         <{{componentType.typeName}}
             onChange={{#surroundWithCurlyBraces}}(next) => setCurrent(p => ({ ...p, {{../input.name}}: next })){{/surroundWithCurlyBraces}}
@@ -32,6 +33,7 @@ export const Update{{name}}Form = (props: {
             value={{#surroundWithCurlyBraces}}current.{{../input.name}}{{/surroundWithCurlyBraces}}
         />
     {{/findElementByPropertyValueAndRegex}}
+    {{/if}}
     {{/each}}
       <button
         onClick={{#surroundWithCurlyBraces}}async (e) => {

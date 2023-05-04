@@ -15,6 +15,7 @@ export const WheelSettingsTable = (props: {
             <th>rotationDurationInner</th>
             <th>rotationDurationNotPlaying</th>
             <th>rotationDurationPlaying</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>

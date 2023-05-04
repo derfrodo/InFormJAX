@@ -18,11 +18,12 @@ export const {{#if detailsTypeInfo}}Update{{else}}Create{{/if}}{{name}}Form = (p
         padding: 8,
         border: "1px solid black",
         marginTop: 8,
+        maxWidth: 300,
     }{{/surroundWithCurlyBraces}}>
-    {typeof title === "string" ? <h2 style={{#surroundWithCurlyBraces}}{ 
+    {typeof title === "string" ? <h3 style={{#surroundWithCurlyBraces}}{ 
         marginTop: -4,
         marginBottom: -8,
-    }{{/surroundWithCurlyBraces}} >{title}</h2> : title}
+    }{{/surroundWithCurlyBraces}} >{title}</h3> : title}
     {{#each byOrdering}}
     {{#if input}}
     {{#findElementByPropertyValueAndRegex input.mappedBy "key" "[^(CELL)]$"}}

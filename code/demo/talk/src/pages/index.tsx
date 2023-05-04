@@ -2,14 +2,24 @@
 
 import Head from "next/head";
 
+import {
+  CreateCreateUserForm,
+  createDefaultCreateUserInput,
+} from "@/Features/User/CreateUser.generated";
+import {
+  UpdateUpdateUserForm,
+  UpdateUserTable,
+} from "@/Features/User/UpdateUser.generated";
+import {
+  mutateCreateUser,
+  mutateUpdateUser,
+  queryUsers,
+} from "@/Features/User/queries/userQueries";
+import { CreateUserInput, User } from "@/api/generated-types/graphql";
 import { getClient } from "@/gql/getApolloClient";
 import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
-import { mutateCreateUser, mutateUpdateUser, queryUsers } from "@/Features/User/queries/queryUsers";
-import { CreateCreateUserForm, createDefaultCreateUserInput } from "@/Features/User/CreateUser.generated";
-import { useMemo, useState } from "react";
-import { UpdateUpdateUserForm, UpdateUserTable } from "@/Features/User/UpdateUser.generated";
-import { CreateUserInput, User } from "@/api/generated-types/graphql";
+import { useState } from "react";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -28,9 +38,10 @@ export default function AppComponent() {
   const { data, client, refetch } = useQuery(queryUsers);
   const [createUser] = useMutation(mutateCreateUser);
 
-  const [defaultCreateUser, setCreateUser] = useState<CreateUserInput>(createDefaultCreateUserInput());
-  console.log(data, { e: client.extract() })
-
+  const [defaultCreateUser, setCreateUser] = useState<CreateUserInput>(
+    createDefaultCreateUserInput()
+  );
+  console.log(data, { e: client.extract() });
 
   const [updateUser, setUpdateUser] = useState<User | null>(null);
   const [doUpdateUser] = useMutation(mutateUpdateUser);
@@ -46,27 +57,37 @@ export default function AppComponent() {
       <main>
         <div>
           <h2>Users</h2>
-          <h3>Create User</h3>
-          <CreateCreateUserForm item={defaultCreateUser} onSave={async next => {
-            await createUser({ variables: { input: next } });
-            await refetch();
-            setUpdateUser(null)
-            setCreateUser(createDefaultCreateUserInput())
-          }} />
-          {updateUser ?
+          <CreateCreateUserForm
+            item={defaultCreateUser}
+            title="Create User"
+            onSave={async (next) => {
+              await createUser({ variables: { input: next } });
+              await refetch();
+              setUpdateUser(null);
+              setCreateUser(createDefaultCreateUserInput());
+            }}
+          />
+          {updateUser ? (
             <>
-              <h3>Edit User</h3>
-              <UpdateUpdateUserForm item={updateUser} onSave={
-                async user => {
+              <UpdateUpdateUserForm
+                title="Edit User"
+                item={updateUser}
+                onSave={async (user) => {
                   await doUpdateUser({ variables: { input: user } });
                   await refetch();
-                  setUpdateUser(null)
-                }} /></> :
+                  setUpdateUser(null);
+                }}
+              />
+            </>
+          ) : (
             <>
               <h3>Show Users</h3>
-              <UpdateUserTable items={data?.users ?? []} onRowClicked={user => setUpdateUser(user)} />
+              <UpdateUserTable
+                items={data?.users ?? []}
+                onRowClicked={(user) => setUpdateUser(user)}
+              />
             </>
-          }
+          )}
           <h2>Contact</h2>
         </div>
       </main>

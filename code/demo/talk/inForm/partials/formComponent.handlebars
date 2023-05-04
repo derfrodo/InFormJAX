@@ -19,7 +19,13 @@ export const {{#if detailsTypeInfo}}Update{{else}}Create{{/if}}{{name}}Form = (p
         border: "1px solid black",
         marginTop: 8,
         maxWidth: 300,
-    }{{/surroundWithCurlyBraces}}>
+    }{{/surroundWithCurlyBraces}}
+    onSubmit={{#surroundWithCurlyBraces}}async (e) => {
+          e.preventDefault();
+          const next = {{#if detailsTypeInfo}}projectTo{{name}}Input(current){{else}}current{{/if}};
+          await onSave(next);
+        }{{/surroundWithCurlyBraces}}
+    >
     {typeof title === "string" ? <h3 style={{#surroundWithCurlyBraces}}{ 
         marginTop: -4,
         marginBottom: -8,
@@ -38,11 +44,6 @@ export const {{#if detailsTypeInfo}}Update{{else}}Create{{/if}}{{name}}Form = (p
     {{/if}}
     {{/each}}
       <button
-        onClick={{#surroundWithCurlyBraces}}async (e) => {
-          e.preventDefault();
-          const next = {{#if detailsTypeInfo}}projectTo{{name}}Input(current){{else}}current{{/if}};
-          await onSave(next);
-        }{{/surroundWithCurlyBraces}}
         style={{#surroundWithCurlyBraces}}{ 
         width: 150,
         borderRadius: 4,

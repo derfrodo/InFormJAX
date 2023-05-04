@@ -34,7 +34,7 @@ export const {{#if detailsTypeInfo}}Update{{else}}Create{{/if}}{{name}}Form = (p
     {{#if input}}
     {{#findElementByPropertyValueAndRegex input.mappedBy "key" "[^(CELL)]$"}}
         <{{componentType.typeName}}
-            required={{#surroundWithCurlyBraces}}{{#ifIsEqual ../input.typeName InputMaybe}}false{{else}}true{{/ifIsEqual}}{{/surroundWithCurlyBraces}}
+            required={{#surroundWithCurlyBraces}}{{#ifIsEqual ../input.typeName "InputMaybe"}}false{{else}}true{{/ifIsEqual}}{{/surroundWithCurlyBraces}}
             onChange={{#surroundWithCurlyBraces}}(next) => setCurrent(p => ({ ...p, {{../input.name}}: next })){{/surroundWithCurlyBraces}}
             item={{surroundWithCurlyBraces "item"}}
             name={{#surroundWithCurlyBraces}}"{{../input.name}}"{{/surroundWithCurlyBraces}}

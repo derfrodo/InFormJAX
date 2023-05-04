@@ -1,7 +1,7 @@
 import { UpdateUserInput } from "../../gql/generated-client/graphql"
 import { StringInput,  } from "./../../Configuration/InForm/atoms/StringInput"
 import { StringCell,  } from "./../../Configuration/InForm/atoms/StringCell"
-import { Scalars,  } from "./../../gql/generated-client/graphql"
+import { Scalars, InputMaybe,  } from "./../../gql/generated-client/graphql"
 import { useState, useEffect } from "react"
 import { ReturnedUserArrayElement } from "./UserObject"
 
@@ -30,11 +30,6 @@ export const UpdateUserTable = (props: {
                         item={item}
                         name={"lastName"}
                         value={item.lastName}
-                    />
-                    <StringCell
-                        item={item}
-                        name={"nickName"}
-                        value={item.nickName}
                     />
                     <StringCell
                         item={item}
@@ -72,18 +67,21 @@ export const UpdateUpdateUserForm = (props: {
         marginBottom: -8,
     }} >{title}</h3> : title}
         <StringInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, firstName: next }))}
             item={item}
             name={"firstName"}
             value={current.firstName}
         />
         <StringInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, lastName: next }))}
             item={item}
             name={"lastName"}
             value={current.lastName}
         />
         <StringInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, nickName: next }))}
             item={item}
             name={"nickName"}

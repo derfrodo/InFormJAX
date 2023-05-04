@@ -1,7 +1,7 @@
 import { CreateUserInput } from "../../gql/generated-client/graphql"
 import { StringInput,  } from "./../../Configuration/InForm/atoms/StringInput"
 import { StringCell,  } from "./../../Configuration/InForm/atoms/StringCell"
-import { Scalars,  } from "./../../gql/generated-client/graphql"
+import { Scalars, InputMaybe,  } from "./../../gql/generated-client/graphql"
 import { useState, useEffect } from "react"
 
 
@@ -32,18 +32,21 @@ export const CreateCreateUserForm = (props: {
         marginBottom: -8,
     }} >{title}</h3> : title}
         <StringInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, firstName: next }))}
             item={item}
             name={"firstName"}
             value={current.firstName}
         />
         <StringInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, lastName: next }))}
             item={item}
             name={"lastName"}
             value={current.lastName}
         />
         <StringInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, nickName: next }))}
             item={item}
             name={"nickName"}

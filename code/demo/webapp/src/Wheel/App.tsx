@@ -65,6 +65,26 @@ function isWinner(winChance: number) {
   return randomResult < winChance;
 }
 
+
+function getWinner(sumOfChances: number, values: WheelValue[]) {
+  if (values.length === 0) {
+    console.error("NO values to be found.");
+  }
+  const randomResult = Math.random() * sumOfChances;
+
+  let currentChance = 0;
+  for (const value of values) {
+    currentChance += value.winChance;
+    if (currentChance > randomResult) {
+      return value;
+    }
+  }
+
+  return values[values.length - 1];
+}
+
+
+
 function App(props: { values: WheelValue[] }) {
   const { radius } = useGetWheelSettings();
   const { data } = useQuery(queryGameSettings);
@@ -77,6 +97,8 @@ function App(props: { values: WheelValue[] }) {
 
   const { values } = props;
   const winChance = data?.gameSettings?.chanceToWin ?? 0;
+  const sumOfLooseChance = data?.gameSettings?.sumOfLooseChance ?? 0;
+  const sumOfWinChance = data?.gameSettings?.sumOfWinChance ?? 0;
 
   const calculateWinner = useCallback(() => {
     console.log(winChance);
@@ -105,8 +127,7 @@ function App(props: { values: WheelValue[] }) {
     if (winner) {
       //WON!
       const winOptions = values.filter((value) => value.win);
-      const winOffset =
-        winOptions[Math.floor(Math.random() * winOptions.length)];
+      const winOffset = getWinner(sumOfWinChance, winOptions);
       const winIndex = values.indexOf(winOffset);
       console.log({ winOffset, winIndex });
       setLastWin(winIndex);
@@ -114,14 +135,13 @@ function App(props: { values: WheelValue[] }) {
     } else {
       // LOST!
       const lostOptions = values.filter((value) => !value.win);
-      const lostOffset =
-        lostOptions[Math.floor(Math.random() * lostOptions.length)];
+      const lostOffset = getWinner(sumOfLooseChance, lostOptions);
       const lostIndex = values.indexOf(lostOffset);
       console.log({ lostOffset, lostIndex });
       setLastWin(lostIndex);
       setRoundDone(false);
     }
-  }, [values, winChance]);
+  }, [sumOfLooseChance, sumOfWinChance, values, winChance]);
 
   const updatePlaying = useCallback(() => {
     setPlaying((p) => {

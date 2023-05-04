@@ -18,7 +18,7 @@ const documents = {
     "\n  mutation UpdateSettings($input: DisplaySettingsInput!) {\n    updateDisplaySettings(input: $input) {\n        showResultAfterMS\n        showResultForMS\n    }\n  }\n": types.UpdateSettingsDocument,
     "\nmutation UpdateWheelSettings($input: WheelSettingsInput!) {\n  updateWheelSettings(input: $input) {\n    radius\n    rotationDurationInner\n    rotationDurationNotPlaying\n    rotationDurationPlaying\n  }\n}\n": types.UpdateWheelSettingsDocument,
     "\n  mutation toggleDisableWheelValue($name: String!) {\n    toggleDisableWheelValue(name: $name) {\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n": types.ToggleDisableWheelValueDocument,
-    "\n  query GameSettings {\n    gameSettings {\n      chanceToWin\n      sumOfChances\n      sumOfWinChance\n    }\n  }\n": types.GameSettingsDocument,
+    "\n  query GameSettings {\n    gameSettings {\n      chanceToWin\n      sumOfChances\n      sumOfWinChance\n      sumOfLooseChance\n    }\n  }\n": types.GameSettingsDocument,
     "\n  query wheelParts($filter: wheelPartFilter) {\n    wheelParts(filter: $filter) {\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n": types.WheelPartsDocument,
 };
 
@@ -59,7 +59,7 @@ export function graphql(source: "\n  mutation toggleDisableWheelValue($name: Str
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GameSettings {\n    gameSettings {\n      chanceToWin\n      sumOfChances\n      sumOfWinChance\n    }\n  }\n"): (typeof documents)["\n  query GameSettings {\n    gameSettings {\n      chanceToWin\n      sumOfChances\n      sumOfWinChance\n    }\n  }\n"];
+export function graphql(source: "\n  query GameSettings {\n    gameSettings {\n      chanceToWin\n      sumOfChances\n      sumOfWinChance\n      sumOfLooseChance\n    }\n  }\n"): (typeof documents)["\n  query GameSettings {\n    gameSettings {\n      chanceToWin\n      sumOfChances\n      sumOfWinChance\n      sumOfLooseChance\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

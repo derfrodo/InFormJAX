@@ -27,7 +27,7 @@ export const getClient = (pageProps?: any, forceReset = false) => {
 
     client = new ApolloClient({
       link: new HttpLink({
-        uri: "http://localhost:3255/api/graphql",
+        uri: "http://localhost:3256/api/graphql",
       }),
       cache:
         typeof window !== "undefined" &&

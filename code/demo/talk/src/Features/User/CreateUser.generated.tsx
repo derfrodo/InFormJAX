@@ -25,11 +25,12 @@ export const CreateCreateUserForm = (props: {
         padding: 8,
         border: "1px solid black",
         marginTop: 8,
+        maxWidth: 300,
     }}>
-    {typeof title === "string" ? <h2 style={{ 
+    {typeof title === "string" ? <h3 style={{ 
         marginTop: -4,
         marginBottom: -8,
-    }} >{title}</h2> : title}
+    }} >{title}</h3> : title}
         <StringInput
             onChange={(next) => setCurrent(p => ({ ...p, firstName: next }))}
             item={item}

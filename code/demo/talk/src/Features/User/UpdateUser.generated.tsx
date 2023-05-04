@@ -61,7 +61,13 @@ export const UpdateUpdateUserForm = (props: {
         border: "1px solid black",
         marginTop: 8,
         maxWidth: 300,
-    }}>
+    }}
+    onSubmit={async (e) => {
+          e.preventDefault();
+          const next = projectToUpdateUserInput(current);
+          await onSave(next);
+        }}
+    >
     {typeof title === "string" ? <h3 style={{ 
         marginTop: -4,
         marginBottom: -8,
@@ -81,18 +87,13 @@ export const UpdateUpdateUserForm = (props: {
             value={current.lastName}
         />
         <StringInput
-            required={true}
+            required={false}
             onChange={(next) => setCurrent(p => ({ ...p, nickName: next }))}
             item={item}
             name={"nickName"}
             value={current.nickName}
         />
       <button
-        onClick={async (e) => {
-          e.preventDefault();
-          const next = projectToUpdateUserInput(current);
-          await onSave(next);
-        }}
         style={{ 
         width: 150,
         borderRadius: 4,

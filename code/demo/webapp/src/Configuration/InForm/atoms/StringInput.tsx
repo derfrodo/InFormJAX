@@ -8,7 +8,7 @@ TV extends T[TKey] | string | null | undefined
       value={value ?? ""}
       onChange={(e) =>
         e.target.value !== ""
-          ? props.onChange(Number(e.target.value) as TV)
+          ? props.onChange(e.target.value as TV)
           : undefined
       }
     ></input>

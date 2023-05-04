@@ -13,7 +13,9 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\nquery getUsers {\n    users {\n      id\n      firstName\n      samAccountName\n      lastName\n      nickName\n    }\n  }\n": types.GetUsersDocument,
+    "\nquery getUsers {\n    users {\n      id\n      firstName\n      displayName\n      lastName\n      nickName\n    }\n  }\n": types.GetUsersDocument,
+    "\nmutation CreateUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n        id\n        firstName\n        displayName\n        lastName\n        nickName\n    }\n  }\n": types.CreateUserDocument,
+    "\nmutation UpdateUser($input: UpdateUserInput!) {\n    updateUser(input: $input) {\n        id\n        firstName\n        displayName\n        lastName\n        nickName\n    }\n  }\n": types.UpdateUserDocument,
 };
 
 /**
@@ -33,7 +35,15 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\nquery getUsers {\n    users {\n      id\n      firstName\n      samAccountName\n      lastName\n      nickName\n    }\n  }\n"): (typeof documents)["\nquery getUsers {\n    users {\n      id\n      firstName\n      samAccountName\n      lastName\n      nickName\n    }\n  }\n"];
+export function graphql(source: "\nquery getUsers {\n    users {\n      id\n      firstName\n      displayName\n      lastName\n      nickName\n    }\n  }\n"): (typeof documents)["\nquery getUsers {\n    users {\n      id\n      firstName\n      displayName\n      lastName\n      nickName\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nmutation CreateUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n        id\n        firstName\n        displayName\n        lastName\n        nickName\n    }\n  }\n"): (typeof documents)["\nmutation CreateUser($input: CreateUserInput!) {\n    createUser(input: $input) {\n        id\n        firstName\n        displayName\n        lastName\n        nickName\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nmutation UpdateUser($input: UpdateUserInput!) {\n    updateUser(input: $input) {\n        id\n        firstName\n        displayName\n        lastName\n        nickName\n    }\n  }\n"): (typeof documents)["\nmutation UpdateUser($input: UpdateUserInput!) {\n    updateUser(input: $input) {\n        id\n        firstName\n        displayName\n        lastName\n        nickName\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

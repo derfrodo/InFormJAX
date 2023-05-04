@@ -5,9 +5,33 @@ query getUsers {
     users {
       id
       firstName
-      samAccountName
+      displayName
       lastName
       nickName
+    }
+  }
+`);
+
+export const mutateCreateUser = graphql(`
+mutation CreateUser($input: CreateUserInput!) {
+    createUser(input: $input) {
+        id
+        firstName
+        displayName
+        lastName
+        nickName
+    }
+  }
+`);
+
+export const mutateUpdateUser = graphql(`
+mutation UpdateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
+        id
+        firstName
+        displayName
+        lastName
+        nickName
     }
   }
 `);

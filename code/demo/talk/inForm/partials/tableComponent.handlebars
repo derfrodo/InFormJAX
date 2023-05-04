@@ -1,24 +1,24 @@
 export const {{name}}Table = (props: { 
-    items: {{inputTypeInfo.namedBinding}}[];
-    onRowClicked?: (item: {{inputTypeInfo.namedBinding}}) => Promise<void> | void
+    items: {{detailsTypeInfo.namedBinding}}[];
+    onRowClicked?: (item: {{detailsTypeInfo.namedBinding}}) => Promise<void> | void
 }) => {
     return <table style={{#surroundWithCurlyBraces}}{{#surroundWithCurlyBraces}} borderSpacing: 4, {{/surroundWithCurlyBraces}}{{/surroundWithCurlyBraces}}>
     <thead>
         <tr>
         {{#each byOrdering}}
-            <th>{{input.name}}</th>
+            <th>{{detail.name}}</th>
         {{/each}}
         </tr>
     </thead>
     <tbody>
         {{#surroundWithCurlyBraces}}props.items.map((item, index)=>
-            <tr key={{#surroundWithCurlyBraces}}index{{/surroundWithCurlyBraces}} onClick={{#surroundWithCurlyBraces}}() => props.onRowClicked && props.onRowClicked(item){{/surroundWithCurlyBraces}}>
+            <tr key={{#surroundWithCurlyBraces}}item.id{{/surroundWithCurlyBraces}} onClick={{#surroundWithCurlyBraces}}() => props.onRowClicked && props.onRowClicked(item){{/surroundWithCurlyBraces}}>
                 {{#each byOrdering}}
-                {{#findElementByPropertyValueAndRegex input.mappedBy "key" "CELL$"}}
+                {{#findElementByPropertyValueAndRegex detail.mappedBy "key" "CELL$"}}
                     <{{componentType.typeName}}
                         item={{surroundWithCurlyBraces "item"}}
-                        name={{#surroundWithCurlyBraces}}"{{../input.name}}"{{/surroundWithCurlyBraces}}
-                        value={{#surroundWithCurlyBraces}}item.{{../input.name}}{{/surroundWithCurlyBraces}}
+                        name={{#surroundWithCurlyBraces}}"{{../detail.name}}"{{/surroundWithCurlyBraces}}
+                        value={{#surroundWithCurlyBraces}}item.{{../detail.name}}{{/surroundWithCurlyBraces}}
                     />
                 {{/findElementByPropertyValueAndRegex}}
                 {{/each}}

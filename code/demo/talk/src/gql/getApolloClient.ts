@@ -15,15 +15,10 @@ export const getClient = (pageProps?: any, forceReset = false) => {
     const mc = new InMemoryCache({
       dataIdFromObject(responseObject) {
         switch (responseObject.__typename) {
-          case "WheelPart":
-            return `WheelPart:${responseObject.name}`;
-          case "DisplaySettings":
-            return `DisplaySettings`;
-          case "WheelSettings":
-            return `WheelSettings`;
-            case "gameSettings":
-              return `GameSettings`;
-
+          case "User":
+            return `User:${responseObject.id}`;
+          case "Contact":
+            return `Contact:${responseObject.id}`;
           default:
             return defaultDataIdFromObject(responseObject);
         }
@@ -36,9 +31,9 @@ export const getClient = (pageProps?: any, forceReset = false) => {
       }),
       cache:
         typeof window !== "undefined" &&
-        typeof pageProps === "object" &&
-        pageProps !== null &&
-        pageProps.state
+          typeof pageProps === "object" &&
+          pageProps !== null &&
+          pageProps.state
           ? mc.restore(pageProps.state)
           : mc,
     });

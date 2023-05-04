@@ -3,9 +3,13 @@
 import Head from "next/head";
 
 import { getClient } from "@/gql/getApolloClient";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
-import { queryUsers } from "@/Features/User/queries/queryUsers";
+import { mutateCreateUser, mutateUpdateUser, queryUsers } from "@/Features/User/queries/queryUsers";
+import { CreateCreateUserForm, createDefaultCreateUserInput } from "@/Features/User/CreateUser.generated";
+import { useMemo, useState } from "react";
+import { UpdateUpdateUserForm, UpdateUserTable } from "@/Features/User/UpdateUser.generated";
+import { User } from "@/api/generated-types/graphql";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -21,7 +25,15 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 }
 
 export default function AppComponent() {
-  const { data, called, loading } = useQuery(queryUsers);
+  const { data, client, refetch } = useQuery(queryUsers);
+  const [createUser] = useMutation(mutateCreateUser);
+
+  const defaultUser = useMemo(() => createDefaultCreateUserInput(), []);
+  console.log(data, { e: client.extract() })
+
+
+  const [updateUser, setUpdateUser] = useState<User | null>(null);
+  const [doUpdateUser] = useMutation(mutateUpdateUser);
 
   return (
     <>
@@ -33,7 +45,27 @@ export default function AppComponent() {
       </Head>
       <main>
         <div>
-          <h2>User</h2>
+          <h2>Users</h2>
+          <h3>Create User</h3>
+          <CreateCreateUserForm item={defaultUser} onSave={async next => {
+            await createUser({ variables: { input: next } });
+            await refetch();
+            setUpdateUser(null)
+          }} />
+          {updateUser ?
+            <>
+              <h3>Edit User</h3>
+              <UpdateUpdateUserForm item={updateUser} onSave={
+                async user => {
+                  await doUpdateUser({ variables: { input: user } });
+                  await refetch();
+                  setUpdateUser(null)
+                }} /></> :
+            <>
+              <h3>Show Users</h3>
+              <UpdateUserTable items={data?.users ?? []} onRowClicked={user => setUpdateUser(user)} />
+            </>
+          }
           <h2>Contact</h2>
         </div>
       </main>

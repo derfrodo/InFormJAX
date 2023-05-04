@@ -18,7 +18,6 @@ export type CreateUserInput = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   nickName: Scalars['String'];
-  samAccountName: Scalars['String'];
 };
 
 export type Mutation = {
@@ -47,16 +46,15 @@ export type UpdateUserInput = {
   id: Scalars['ID'];
   lastName: Scalars['String'];
   nickName: Scalars['String'];
-  samAccountName: Scalars['String'];
 };
 
 export type User = {
   __typename?: 'User';
+  displayName: Scalars['String'];
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
   nickName: Scalars['String'];
-  samAccountName: Scalars['String'];
 };
 
 
@@ -162,11 +160,11 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   nickName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  samAccountName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

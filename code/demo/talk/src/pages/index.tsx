@@ -9,7 +9,7 @@ import { mutateCreateUser, mutateUpdateUser, queryUsers } from "@/Features/User/
 import { CreateCreateUserForm, createDefaultCreateUserInput } from "@/Features/User/CreateUser.generated";
 import { useMemo, useState } from "react";
 import { UpdateUpdateUserForm, UpdateUserTable } from "@/Features/User/UpdateUser.generated";
-import { User } from "@/api/generated-types/graphql";
+import { CreateUserInput, User } from "@/api/generated-types/graphql";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -28,7 +28,7 @@ export default function AppComponent() {
   const { data, client, refetch } = useQuery(queryUsers);
   const [createUser] = useMutation(mutateCreateUser);
 
-  const defaultUser = useMemo(() => createDefaultCreateUserInput(), []);
+  const [defaultCreateUser, setCreateUser] = useState<CreateUserInput>(createDefaultCreateUserInput());
   console.log(data, { e: client.extract() })
 
 
@@ -47,10 +47,11 @@ export default function AppComponent() {
         <div>
           <h2>Users</h2>
           <h3>Create User</h3>
-          <CreateCreateUserForm item={defaultUser} onSave={async next => {
+          <CreateCreateUserForm item={defaultCreateUser} onSave={async next => {
             await createUser({ variables: { input: next } });
             await refetch();
             setUpdateUser(null)
+            setCreateUser(createDefaultCreateUserInput())
           }} />
           {updateUser ?
             <>

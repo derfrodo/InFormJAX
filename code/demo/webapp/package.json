@@ -29,7 +29,7 @@
     "react-rewards": "^2.0.4"
   },
   "devDependencies": {
-    "@derfrodo/gen-in-form-cli": "^0.1.13-beta",
+    "@derfrodo/gen-in-form-cli": "^0.1.14-beta",
     "@derfrodo/gen-in-form-runtime": "^0.1.7-beta",
     "@graphql-codegen/cli": "^3.3.1",
     "@graphql-codegen/client-preset": "^3.0.1",

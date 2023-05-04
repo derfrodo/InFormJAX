@@ -11,14 +11,14 @@ export const schema = new GraphQLSchema({
     name: "Query",
     fields: {
       ...userQueries,
-      ...contactQueries
+      // ...contactQueries
     },
   }),
   mutation: new GraphQLObjectType({
     name: "Mutation",
     fields: {
       ...userMutations,
-      ...contactMutations
+      // ...contactMutations
     },
   }),
 });

@@ -17,7 +17,7 @@ export type Scalars = {
 export type CreateUserInput = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
-  nickName: Scalars['String'];
+  nickName?: InputMaybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -45,7 +45,7 @@ export type UpdateUserInput = {
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
-  nickName: Scalars['String'];
+  nickName?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
@@ -54,7 +54,7 @@ export type User = {
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
-  nickName: Scalars['String'];
+  nickName?: Maybe<Scalars['String']>;
 };
 
 
@@ -164,7 +164,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  nickName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  nickName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

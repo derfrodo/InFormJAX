@@ -6,7 +6,9 @@ export const {{name}}Table = (props: {
     <thead>
         <tr>
         {{#each byOrdering}}
+            {{#if detail}}
             <th>{{detail.name}}</th>
+            {{/if}}
         {{/each}}
         </tr>
     </thead>
@@ -14,6 +16,7 @@ export const {{name}}Table = (props: {
         {{#surroundWithCurlyBraces}}props.items.map((item, index)=>
             <tr key={{#surroundWithCurlyBraces}}item.id{{/surroundWithCurlyBraces}} onClick={{#surroundWithCurlyBraces}}() => props.onRowClicked && props.onRowClicked(item){{/surroundWithCurlyBraces}}>
                 {{#each byOrdering}}
+                {{#if detail}}
                 {{#findElementByPropertyValueAndRegex detail.mappedBy "key" "CELL$"}}
                     <{{componentType.typeName}}
                         item={{surroundWithCurlyBraces "item"}}
@@ -21,6 +24,7 @@ export const {{name}}Table = (props: {
                         value={{#surroundWithCurlyBraces}}item.{{../detail.name}}{{/surroundWithCurlyBraces}}
                     />
                 {{/findElementByPropertyValueAndRegex}}
+                {{/if}}
                 {{/each}}
             </tr>){{/surroundWithCurlyBraces}}
     </tbody>

@@ -8,6 +8,7 @@ export const userFields = {
     type: new GraphQLNonNull(GraphQLString),
   },
   nickName: {
-    type: new GraphQLNonNull(GraphQLString),
+    // type: new GraphQLNonNull(GraphQLString),
+    type: (GraphQLString),
   },
 };

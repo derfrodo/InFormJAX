@@ -17,7 +17,7 @@ export type Scalars = {
 export type CreateUserInput = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
-  nickName: Scalars['String'];
+  nickName?: InputMaybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -45,7 +45,7 @@ export type UpdateUserInput = {
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
-  nickName: Scalars['String'];
+  nickName?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
@@ -54,27 +54,27 @@ export type User = {
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
-  nickName: Scalars['String'];
+  nickName?: Maybe<Scalars['String']>;
 };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users?: Array<{ __typename?: 'User', id: string, firstName: string, displayName: string, lastName: string, nickName: string }> | null };
+export type GetUsersQuery = { __typename?: 'Query', users?: Array<{ __typename?: 'User', id: string, firstName: string, displayName: string, lastName: string, nickName?: string | null }> | null };
 
 export type CreateUserMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, firstName: string, displayName: string, lastName: string, nickName: string } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, firstName: string, displayName: string, lastName: string, nickName?: string | null } };
 
 export type UpdateUserMutationVariables = Exact<{
   input: UpdateUserInput;
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, firstName: string, displayName: string, lastName: string, nickName: string } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, firstName: string, displayName: string, lastName: string, nickName?: string | null } };
 
 
 export const GetUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"nickName"}}]}}]}}]} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>;

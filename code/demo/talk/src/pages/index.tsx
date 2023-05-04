@@ -10,16 +10,12 @@ import {
   UpdateUpdateUserForm,
   UpdateUserTable,
 } from "@/Features/User/UpdateUser.generated";
-import {
-  mutateCreateUser,
-  mutateUpdateUser,
-  queryUsers,
-} from "@/Features/User/queries/userQueries";
 import { CreateUserInput, User } from "@/api/generated-types/graphql";
 import { getClient } from "@/gql/getApolloClient";
 import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
 import { useState } from "react";
+import { queryUsers, mutateCreateUser, mutateUpdateUser } from "@/Features/User/queries/graphqlQueries";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);

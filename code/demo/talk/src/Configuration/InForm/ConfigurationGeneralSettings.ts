@@ -11,7 +11,6 @@ import { StringInput } from "./atoms/StringInput";
  * Mapping "input property types to keys and output types"
  */
 interface FM extends InFormDataTypes<string, string> {
-  
   ["InputMaybe<Scalars['String']>2"]: InFormDataTypeWithDefaultValueAndComponent<
     "STRING2",
     InputMaybe<Scalars['String']>,
@@ -28,6 +27,13 @@ interface FM extends InFormDataTypes<string, string> {
   ["Scalars['String']Cell"]: InFormDataTypeWithDefaultValueAndComponent<
     "Scalars['String']CELL",
     Scalars["String"],
+    '""',
+    typeof StringCell
+  >;
+
+  ["StringOptionalCELL"]: InFormDataTypeWithDefaultValueAndComponent<
+    "StringCELL",
+    string | null,
     '""',
     typeof StringCell
   >;

@@ -33,6 +33,11 @@ export const UpdateUserTable = (props: {
                     />
                     <StringCell
                         item={item}
+                        name={"nickName"}
+                        value={item.nickName}
+                    />
+                    <StringCell
+                        item={item}
                         name={"displayName"}
                         value={item.displayName}
                     />

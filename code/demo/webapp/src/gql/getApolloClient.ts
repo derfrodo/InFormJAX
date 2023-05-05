@@ -30,8 +30,8 @@ export const getClient = (pageProps?: any, forceReset = false) => {
             return `DisplaySettings`;
           case "WheelSettings":
             return `WheelSettings`;
-            case "gameSettings":
-              return `GameSettings`;
+          case "gameSettings":
+            return `GameSettings`;
 
           default:
             return defaultDataIdFromObject(responseObject);
@@ -56,13 +56,15 @@ export const getClient = (pageProps?: any, forceReset = false) => {
 
     client = new ApolloClient({
       link: new HttpLink({
-        uri: "http://localhost:3255/api/graphql",
+        uri: process.env.NODE_ENV === "development" ?
+          "http://localhost:3255/api/graphql" :
+          "http://127.0.0.1:3000/api/graphql",
       }),
       cache:
         typeof window !== "undefined" &&
-        typeof pageProps === "object" &&
-        pageProps !== null &&
-        pageProps.state
+          typeof pageProps === "object" &&
+          pageProps !== null &&
+          pageProps.state
           ? mc.restore(pageProps.state)
           : mc,
     });

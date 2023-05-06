@@ -1,8 +1,6 @@
+import { useEffect, useState } from "react"
 import { CreateUserInput } from "../../gql/generated-client/graphql"
-import { StringInput,  } from "./../../Configuration/InForm/atoms/StringInput"
-import { StringCell,  } from "./../../Configuration/InForm/atoms/StringCell"
-import { Scalars, InputMaybe,  } from "./../../gql/generated-client/graphql"
-import { useState, useEffect } from "react"
+import { StringInput, } from "./../../Configuration/InForm/atoms/StringInput"
 
 
 export const CreateCreateContactForm = (props: { 

@@ -10,15 +10,12 @@ import {
   UpdateUpdateUserForm,
   UpdateUserTable,
 } from "@/Features/User/UpdateUser.generated";
+import { mutateCreateUser, mutateUpdateUser, queryUsers } from "@/Features/User/queries/graphqlQueries";
 import { CreateUserInput, User } from "@/api/generated-types/graphql";
 import { getClient } from "@/gql/getApolloClient";
 import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
 import { useState } from "react";
-import { queryUsers, mutateCreateUser, mutateUpdateUser } from "@/Features/User/queries/graphqlQueries";
-import { mutateCreateContact, queryContacts } from "@/Features/Contact/queries/graphqlQueries";
-import { CreateCreateContactForm, createDefaultCreateContactInput } from "@/Features/Contact/CreateContact.generated";
-import { UpdateContactTable } from "@/Features/Contact/UpdateContact.generated";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -47,12 +44,12 @@ export default function AppComponent() {
 
 
   
-  const { data: contactData,refetch: refetchContacts } = useQuery(queryContacts);
-  const [createContact] = useMutation(mutateCreateContact);
+  // const { data: contactData,refetch: refetchContacts } = useQuery(queryContacts);
+  // const [createContact] = useMutation(mutateCreateContact);
 
-  const [defaultCreateContact, setCreateContact] = useState(
-    createDefaultCreateContactInput()
-  );
+  // const [defaultCreateContact, setCreateContact] = useState(
+  //   createDefaultCreateContactInput()
+  // );
 
   return (
     <>
@@ -96,7 +93,7 @@ export default function AppComponent() {
               />
             </>
           )}
-          <h2>Contact</h2>
+          {/* <h2>Contact</h2>
           
           <CreateCreateContactForm
             item={defaultCreateContact}
@@ -108,12 +105,12 @@ export default function AppComponent() {
             }}
           />
           <>
-            <h3>Show Users</h3>
+            <h3>Show Contacts</h3>
             <UpdateContactTable
               items={contactData?.contacts ?? []}
               onRowClicked={() => {}}
             />
-          </>
+          </> */}
 
         </div>
       </main>

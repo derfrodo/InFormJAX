@@ -2,9 +2,8 @@ import {
   GroupAndOrderTypes,
   InFormMapping,
 } from "@derfrodo/gen-in-form-runtime";
+import { CreateContactInput, UpdateContactInput } from "../../gql/generated-client/graphql";
 import { ReturnedContactArrayElement } from "./ContactObject";
-import { CreateUserInput, UpdateUserInput } from "../../gql/generated-client/graphql";
-import { CreateContactInput, UpdateContactInput } from "@/api/generated-types/graphql";
 
 const groupAndOrderFields: GroupAndOrderTypes<CreateContactInput> = {
   fields: {
@@ -12,7 +11,7 @@ const groupAndOrderFields: GroupAndOrderTypes<CreateContactInput> = {
 };
 
 export interface CreateContactMapping
-  extends InFormMapping<CreateUserInput> {
+  extends InFormMapping<CreateContactInput> {
   name: "CreateContact";
   groupAndOrderFields: typeof groupAndOrderFields;
 }

@@ -16,6 +16,9 @@ import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
 import { useState } from "react";
 import { queryUsers, mutateCreateUser, mutateUpdateUser } from "@/Features/User/queries/graphqlQueries";
+import { mutateCreateContact, queryContacts } from "@/Features/Contact/queries/graphqlQueries";
+import { CreateCreateContactForm, createDefaultCreateContactInput } from "@/Features/Contact/CreateContact.generated";
+import { UpdateContactTable } from "@/Features/Contact/UpdateContact.generated";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -41,6 +44,15 @@ export default function AppComponent() {
 
   const [updateUser, setUpdateUser] = useState<User | null>(null);
   const [doUpdateUser] = useMutation(mutateUpdateUser);
+
+
+  
+  const { data: contactData,refetch: refetchContacts } = useQuery(queryContacts);
+  const [createContact] = useMutation(mutateCreateContact);
+
+  const [defaultCreateContact, setCreateContact] = useState(
+    createDefaultCreateContactInput()
+  );
 
   return (
     <>
@@ -85,6 +97,24 @@ export default function AppComponent() {
             </>
           )}
           <h2>Contact</h2>
+          
+          <CreateCreateContactForm
+            item={defaultCreateContact}
+            title="Create Contact"
+            onSave={async (next) => {
+              await createContact({ variables: { input: next } });
+              setCreateContact(createDefaultCreateContactInput());
+              refetchContacts();
+            }}
+          />
+          <>
+            <h3>Show Users</h3>
+            <UpdateContactTable
+              items={contactData?.contacts ?? []}
+              onRowClicked={() => {}}
+            />
+          </>
+
         </div>
       </main>
     </>

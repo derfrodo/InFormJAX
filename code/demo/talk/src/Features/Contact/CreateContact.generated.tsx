@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react"
-import { CreateUserInput } from "../../gql/generated-client/graphql"
-import { StringInput, } from "./../../Configuration/InForm/atoms/StringInput"
+import { CreateContactInput } from "../../gql/generated-client/graphql"
+import { StringInput,  } from "./../../Configuration/InForm/atoms/StringInput"
+import { StringCell,  } from "./../../Configuration/InForm/atoms/StringCell"
+import { Scalars,  } from "./../../gql/generated-client/graphql"
+import { useState, useEffect } from "react"
 
 
 export const CreateCreateContactForm = (props: { 
     title?: React.ReactNode;
-    item: CreateUserInput
-    onSave?: (next: CreateUserInput) => Promise<void> | void
+    item: CreateContactInput
+    onSave?: (next: CreateContactInput) => Promise<void> | void
 }) => {
     const { title, item, onSave = () => {} } = props;
     const [current, setCurrent] = useState({ ...item });
@@ -37,6 +39,13 @@ export const CreateCreateContactForm = (props: {
     }} >{title}</h3> : title}
         <StringInput
             required={true}
+            onChange={(next) => setCurrent(p => ({ ...p, email: next }))}
+            item={item}
+            name={"email"}
+            value={current.email}
+        />
+        <StringInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, firstName: next }))}
             item={item}
             name={"firstName"}
@@ -49,13 +58,6 @@ export const CreateCreateContactForm = (props: {
             name={"lastName"}
             value={current.lastName}
         />
-        <StringInput
-            required={false}
-            onChange={(next) => setCurrent(p => ({ ...p, nickName: next }))}
-            item={item}
-            name={"nickName"}
-            value={current.nickName}
-        />
       <button
         style={{ 
         width: 150,
@@ -66,11 +68,11 @@ export const CreateCreateContactForm = (props: {
     </form>;
 }
 
-export function createDefaultCreateContactInput(): CreateUserInput {
+export function createDefaultCreateContactInput(): CreateContactInput {
   return {
+    email: "",
     firstName: "",
     lastName: "",
-    nickName: "",
   }
 }
 

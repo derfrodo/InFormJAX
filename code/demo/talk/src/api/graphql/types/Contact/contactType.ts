@@ -7,12 +7,6 @@ export const contactType = new GraphQLObjectType({
     id: {
       type: new GraphQLNonNull(GraphQLID),
     },
-    ...contactFields,
-    displayName: {
-      type: new GraphQLNonNull(GraphQLString),
-      resolve(source) {
-        return `${source.firstName} ${source.lastName}`
-      }
-    }
+    ...contactFields
   },
 });

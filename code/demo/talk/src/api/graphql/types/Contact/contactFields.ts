@@ -7,4 +7,7 @@ export const contactFields = {
   lastName: {
     type: new GraphQLNonNull(GraphQLString),
   },
+  email: {
+    type: new GraphQLNonNull(GraphQLString),
+  },
 };

@@ -1,7 +1,7 @@
-import { UpdateUserInput } from "../../gql/generated-client/graphql"
+import { UpdateContactInput } from "../../gql/generated-client/graphql"
 import { StringInput,  } from "./../../Configuration/InForm/atoms/StringInput"
 import { StringCell,  } from "./../../Configuration/InForm/atoms/StringCell"
-import { Scalars, InputMaybe,  } from "./../../gql/generated-client/graphql"
+import { Scalars,  } from "./../../gql/generated-client/graphql"
 import { useState, useEffect } from "react"
 import { ReturnedContactArrayElement } from "./ContactObject"
 
@@ -12,15 +12,19 @@ export const UpdateContactTable = (props: {
     return <table style={{ borderSpacing: 4, }}>
     <thead>
         <tr>
+            <th>email</th>
             <th>firstName</th>
             <th>lastName</th>
-            <th>nickName</th>
-            <th>displayName</th>
         </tr>
     </thead>
     <tbody>
         {props.items.map((item, index)=>
             <tr key={item.id} onClick={() => props.onRowClicked && props.onRowClicked(item)}>
+                    <StringCell
+                        item={item}
+                        name={"email"}
+                        value={item.email}
+                    />
                     <StringCell
                         item={item}
                         name={"firstName"}
@@ -31,16 +35,6 @@ export const UpdateContactTable = (props: {
                         name={"lastName"}
                         value={item.lastName}
                     />
-                    <StringCell
-                        item={item}
-                        name={"nickName"}
-                        value={item.nickName}
-                    />
-                    <StringCell
-                        item={item}
-                        name={"displayName"}
-                        value={item.displayName}
-                    />
             </tr>)}
     </tbody>
     </table>;
@@ -48,7 +42,7 @@ export const UpdateContactTable = (props: {
 export const UpdateUpdateContactForm = (props: { 
     title?: React.ReactNode;
     item: ReturnedContactArrayElement
-    onSave?: (next: UpdateUserInput) => Promise<void> | void
+    onSave?: (next: UpdateContactInput) => Promise<void> | void
 }) => {
     const { title, item, onSave = () => {} } = props;
     const [current, setCurrent] = useState({ ...item });
@@ -79,6 +73,13 @@ export const UpdateUpdateContactForm = (props: {
     }} >{title}</h3> : title}
         <StringInput
             required={true}
+            onChange={(next) => setCurrent(p => ({ ...p, email: next }))}
+            item={item}
+            name={"email"}
+            value={current.email}
+        />
+        <StringInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, firstName: next }))}
             item={item}
             name={"firstName"}
@@ -91,13 +92,6 @@ export const UpdateUpdateContactForm = (props: {
             name={"lastName"}
             value={current.lastName}
         />
-        <StringInput
-            required={false}
-            onChange={(next) => setCurrent(p => ({ ...p, nickName: next }))}
-            item={item}
-            name={"nickName"}
-            value={current.nickName}
-        />
       <button
         style={{ 
         width: 150,
@@ -108,11 +102,11 @@ export const UpdateUpdateContactForm = (props: {
     </form>;
 }
 
-export function projectToUpdateContactInput(details: ReturnedContactArrayElement): UpdateUserInput {
+export function projectToUpdateContactInput(details: ReturnedContactArrayElement): UpdateContactInput {
   return {
+    email: details.email,
     firstName: details.firstName,
     id: details.id,
     lastName: details.lastName,
-    nickName: details.nickName,
   }
 }

@@ -11,7 +11,7 @@ query getContacts {
   }
 `);
 
-export const mutateCreateUser = graphql(`
+export const mutateCreateContact = graphql(`
 mutation CreateContact($input: CreateContactInput!) {
     createContact(input: $input) {
         id
@@ -22,7 +22,7 @@ mutation CreateContact($input: CreateContactInput!) {
   }
 `);
 
-export const mutateUpdateUser = graphql(`
+export const mutateUpdateContact = graphql(`
 mutation UpdateContact($input: UpdateContactInput!) {
     updateContact(input: $input) {
         id

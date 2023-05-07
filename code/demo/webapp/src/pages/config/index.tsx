@@ -20,9 +20,10 @@ import { getClient } from "@/gql/getApolloClient";
 import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReturnedWheelPartArrayElement } from "@/Configuration/WheelParts/ReturnedWheelPartArrayElement";
 import { mutationUpdateOrCreateWheelPart } from "@/Wheel/gql/mutationUpdateOrCreateWheelPart";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -55,6 +56,18 @@ export default function Config() {
   const [selectedWheelPart, setSelectedWheelPart] =
     useState<ReturnedWheelPartArrayElement | null>(null);
 
+    const router = useRouter();
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if( e.key === "Escape"){
+        router.push("/")
+      } 
+      // ? alert("WEG HIER") : undefined;
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
+
   return (
     <>
       <Head>
@@ -63,7 +76,9 @@ export default function Config() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main style={{ padding: 16, position: "relative" }}>
+      <main
+        style={{ padding: 16, position: "relative" }}
+      >
         <div
           style={{
             position: "absolute",
@@ -157,7 +172,7 @@ export default function Config() {
                               await refetchGameSettings();
                             }}
                           >
-                            {item.disabled ? "✅":"🚫"}
+                            {item.disabled ? "✅" : "🚫"}
                           </button>
                         </>
                       );

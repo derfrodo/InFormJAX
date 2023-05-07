@@ -370,9 +370,9 @@ function App(props: { values: WheelValue[] }) {
           <Link href="/config" style={{ marginLeft: 8 }}>
             ⚙️
           </Link>
-          <Link href="/highscore" style={{ marginLeft: 8 }}>
+          {/* <Link href="/highscore" style={{ marginLeft: 8 }}>
             🏆
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>

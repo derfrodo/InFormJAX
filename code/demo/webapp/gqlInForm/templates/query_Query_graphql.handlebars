@@ -1,0 +1,13 @@
+
+query {{name}} {
+  {{name}} {
+    ...Full{{inputTypeInfo.typeName}} 
+  }
+}
+
+
+fragment Full{{inputTypeInfo.typeName}} on {{inputTypeInfo.typeName}}{
+  {{#each byOrdering}}
+    {{input.name}}
+  {{/each}}
+}

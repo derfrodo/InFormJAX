@@ -1,0 +1,17 @@
+
+query wheelParts {
+  wheelParts {
+    ...FullWheelPart 
+  }
+}
+
+
+fragment FullWheelPart on WheelPart{
+    disabled
+    imagePath
+    imageText
+    name
+    win
+    winChance
+    winText
+}

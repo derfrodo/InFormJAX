@@ -1,14 +1,19 @@
-import { UpdateDisplaySettingsMutationReturnType } from "./UpdateDisplaySettingsMutationReturnType"
-import { IntCell, IntInput,  } from "./../InForm/atoms/IntCell"
+import { DisplaySettingsInput } from "../../gql/generated-client/graphql"
+import { IntInput, IntCell,  } from "./../InForm/atoms/IntCell"
+import { Scalars,  } from "./../../gql/generated-client/graphql"
 import { useState, useEffect } from "react"
+import { UpdateDisplaySettingsMutationReturnType } from "./UpdateDisplaySettingsMutationReturnType"
 
 export const DisplaySettingsTable = (props: { 
+    actionsComponent?: React.ComponentType<{ item: UpdateDisplaySettingsMutationReturnType }>;
     items: UpdateDisplaySettingsMutationReturnType[];
     onRowClicked?: (item: UpdateDisplaySettingsMutationReturnType) => Promise<void> | void
 }) => {
+    const ActionsComponent = props.actionsComponent;
     return <table style={{ borderSpacing: 4, }}>
     <thead>
         <tr>
+            {ActionsComponent ? <th></th> : <></>}
             <th>showResultAfterMS</th>
             <th>showResultForMS</th>
         </tr>
@@ -16,6 +21,7 @@ export const DisplaySettingsTable = (props: {
     <tbody>
         {props.items.map((item, index)=>
             <tr key={index} onClick={() => props.onRowClicked && props.onRowClicked(item)}>
+                {ActionsComponent ? <td><ActionsComponent item={item}/></td> : <></>}
                     <IntCell
                         item={item}
                         name={"showResultAfterMS"}
@@ -33,7 +39,7 @@ export const DisplaySettingsTable = (props: {
 export const UpdateDisplaySettingsForm = (props: { 
     title?: React.ReactNode;
     item: UpdateDisplaySettingsMutationReturnType
-    onSave?: (next: UpdateDisplaySettingsMutationReturnType) => Promise<void> | void
+    onSave?: (next: DisplaySettingsInput) => Promise<void> | void
 }) => {
     const { title, item, onSave = () => {} } = props;
     const [current, setCurrent] = useState({ ...item });
@@ -50,29 +56,33 @@ export const UpdateDisplaySettingsForm = (props: {
         padding: 8,
         border: "1px solid black",
         marginTop: 8,
-    }}>
-    {typeof title === "string" ? <h2 style={{ 
+        maxWidth: 300,
+    }}
+    onSubmit={async (e) => {
+          e.preventDefault();
+          const next = projectToDisplaySettingsInput(current);
+          await onSave(next);
+        }}
+    >
+    {typeof title === "string" ? <h3 style={{ 
         marginTop: -4,
         marginBottom: -8,
-    }} >{title}</h2> : title}
+    }} >{title}</h3> : title}
         <IntInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, showResultAfterMS: next }))}
             item={item}
             name={"showResultAfterMS"}
             value={current.showResultAfterMS}
         />
         <IntInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, showResultForMS: next }))}
             item={item}
             name={"showResultForMS"}
             value={current.showResultForMS}
         />
       <button
-        onClick={async (e) => {
-          e.preventDefault();
-          const next = current;
-          await onSave(next);
-        }}
         style={{ 
         width: 150,
         borderRadius: 4,
@@ -82,3 +92,9 @@ export const UpdateDisplaySettingsForm = (props: {
     </form>;
 }
 
+export function projectToDisplaySettingsInput(details: UpdateDisplaySettingsMutationReturnType): DisplaySettingsInput {
+  return {
+    showResultAfterMS: details.showResultAfterMS,
+    showResultForMS: details.showResultForMS,
+  }
+}

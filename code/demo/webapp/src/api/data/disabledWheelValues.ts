@@ -2,7 +2,24 @@ import { getWheelValues } from "./getWheelValues";
 import type { WheelValue } from "./types/WheelValue";
 import { WheelPartFilter } from "../generated-types/graphql";
 
-export const disabledWheelValues: WheelValue[] = [];
+export const disabledWheelValues: WheelValue[] = [
+  
+  {
+    name: "Leider nix",
+    winText: "Vielleicht das nächste Mal.",
+    win: false,
+    imageText: "😢",
+    winChance: 0.5,
+  },
+  {
+    name: "Zauberwürfel",
+    winText: "Zauberhaft!",
+    win: true,
+    imageText: "🎲",
+    winChance: 0.05,
+  },
+
+];
 
 export function resolveDisabledWheelValue(value: WheelValue) {
   return disabledWheelValues.some((item) => item.name === value.name);

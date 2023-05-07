@@ -5,22 +5,46 @@ import { useState, useEffect } from "react"
 import { UpdateWheelSettingsMutationReturnType } from "./UpdateWheelSettingsMutationReturnType"
 
 export const WheelSettingsTable = (props: { 
-    items: UpdateWheelSettingsInputType[];
-    onRowClicked?: (item: UpdateWheelSettingsInputType) => Promise<void> | void
+    actionsComponent?: React.ComponentType<{ item: UpdateWheelSettingsMutationReturnType }>;
+    items: UpdateWheelSettingsMutationReturnType[];
+    onRowClicked?: (item: UpdateWheelSettingsMutationReturnType) => Promise<void> | void
 }) => {
+    const ActionsComponent = props.actionsComponent;
     return <table style={{ borderSpacing: 4, }}>
     <thead>
         <tr>
+            {ActionsComponent ? <th></th> : <></>}
             <th>radius</th>
             <th>rotationDurationInner</th>
             <th>rotationDurationNotPlaying</th>
             <th>rotationDurationPlaying</th>
-            <th></th>
+            <th>__typename</th>
         </tr>
     </thead>
     <tbody>
         {props.items.map((item, index)=>
             <tr key={index} onClick={() => props.onRowClicked && props.onRowClicked(item)}>
+                {ActionsComponent ? <td><ActionsComponent item={item}/></td> : <></>}
+                    <IntCell
+                        item={item}
+                        name={"radius"}
+                        value={item.radius}
+                    />
+                    <IntCell
+                        item={item}
+                        name={"rotationDurationInner"}
+                        value={item.rotationDurationInner}
+                    />
+                    <IntCell
+                        item={item}
+                        name={"rotationDurationNotPlaying"}
+                        value={item.rotationDurationNotPlaying}
+                    />
+                    <IntCell
+                        item={item}
+                        name={"rotationDurationPlaying"}
+                        value={item.rotationDurationPlaying}
+                    />
             </tr>)}
     </tbody>
     </table>;
@@ -45,41 +69,47 @@ export const UpdateWheelSettingsForm = (props: {
         padding: 8,
         border: "1px solid black",
         marginTop: 8,
-    }}>
-    {typeof title === "string" ? <h2 style={{ 
+        maxWidth: 300,
+    }}
+    onSubmit={async (e) => {
+          e.preventDefault();
+          const next = projectToWheelSettingsInput(current);
+          await onSave(next);
+        }}
+    >
+    {typeof title === "string" ? <h3 style={{ 
         marginTop: -4,
         marginBottom: -8,
-    }} >{title}</h2> : title}
+    }} >{title}</h3> : title}
         <IntInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, radius: next }))}
             item={item}
             name={"radius"}
             value={current.radius}
         />
         <IntInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, rotationDurationInner: next }))}
             item={item}
             name={"rotationDurationInner"}
             value={current.rotationDurationInner}
         />
         <IntInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, rotationDurationNotPlaying: next }))}
             item={item}
             name={"rotationDurationNotPlaying"}
             value={current.rotationDurationNotPlaying}
         />
         <IntInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, rotationDurationPlaying: next }))}
             item={item}
             name={"rotationDurationPlaying"}
             value={current.rotationDurationPlaying}
         />
       <button
-        onClick={async (e) => {
-          e.preventDefault();
-          const next = projectToWheelSettingsInput(current);
-          await onSave(next);
-        }}
         style={{ 
         width: 150,
         borderRadius: 4,
@@ -97,4 +127,3 @@ export function projectToWheelSettingsInput(details: UpdateWheelSettingsMutation
     rotationDurationPlaying: details.rotationDurationPlaying,
   }
 }
-

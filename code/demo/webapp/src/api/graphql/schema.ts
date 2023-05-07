@@ -7,9 +7,10 @@ import {
   GraphQLSchema,
   GraphQLString,
 } from "graphql";
-import { getWheelValues } from "../data/getWheelValues";
+import { getWheelValues, updateOrAddWheelValue } from "../data/getWheelValues";
 import {
   DisplaySettingsInput,
+  UpdateWheelPartInput,
   WheelPartFilter,
   WheelSettingsInput,
 } from "../generated-types/graphql";
@@ -19,7 +20,7 @@ import {
   getFilteredWheelParts,
 } from "../data/disabledWheelValues";
 import { sessionDisplaySettings } from "../data/sessionDisplaySettings";
-import { wheelPartType } from "./types/wheelPartType";
+import { updateWheelPartInputType, wheelPartType } from "./types/wheelPartType";
 import { sessionWheelSettings } from "../data/sessionWheelSettings";
 import { displaySettingsInputType } from "./types/displaySettingsInputType";
 import { displaySettingsType } from "./types/displaySettingsType";
@@ -137,6 +138,22 @@ export const schema = new GraphQLSchema({
           }
 
           return sessionWheelSettings;
+        },
+      },
+      updateOrCreateWheelPart: {
+        type: wheelPartType,
+        args: {
+          input: {
+            type: new GraphQLNonNull(updateWheelPartInputType),
+          },
+        },
+        resolve: async (source, args, context, info) => {
+          const input: UpdateWheelPartInput = args["input"];
+          if (input) {
+            await updateOrAddWheelValue(input);
+            return (await getWheelValues()).find((v) => v.name === input.name);
+          }
+          return null;
         },
       },
 

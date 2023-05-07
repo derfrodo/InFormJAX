@@ -10,7 +10,7 @@ import { IntCell, IntInput } from "./atoms/IntCell";
 import { StringCell } from "./atoms/StringCell";
 import { ImageCell } from "./atoms/ImageCell";
 import { StringInput } from "./atoms/StringInput";
-import { Scalars } from "../../gql/generated-client/graphql";
+import { InputMaybe, Scalars } from "../../gql/generated-client/graphql";
 
 const image = /imagePath/i;
 
@@ -21,7 +21,7 @@ interface FM extends InFormDataTypes<string, string> {
   ["IMAGECELL"]: InFormDataTypeWithDefaultValueAndComponent<
     "ImageCELL",
     string | null,
-    "",
+    '""',
     typeof ImageCell,
     InFormPropertyMatcherRegexRegex<typeof image>
   >;
@@ -48,27 +48,27 @@ interface FM extends InFormDataTypes<string, string> {
   ["StNullUndef"]: InFormDataTypeWithDefaultValueAndComponent<
     "STRING",
     string | null,
-    "",
+    '""',
     typeof StringInput
   >;
   ["StNullUndefCell"]: InFormDataTypeWithDefaultValueAndComponent<
     "STRINGCELL",
     string | null,
-    "",
+    '""',
     typeof StringCell
   >;
 
   ["String"]: InFormDataTypeWithDefaultValueAndComponent<
     "STRING",
     string,
-    "",
+    '""',
     typeof StringInput
   >;
 
   ["StringCell"]: InFormDataTypeWithDefaultValueAndComponent<
     "STRINGCELL",
     string,
-    "",
+    '""',
     typeof StringCell
   >;
 
@@ -99,7 +99,41 @@ interface FM extends InFormDataTypes<string, string> {
     false,
     typeof BoolInput
   >;
+
+
+
+  ["Scalars['Boolean']"]: InFormDataTypeWithDefaultValueAndComponent<
+    "Scalars['Boolean']",
+    Scalars['Boolean'],
+    false,
+    typeof BoolInput
+  >;
+  ["Scalars['Float']"]: InFormDataTypeWithDefaultValueAndComponent<
+    "Scalars['Float']",
+    Scalars['Float'],
+    0,
+    typeof IntInput
+  >;
+  ["InputMaybe<Scalars['String']>"]: InFormDataTypeWithDefaultValueAndComponent<
+    "InputMaybe<Scalars['String']>",
+    InputMaybe<Scalars['String']>,
+    '""',
+    typeof StringInput
+  >;
+  ["Scalars['String']"]: InFormDataTypeWithDefaultValueAndComponent<
+    "Scalars['String']",
+    Scalars['String'],
+    '""',
+    typeof StringInput
+  >;
 }
 
+// image?: InputMaybe<Scalars['String']>;
+// imagePath?: InputMaybe<Scalars['String']>;
+// imageText?: InputMaybe<Scalars['String']>;
+// name: Scalars['String'];
+// win: Scalars['Boolean'];
+// winChance: Scalars['Float'];
+// winText?: InputMaybe<Scalars['String']>;
 export interface ConfigurationGeneralSettings
   extends InFormGeneralSettings<FM> {}

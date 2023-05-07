@@ -1,12 +1,41 @@
-import { UpdateDisplaySettingsMutationReturnType } from "./UpdateDisplaySettingsMutationReturnType"
-import { IntCell, IntInput,  } from "./../InForm/atoms/IntCell"
+import { DisplaySettingsInput } from "../../gql/generated-client/graphql"
+import { IntInput, IntCell,  } from "./../InForm/atoms/IntCell"
+import { Scalars,  } from "./../../gql/generated-client/graphql"
 import { useState, useEffect } from "react"
+import { UpdateDisplaySettingsMutationReturnType } from "./UpdateDisplaySettingsMutationReturnType"
 
-
-export const CreateDisplaySettingsForm = (props: { 
+export const DisplaySettingsTable = (props: { 
+    items: UpdateDisplaySettingsMutationReturnType[];
+    onRowClicked?: (item: UpdateDisplaySettingsMutationReturnType) => Promise<void> | void
+}) => {
+    return <table style={{ borderSpacing: 4, }}>
+    <thead>
+        <tr>
+            <th>showResultAfterMS</th>
+            <th>showResultForMS</th>
+        </tr>
+    </thead>
+    <tbody>
+        {props.items.map((item, index)=>
+            <tr key={index} onClick={() => props.onRowClicked && props.onRowClicked(item)}>
+                    <IntCell
+                        item={item}
+                        name={"showResultAfterMS"}
+                        value={item.showResultAfterMS}
+                    />
+                    <IntCell
+                        item={item}
+                        name={"showResultForMS"}
+                        value={item.showResultForMS}
+                    />
+            </tr>)}
+    </tbody>
+    </table>;
+}
+export const UpdateDisplaySettingsForm = (props: { 
     title?: React.ReactNode;
     item: UpdateDisplaySettingsMutationReturnType
-    onSave?: (next: UpdateDisplaySettingsMutationReturnType) => Promise<void> | void
+    onSave?: (next: DisplaySettingsInput) => Promise<void> | void
 }) => {
     const { title, item, onSave = () => {} } = props;
     const [current, setCurrent] = useState({ ...item });
@@ -27,7 +56,7 @@ export const CreateDisplaySettingsForm = (props: {
     }}
     onSubmit={async (e) => {
           e.preventDefault();
-          const next = current;
+          const next = projectToDisplaySettingsInput(current);
           await onSave(next);
         }}
     >
@@ -59,11 +88,9 @@ export const CreateDisplaySettingsForm = (props: {
     </form>;
 }
 
-export function createDefaultDisplaySettingsInput(): UpdateDisplaySettingsMutationReturnType {
+export function projectToDisplaySettingsInput(details: UpdateDisplaySettingsMutationReturnType): DisplaySettingsInput {
   return {
-    __typename: ,
-    showResultAfterMS: 0,
-    showResultForMS: 0,
+    showResultAfterMS: details.showResultAfterMS,
+    showResultForMS: details.showResultForMS,
   }
 }
-

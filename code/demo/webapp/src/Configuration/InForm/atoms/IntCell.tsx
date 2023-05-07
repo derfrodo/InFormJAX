@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useRandomId } from "../hooks/useRandomId";
 
 export function IntCell<T extends {}, TKey extends keyof T>(props: {
   item: T;
@@ -20,7 +21,7 @@ export function IntInput<
   onChange: (next: TV) => any;
 }) {
   const { name, required, value } = props;
-  const id = useMemo(() => Math.floor(Math.random() * 10000) + "", []);
+  const id = useRandomId();
   return (
     <div>
       <label htmlFor={id}>{typeof name === "string" ? name : ""}</label>
@@ -31,7 +32,7 @@ export function IntInput<
         value={value ?? ""}
         onChange={(e) =>
           e.target.value !== ""
-            ? props.onChange(Number(e.target.value) as TV)
+            ? props.onChange(Number(e.target.value.replace(",", ".")) as TV)
             : undefined
         }
       ></input>

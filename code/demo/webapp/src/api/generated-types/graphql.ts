@@ -37,7 +37,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   toggleDisableWheelValue?: Maybe<WheelPart>;
   updateDisplaySettings?: Maybe<DisplaySettings>;
-  updateOrCreateWheelPart?: Maybe<WheelSettings>;
+  updateOrCreateWheelPart?: Maybe<WheelPart>;
   updateWheelSettings?: Maybe<WheelSettings>;
 };
 
@@ -236,7 +236,7 @@ export type GameSettingsTypeResolvers<ContextType = any, ParentType extends Reso
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   toggleDisableWheelValue?: Resolver<Maybe<ResolversTypes['WheelPart']>, ParentType, ContextType, RequireFields<MutationToggleDisableWheelValueArgs, 'name'>>;
   updateDisplaySettings?: Resolver<Maybe<ResolversTypes['DisplaySettings']>, ParentType, ContextType, RequireFields<MutationUpdateDisplaySettingsArgs, 'input'>>;
-  updateOrCreateWheelPart?: Resolver<Maybe<ResolversTypes['WheelSettings']>, ParentType, ContextType, RequireFields<MutationUpdateOrCreateWheelPartArgs, 'input'>>;
+  updateOrCreateWheelPart?: Resolver<Maybe<ResolversTypes['WheelPart']>, ParentType, ContextType, RequireFields<MutationUpdateOrCreateWheelPartArgs, 'input'>>;
   updateWheelSettings?: Resolver<Maybe<ResolversTypes['WheelSettings']>, ParentType, ContextType, RequireFields<MutationUpdateWheelSettingsArgs, 'input'>>;
 };
 

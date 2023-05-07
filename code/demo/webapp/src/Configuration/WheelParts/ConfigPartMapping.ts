@@ -3,6 +3,7 @@ import {
   InFormMapping,
 } from "@derfrodo/gen-in-form-runtime";
 import { ReturnedWheelPartArrayElement } from "./ReturnedWheelPartArrayElement";
+import { UpdateWheelPartInput } from "../../gql/generated-client/graphql";
 
 const groupAndOrderFields: GroupAndOrderTypes<ReturnedWheelPartArrayElement> = {
   fields: {
@@ -16,10 +17,20 @@ const groupAndOrderFields: GroupAndOrderTypes<ReturnedWheelPartArrayElement> = {
   },
 };
 
-export interface ConfigPartMapping
-  extends InFormMapping<ReturnedWheelPartArrayElement> {
-  //,
-  // GetUserDetailQuery["userDetail"] & {}
-  name: "WheelPartArrayElement";
+export interface UpdateConfigPartMapping
+  extends InFormMapping<UpdateWheelPartInput, ReturnedWheelPartArrayElement> {
+  name: "UpdateWheelPart";
   groupAndOrderFields: typeof groupAndOrderFields;
+}
+
+const createGroupAndOrderFields: GroupAndOrderTypes<ReturnedWheelPartArrayElement> = {
+  fields: {
+    __typename: { ordinal: 10, isHidden: true },
+  },
+};
+
+export interface CreateConfigPartMapping
+  extends InFormMapping<UpdateWheelPartInput> {
+  name: "CreateWheelPart";
+  groupAndOrderFields: typeof createGroupAndOrderFields;
 }

@@ -1,4 +1,4 @@
-export const Update{{name}}Form = (props: { 
+export const {{#if detailsTypeInfo}}Update{{else}}Create{{/if}}{{name}}Form = (props: { 
     title?: React.ReactNode;
     item: {{#if detailsTypeInfo}}{{detailsTypeInfo.namedBinding}}{{else}}{{inputTypeInfo.namedBinding}}{{/if}}
     onSave?: (next: {{inputTypeInfo.namedBinding}}) => Promise<void> | void
@@ -18,15 +18,23 @@ export const Update{{name}}Form = (props: {
         padding: 8,
         border: "1px solid black",
         marginTop: 8,
-    }{{/surroundWithCurlyBraces}}>
-    {typeof title === "string" ? <h2 style={{#surroundWithCurlyBraces}}{ 
+        maxWidth: 300,
+    }{{/surroundWithCurlyBraces}}
+    onSubmit={{#surroundWithCurlyBraces}}async (e) => {
+          e.preventDefault();
+          const next = {{#if detailsTypeInfo}}projectTo{{name}}Input(current){{else}}current{{/if}};
+          await onSave(next);
+        }{{/surroundWithCurlyBraces}}
+    >
+    {typeof title === "string" ? <h3 style={{#surroundWithCurlyBraces}}{ 
         marginTop: -4,
         marginBottom: -8,
-    }{{/surroundWithCurlyBraces}} >{title}</h2> : title}
+    }{{/surroundWithCurlyBraces}} >{title}</h3> : title}
     {{#each byOrdering}}
     {{#if input}}
     {{#findElementByPropertyValueAndRegex input.mappedBy "key" "[^(CELL)]$"}}
         <{{componentType.typeName}}
+            required={{#surroundWithCurlyBraces}}{{#ifIsEqual ../input.typeName "InputMaybe"}}false{{else}}true{{/ifIsEqual}}{{/surroundWithCurlyBraces}}
             onChange={{#surroundWithCurlyBraces}}(next) => setCurrent(p => ({ ...p, {{../input.name}}: next })){{/surroundWithCurlyBraces}}
             item={{surroundWithCurlyBraces "item"}}
             name={{#surroundWithCurlyBraces}}"{{../input.name}}"{{/surroundWithCurlyBraces}}
@@ -36,11 +44,6 @@ export const Update{{name}}Form = (props: {
     {{/if}}
     {{/each}}
       <button
-        onClick={{#surroundWithCurlyBraces}}async (e) => {
-          e.preventDefault();
-          const next = {{#if detailsTypeInfo}}projectTo{{name}}Input(current){{else}}current{{/if}};
-          await onSave(next);
-        }{{/surroundWithCurlyBraces}}
         style={{#surroundWithCurlyBraces}}{ 
         width: 150,
         borderRadius: 4,

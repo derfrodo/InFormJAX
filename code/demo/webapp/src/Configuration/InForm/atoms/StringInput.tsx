@@ -1,15 +1,21 @@
-export function StringInput<T extends {},
-TKey extends keyof T,
-TV extends T[TKey] | string | null | undefined
->(props: { item: T; name: TKey; value: TV; onChange: (next: TV) => any }) {
-  const { name, value } = props;
+export function StringInput<
+  T extends {},
+  TKey extends keyof T,
+  TV extends T[TKey] | string | null | undefined
+>(props: {
+  required?: boolean;
+  item: T;
+  name: TKey;
+  value: TV;
+  onChange: (next: TV) => any;
+}) {
+  const { name, value, required } = props;
   return (
     <input
+      required={required}
       value={value ?? ""}
       onChange={(e) =>
-        e.target.value !== ""
-          ? props.onChange(e.target.value as TV)
-          : undefined
+        e.target.value !== "" ? props.onChange(e.target.value as TV) : undefined
       }
     ></input>
   );

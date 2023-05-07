@@ -37,6 +37,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   toggleDisableWheelValue?: Maybe<WheelPart>;
   updateDisplaySettings?: Maybe<DisplaySettings>;
+  updateOrCreateWheelPart?: Maybe<WheelSettings>;
   updateWheelSettings?: Maybe<WheelSettings>;
 };
 
@@ -48,6 +49,11 @@ export type MutationToggleDisableWheelValueArgs = {
 
 export type MutationUpdateDisplaySettingsArgs = {
   input: DisplaySettingsInput;
+};
+
+
+export type MutationUpdateOrCreateWheelPartArgs = {
+  input: UpdateWheelPartInput;
 };
 
 
@@ -69,10 +75,18 @@ export type QueryWheelPartsArgs = {
   filter?: InputMaybe<WheelPartFilter>;
 };
 
+export type UpdateWheelPartInput = {
+  imagePath?: InputMaybe<Scalars['String']>;
+  imageText?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  win: Scalars['Boolean'];
+  winChance: Scalars['Float'];
+  winText?: InputMaybe<Scalars['String']>;
+};
+
 export type WheelPart = {
   __typename?: 'WheelPart';
   disabled: Scalars['Boolean'];
-  image?: Maybe<Scalars['String']>;
   imagePath?: Maybe<Scalars['String']>;
   imageText?: Maybe<Scalars['String']>;
   name: Scalars['String'];
@@ -131,6 +145,13 @@ export type ToggleDisableWheelValueMutationVariables = Exact<{
 
 export type ToggleDisableWheelValueMutation = { __typename?: 'Mutation', toggleDisableWheelValue?: { __typename?: 'WheelPart', name: string, imagePath?: string | null, imageText?: string | null, win: boolean, winText?: string | null, winChance: number, disabled: boolean } | null };
 
+export type UpdateOrCreateWheelPartMutationVariables = Exact<{
+  input: UpdateWheelPartInput;
+}>;
+
+
+export type UpdateOrCreateWheelPartMutation = { __typename?: 'Mutation', updateOrCreateWheelPart?: { __typename?: 'WheelSettings', radius: number, rotationDurationNotPlaying: number, rotationDurationPlaying: number, rotationDurationInner: number } | null };
+
 export type GameSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -149,5 +170,6 @@ export const WheelSettingsDocument = {"kind":"Document","definitions":[{"kind":"
 export const UpdateSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DisplaySettingsInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateDisplaySettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"showResultAfterMS"}},{"kind":"Field","name":{"kind":"Name","value":"showResultForMS"}}]}}]}}]} as unknown as DocumentNode<UpdateSettingsMutation, UpdateSettingsMutationVariables>;
 export const UpdateWheelSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateWheelSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"WheelSettingsInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateWheelSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"radius"}},{"kind":"Field","name":{"kind":"Name","value":"rotationDurationInner"}},{"kind":"Field","name":{"kind":"Name","value":"rotationDurationNotPlaying"}},{"kind":"Field","name":{"kind":"Name","value":"rotationDurationPlaying"}}]}}]}}]} as unknown as DocumentNode<UpdateWheelSettingsMutation, UpdateWheelSettingsMutationVariables>;
 export const ToggleDisableWheelValueDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"toggleDisableWheelValue"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"toggleDisableWheelValue"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"imagePath"}},{"kind":"Field","name":{"kind":"Name","value":"imageText"}},{"kind":"Field","name":{"kind":"Name","value":"win"}},{"kind":"Field","name":{"kind":"Name","value":"winText"}},{"kind":"Field","name":{"kind":"Name","value":"winChance"}},{"kind":"Field","name":{"kind":"Name","value":"disabled"}}]}}]}}]} as unknown as DocumentNode<ToggleDisableWheelValueMutation, ToggleDisableWheelValueMutationVariables>;
+export const UpdateOrCreateWheelPartDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateOrCreateWheelPart"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateWheelPartInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateOrCreateWheelPart"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"radius"}},{"kind":"Field","name":{"kind":"Name","value":"rotationDurationNotPlaying"}},{"kind":"Field","name":{"kind":"Name","value":"rotationDurationPlaying"}},{"kind":"Field","name":{"kind":"Name","value":"rotationDurationInner"}}]}}]}}]} as unknown as DocumentNode<UpdateOrCreateWheelPartMutation, UpdateOrCreateWheelPartMutationVariables>;
 export const GameSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GameSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gameSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"chanceToWin"}},{"kind":"Field","name":{"kind":"Name","value":"sumOfChances"}},{"kind":"Field","name":{"kind":"Name","value":"sumOfWinChance"}},{"kind":"Field","name":{"kind":"Name","value":"sumOfLooseChance"}}]}}]}}]} as unknown as DocumentNode<GameSettingsQuery, GameSettingsQueryVariables>;
 export const WheelPartsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"wheelParts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"wheelPartFilter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wheelParts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"imagePath"}},{"kind":"Field","name":{"kind":"Name","value":"imageText"}},{"kind":"Field","name":{"kind":"Name","value":"win"}},{"kind":"Field","name":{"kind":"Name","value":"winText"}},{"kind":"Field","name":{"kind":"Name","value":"winChance"}},{"kind":"Field","name":{"kind":"Name","value":"disabled"}}]}}]}}]} as unknown as DocumentNode<WheelPartsQuery, WheelPartsQueryVariables>;

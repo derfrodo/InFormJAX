@@ -1,8 +1,28 @@
 import { WheelValue } from "./types/WheelValue";
 
+let initialized: boolean = false;
+let wheelParts: WheelValue[] = [];
+
 export const getWheelValues: () => Promise<WheelValue[]> = async () => {
-  const maternaValue = await getMaternaValue();
-  return [maternaValue, ...WHEELVALUES];
+  if (!initialized) {
+    const maternaValue = await getMaternaValue();
+    wheelParts = [maternaValue, ...WHEELVALUES];
+    initialized = true;
+  }
+  return wheelParts;
+};
+
+export const updateOrAddWheelValue: (
+  value: WheelValue
+) => Promise<WheelValue[]> = async (value: WheelValue) => {
+  const values = await getWheelValues();
+  const index = values.findIndex((v) => v.name === value.name);
+  if (index >= 0) {
+    values.splice(index, 1, value);
+  } else {
+    values.push(value);
+  }
+  return wheelParts;
 };
 
 const getMaternaValue: () => Promise<WheelValue> = async () => {

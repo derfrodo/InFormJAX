@@ -52,6 +52,13 @@ export const WHEELVALUES: WheelValue[] = [
     imageText: "😢",
     winChance: 0.5,
   },
+  {
+    name: "Leider verloren",
+    winText: "Vielleicht das nächste Mal.",
+    win: false,
+    imageText: "😒",
+    winChance: 0.5,
+  },
   // {
   //   name: "Geiz ist sparsam",
   //   win: false,

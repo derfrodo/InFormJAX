@@ -5,12 +5,15 @@ import { useState, useEffect } from "react"
 import { UpdateDisplaySettingsMutationReturnType } from "./UpdateDisplaySettingsMutationReturnType"
 
 export const DisplaySettingsTable = (props: { 
+    actionsComponent?: React.ComponentType<{ item: UpdateDisplaySettingsMutationReturnType }>;
     items: UpdateDisplaySettingsMutationReturnType[];
     onRowClicked?: (item: UpdateDisplaySettingsMutationReturnType) => Promise<void> | void
 }) => {
+    const ActionsComponent = props.actionsComponent;
     return <table style={{ borderSpacing: 4, }}>
     <thead>
         <tr>
+            {ActionsComponent ? <th></th> : <></>}
             <th>showResultAfterMS</th>
             <th>showResultForMS</th>
         </tr>
@@ -18,6 +21,7 @@ export const DisplaySettingsTable = (props: {
     <tbody>
         {props.items.map((item, index)=>
             <tr key={index} onClick={() => props.onRowClicked && props.onRowClicked(item)}>
+                {ActionsComponent ? <td><ActionsComponent item={item}/></td> : <></>}
                     <IntCell
                         item={item}
                         name={"showResultAfterMS"}

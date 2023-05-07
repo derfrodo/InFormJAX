@@ -6,5 +6,13 @@ export function projectTo{{name}}Input(details: {{detailsTypeInfo.namedBinding}}
   {{/each}}
   }
 }
+{{else}}
+export function createDefault{{name}}Input(): {{inputTypeInfo.namedBinding}} {
+  return {
+  {{#each mappedInputProperties}}
+    {{name}}: {{firstMapping.defaultValue.value}},
+  {{/each}}
+  }
+}
 
 {{/if}}

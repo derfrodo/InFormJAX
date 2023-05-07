@@ -37,6 +37,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   toggleDisableWheelValue?: Maybe<WheelPart>;
   updateDisplaySettings?: Maybe<DisplaySettings>;
+  updateOrCreateWheelPart?: Maybe<WheelSettings>;
   updateWheelSettings?: Maybe<WheelSettings>;
 };
 
@@ -48,6 +49,11 @@ export type MutationToggleDisableWheelValueArgs = {
 
 export type MutationUpdateDisplaySettingsArgs = {
   input: DisplaySettingsInput;
+};
+
+
+export type MutationUpdateOrCreateWheelPartArgs = {
+  input: UpdateWheelPartInput;
 };
 
 
@@ -69,10 +75,18 @@ export type QueryWheelPartsArgs = {
   filter?: InputMaybe<WheelPartFilter>;
 };
 
+export type UpdateWheelPartInput = {
+  imagePath?: InputMaybe<Scalars['String']>;
+  imageText?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  win: Scalars['Boolean'];
+  winChance: Scalars['Float'];
+  winText?: InputMaybe<Scalars['String']>;
+};
+
 export type WheelPart = {
   __typename?: 'WheelPart';
   disabled: Scalars['Boolean'];
-  image?: Maybe<Scalars['String']>;
   imagePath?: Maybe<Scalars['String']>;
   imageText?: Maybe<Scalars['String']>;
   name: Scalars['String'];
@@ -180,6 +194,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  UpdateWheelPartInput: UpdateWheelPartInput;
   WheelPart: ResolverTypeWrapper<WheelPart>;
   WheelSettings: ResolverTypeWrapper<WheelSettings>;
   WheelSettingsInput: WheelSettingsInput;
@@ -197,6 +212,7 @@ export type ResolversParentTypes = {
   Mutation: {};
   Query: {};
   String: Scalars['String'];
+  UpdateWheelPartInput: UpdateWheelPartInput;
   WheelPart: WheelPart;
   WheelSettings: WheelSettings;
   WheelSettingsInput: WheelSettingsInput;
@@ -220,6 +236,7 @@ export type GameSettingsTypeResolvers<ContextType = any, ParentType extends Reso
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   toggleDisableWheelValue?: Resolver<Maybe<ResolversTypes['WheelPart']>, ParentType, ContextType, RequireFields<MutationToggleDisableWheelValueArgs, 'name'>>;
   updateDisplaySettings?: Resolver<Maybe<ResolversTypes['DisplaySettings']>, ParentType, ContextType, RequireFields<MutationUpdateDisplaySettingsArgs, 'input'>>;
+  updateOrCreateWheelPart?: Resolver<Maybe<ResolversTypes['WheelSettings']>, ParentType, ContextType, RequireFields<MutationUpdateOrCreateWheelPartArgs, 'input'>>;
   updateWheelSettings?: Resolver<Maybe<ResolversTypes['WheelSettings']>, ParentType, ContextType, RequireFields<MutationUpdateWheelSettingsArgs, 'input'>>;
 };
 
@@ -233,7 +250,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type WheelPartResolvers<ContextType = any, ParentType extends ResolversParentTypes['WheelPart'] = ResolversParentTypes['WheelPart']> = {
   disabled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   imagePath?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   imageText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

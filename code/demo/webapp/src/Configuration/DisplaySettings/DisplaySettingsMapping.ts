@@ -3,6 +3,7 @@ import {
   InFormMapping,
 } from "@derfrodo/gen-in-form-runtime";
 import { UpdateDisplaySettingsMutationReturnType } from "./UpdateDisplaySettingsMutationReturnType";
+import { DisplaySettingsInput } from "../../gql/generated-client/graphql";
 
 const groupAndOrderFields: GroupAndOrderTypes<UpdateDisplaySettingsMutationReturnType> =
   {
@@ -15,7 +16,7 @@ const groupAndOrderFields: GroupAndOrderTypes<UpdateDisplaySettingsMutationRetur
   };
 
 export interface DisplaySettingsMapping
-  extends InFormMapping<UpdateDisplaySettingsMutationReturnType> {
+  extends InFormMapping<DisplaySettingsInput, UpdateDisplaySettingsMutationReturnType> {
   name: "DisplaySettings";
   groupAndOrderFields: typeof groupAndOrderFields;
 }

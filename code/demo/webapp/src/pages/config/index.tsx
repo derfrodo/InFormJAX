@@ -2,22 +2,28 @@
 
 import Head from "next/head";
 
-import { WheelPartArrayElementTable } from "@/Configuration/WheelParts/WheelPartArrayElement.generated";
-
-import { queryWheelParts } from "@/Wheel/gql/queryWheelParts";
+import { UpdateDisplaySettingsForm } from "@/Configuration/DisplaySettings/DisplaySettings.generated";
+import {
+  UpdateUpdateWheelPartForm,
+  UpdateWheelPartTable,
+} from "@/Configuration/WheelParts/UpdateWheelPart.generated";
+import { UpdateWheelSettingsForm } from "@/Configuration/WheelSettings/WheelSettings.generated";
+import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
+import { queryWheelSettings } from "@/Configuration/mutations/queryWheelSettings";
+import { updateDisplaysettings } from "@/Configuration/mutations/updateDisplaySettings";
+import { updateWheelSettings } from "@/Configuration/mutations/updateWheelSettings";
+import App from "@/Wheel/App";
 import { mutateToggleDisableWheelValue } from "@/Wheel/gql/mutateToggleDisableWheelValue";
+import { queryGameSettings } from "@/Wheel/gql/queryGameSettings";
+import { queryWheelParts } from "@/Wheel/gql/queryWheelParts";
 import { getClient } from "@/gql/getApolloClient";
 import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
 import Link from "next/link";
-import { UpdateDisplaySettingsForm } from "@/Configuration/DisplaySettings/DisplaySettings.generated";
-import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
-import { updateDisplaysettings } from "@/Configuration/mutations/updateDisplaySettings";
-import { UpdateWheelSettingsForm } from "@/Configuration/WheelSettings/WheelSettings.generated";
-import { queryWheelSettings } from "@/Configuration/mutations/queryWheelSettings";
-import { updateWheelSettings } from "@/Configuration/mutations/updateWheelSettings";
-import App from "@/Wheel/App";
-import { queryGameSettings } from "@/Wheel/gql/queryGameSettings";
+import { useEffect, useState } from "react";
+import { ReturnedWheelPartArrayElement } from "@/Configuration/WheelParts/ReturnedWheelPartArrayElement";
+import { mutationUpdateOrCreateWheelPart } from "@/Wheel/gql/mutationUpdateOrCreateWheelPart";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -33,7 +39,8 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 }
 
 export default function Config() {
-  const { data: values } = useQuery(queryWheelParts);
+  const { data: values, refetch: refetchWheelParts } =
+    useQuery(queryWheelParts);
   const { data: displaySettings } = useQuery(queryDisplaysettings);
   const { data: wheelSettings } = useQuery(queryWheelSettings);
   const { refetch: refetchGameSettings } = useQuery(queryGameSettings);
@@ -41,6 +48,24 @@ export default function Config() {
   const [toggleDisabled] = useMutation(mutateToggleDisableWheelValue);
   const [updateDisplaySettings] = useMutation(updateDisplaysettings);
   const [updateWheelsettings] = useMutation(updateWheelSettings);
+
+  const [updateOrCreateWheelPart] = useMutation(
+    mutationUpdateOrCreateWheelPart
+  );
+
+  const [selectedWheelPart, setSelectedWheelPart] =
+    useState<ReturnedWheelPartArrayElement | null>(null);
+
+  const { push } = useRouter();
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        push("/");
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [push]);
 
   return (
     <>
@@ -119,8 +144,7 @@ export default function Config() {
                   title={"Anzeigeeinstellungen"}
                   item={displaySettings.displaySettings}
                   onSave={(next) => {
-                    const { __typename, ...rest } = next;
-                    updateDisplaySettings({ variables: { input: rest } });
+                    updateDisplaySettings({ variables: { input: next } });
                   }}
                 />
               ) : (
@@ -128,14 +152,60 @@ export default function Config() {
               )}
             </div>
             <div style={{ flex: 1 }}>
-              <h2>Abschnitte</h2>
-              <WheelPartArrayElementTable
-                onRowClicked={async (item) => {
-                  await toggleDisabled({ variables: { name: item.name } });
-                  await refetchGameSettings();
-                }}
-                items={values?.wheelParts || []}
-              />
+              {!selectedWheelPart ? (
+                <>
+                  <h2>Abschnitte</h2>
+                  <UpdateWheelPartTable
+                    actionsComponent={({ item }) => {
+                      const isDisabled =
+                        !item.disabled &&
+                        (values?.wheelParts || []).filter(
+                          (i) => i.win === item.win && !i.disabled
+                        ).length <= 1;
+                      return (
+                        <>
+                          <button
+                            disabled={isDisabled}
+                            onClick={async (e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              await toggleDisabled({
+                                variables: { name: item.name },
+                              });
+                              await refetchGameSettings();
+                            }}
+                          >
+                            {item.disabled ? "✅" : "🚫"}
+                          </button>
+                        </>
+                      );
+                    }}
+                    onRowClicked={async (item) => {
+                      setSelectedWheelPart(item);
+                      // await toggleDisabled({ variables: { name: item.name } });
+                      // await refetchGameSettings();
+                    }}
+                    items={values?.wheelParts || []}
+                  />
+                </>
+              ) : (
+                <>
+                  <h2>
+                    Bearbeite Abschnitt (neuer Name {"=>"} neuer Abschnitt)
+                  </h2>
+                  <UpdateUpdateWheelPartForm
+                    item={selectedWheelPart}
+                    onSave={async (next) => {
+                      await updateOrCreateWheelPart({
+                        variables: { input: next },
+                      });
+                      await refetchWheelParts();
+                      await refetchGameSettings();
+                      setSelectedWheelPart(null);
+                    }}
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>

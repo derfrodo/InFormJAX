@@ -1,19 +1,24 @@
-import { ReturnedWheelPartArrayElement } from "./ReturnedWheelPartArrayElement"
-import { StringInput,  } from "./../InForm/atoms/StringInput"
-import { StringCell,  } from "./../InForm/atoms/StringCell"
+import { UpdateWheelPartInput } from "../../gql/generated-client/graphql"
 import { ImageCell,  } from "./../InForm/atoms/ImageCell"
-import { BoolCell,  } from "./../InForm/atoms/BoolCell"
+import { StringInput,  } from "./../InForm/atoms/StringInput"
 import { BoolInput,  } from "./../InForm/atoms/BoolInput"
-import { IntCell, IntInput,  } from "./../InForm/atoms/IntCell"
+import { StringCell,  } from "./../InForm/atoms/StringCell"
+import { BoolCell,  } from "./../InForm/atoms/BoolCell"
+import { IntInput, IntCell,  } from "./../InForm/atoms/IntCell"
+import { InputMaybe, Scalars,  } from "./../../gql/generated-client/graphql"
 import { useState, useEffect } from "react"
+import { ReturnedWheelPartArrayElement } from "./ReturnedWheelPartArrayElement"
 
-export const WheelPartArrayElementTable = (props: { 
+export const UpdateWheelPartTable = (props: { 
+    actionsComponent?: React.ComponentType<{ item: ReturnedWheelPartArrayElement }>;
     items: ReturnedWheelPartArrayElement[];
     onRowClicked?: (item: ReturnedWheelPartArrayElement) => Promise<void> | void
 }) => {
+    const ActionsComponent = props.actionsComponent;
     return <table style={{ borderSpacing: 4, }}>
     <thead>
         <tr>
+            {ActionsComponent ? <th></th> : <></>}
             <th>win</th>
             <th>disabled</th>
             <th>name</th>
@@ -26,6 +31,7 @@ export const WheelPartArrayElementTable = (props: {
     <tbody>
         {props.items.map((item, index)=>
             <tr key={index} onClick={() => props.onRowClicked && props.onRowClicked(item)}>
+                {ActionsComponent ? <td><ActionsComponent item={item}/></td> : <></>}
                     <BoolCell
                         item={item}
                         name={"win"}
@@ -65,10 +71,10 @@ export const WheelPartArrayElementTable = (props: {
     </tbody>
     </table>;
 }
-export const UpdateWheelPartArrayElementForm = (props: { 
+export const UpdateUpdateWheelPartForm = (props: { 
     title?: React.ReactNode;
     item: ReturnedWheelPartArrayElement
-    onSave?: (next: ReturnedWheelPartArrayElement) => Promise<void> | void
+    onSave?: (next: UpdateWheelPartInput) => Promise<void> | void
 }) => {
     const { title, item, onSave = () => {} } = props;
     const [current, setCurrent] = useState({ ...item });
@@ -85,47 +91,61 @@ export const UpdateWheelPartArrayElementForm = (props: {
         padding: 8,
         border: "1px solid black",
         marginTop: 8,
-    }}>
-    {typeof title === "string" ? <h2 style={{ 
+        maxWidth: 300,
+    }}
+    onSubmit={async (e) => {
+          e.preventDefault();
+          const next = projectToUpdateWheelPartInput(current);
+          await onSave(next);
+        }}
+    >
+    {typeof title === "string" ? <h3 style={{ 
         marginTop: -4,
         marginBottom: -8,
-    }} >{title}</h2> : title}
+    }} >{title}</h3> : title}
+        <BoolInput
+            required={true}
+            onChange={(next) => setCurrent(p => ({ ...p, win: next }))}
+            item={item}
+            name={"win"}
+            value={current.win}
+        />
         <StringInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, name: next }))}
             item={item}
             name={"name"}
             value={current.name}
         />
         <StringInput
+            required={false}
             onChange={(next) => setCurrent(p => ({ ...p, imagePath: next }))}
             item={item}
             name={"imagePath"}
             value={current.imagePath}
         />
         <StringInput
+            required={false}
             onChange={(next) => setCurrent(p => ({ ...p, imageText: next }))}
             item={item}
             name={"imageText"}
             value={current.imageText}
         />
         <StringInput
+            required={false}
             onChange={(next) => setCurrent(p => ({ ...p, winText: next }))}
             item={item}
             name={"winText"}
             value={current.winText}
         />
         <IntInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, winChance: next }))}
             item={item}
             name={"winChance"}
             value={current.winChance}
         />
       <button
-        onClick={async (e) => {
-          e.preventDefault();
-          const next = current;
-          await onSave(next);
-        }}
         style={{ 
         width: 150,
         borderRadius: 4,
@@ -135,3 +155,13 @@ export const UpdateWheelPartArrayElementForm = (props: {
     </form>;
 }
 
+export function projectToUpdateWheelPartInput(details: ReturnedWheelPartArrayElement): UpdateWheelPartInput {
+  return {
+    imagePath: details.imagePath,
+    imageText: details.imageText,
+    name: details.name,
+    win: details.win,
+    winChance: details.winChance,
+    winText: details.winText,
+  }
+}

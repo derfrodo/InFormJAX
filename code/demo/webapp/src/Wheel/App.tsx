@@ -65,7 +65,6 @@ function isWinner(winChance: number) {
   return randomResult < winChance;
 }
 
-
 function getWinner(sumOfChances: number, values: WheelValue[]) {
   if (values.length === 0) {
     console.error("NO values to be found.");
@@ -82,8 +81,6 @@ function getWinner(sumOfChances: number, values: WheelValue[]) {
 
   return values[values.length - 1];
 }
-
-
 
 function App(props: { values: WheelValue[] }) {
   const { radius } = useGetWheelSettings();
@@ -174,16 +171,29 @@ function App(props: { values: WheelValue[] }) {
     return null;
   }, [lastWin, values]);
 
-  const onstart = (e: React.MouseEvent<any>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    updatePlaying();
-    if (playing) {
-      calculateWinner();
-    } else {
-      setLastWin(-1);
-    }
-  };
+  const onstart = useCallback(
+    (e: React.MouseEvent<any> | KeyboardEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      updatePlaying();
+      if (playing) {
+        calculateWinner();
+      } else {
+        setLastWin(-1);
+      }
+    },
+    [calculateWinner, playing, updatePlaying]
+  );
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Space") {
+        onstart(e);
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [onstart]);
 
   return (
     <div

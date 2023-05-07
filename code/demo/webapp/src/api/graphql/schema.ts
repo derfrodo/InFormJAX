@@ -141,7 +141,7 @@ export const schema = new GraphQLSchema({
         },
       },
       updateOrCreateWheelPart: {
-        type: wheelSettingsType,
+        type: wheelPartType,
         args: {
           input: {
             type: new GraphQLNonNull(updateWheelPartInputType),
@@ -150,9 +150,10 @@ export const schema = new GraphQLSchema({
         resolve: async (source, args, context, info) => {
           const input: UpdateWheelPartInput = args["input"];
           if (input) {
-            return await updateOrAddWheelValue(input);
+            await updateOrAddWheelValue(input);
+            return (await getWheelValues()).find((v) => v.name === input.name);
           }
-          return await getWheelValues();
+          return null;
         },
       },
 

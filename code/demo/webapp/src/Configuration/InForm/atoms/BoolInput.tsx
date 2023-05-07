@@ -1,3 +1,5 @@
+import { useRandomId } from "../hooks/useRandomId";
+
 export function BoolInput<
   T extends {},
   TKey extends keyof T,
@@ -10,10 +12,14 @@ export function BoolInput<
   onChange: (next: TV) => any;
 }) {
   const { name, value, required, onChange } = props;
+  const id = useRandomId();
   return (
     <>
+      <label htmlFor={id}>{typeof name === "string" ? name : ""}</label>
       <input
-      required={required}
+        id={id}
+        // required={required}
+        
         type="checkbox"
         checked={value ?? false}
         onChange={(e) => onChange(!value as TV)}

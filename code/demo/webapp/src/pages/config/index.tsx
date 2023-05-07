@@ -2,22 +2,27 @@
 
 import Head from "next/head";
 
-import { WheelPartArrayElementTable } from "@/Configuration/WheelParts/WheelPartArrayElement.generated";
-
-import { queryWheelParts } from "@/Wheel/gql/queryWheelParts";
+import { UpdateDisplaySettingsForm } from "@/Configuration/DisplaySettings/DisplaySettings.generated";
+import {
+  UpdateUpdateWheelPartForm,
+  UpdateWheelPartTable,
+} from "@/Configuration/WheelParts/UpdateWheelPart.generated";
+import { UpdateWheelSettingsForm } from "@/Configuration/WheelSettings/WheelSettings.generated";
+import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
+import { queryWheelSettings } from "@/Configuration/mutations/queryWheelSettings";
+import { updateDisplaysettings } from "@/Configuration/mutations/updateDisplaySettings";
+import { updateWheelSettings } from "@/Configuration/mutations/updateWheelSettings";
+import App from "@/Wheel/App";
 import { mutateToggleDisableWheelValue } from "@/Wheel/gql/mutateToggleDisableWheelValue";
+import { queryGameSettings } from "@/Wheel/gql/queryGameSettings";
+import { queryWheelParts } from "@/Wheel/gql/queryWheelParts";
 import { getClient } from "@/gql/getApolloClient";
 import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
 import Link from "next/link";
-import { UpdateDisplaySettingsForm } from "@/Configuration/DisplaySettings/DisplaySettings.generated";
-import { queryDisplaysettings } from "@/Configuration/mutations/queryDisplaysetting";
-import { updateDisplaysettings } from "@/Configuration/mutations/updateDisplaySettings";
-import { UpdateWheelSettingsForm } from "@/Configuration/WheelSettings/WheelSettings.generated";
-import { queryWheelSettings } from "@/Configuration/mutations/queryWheelSettings";
-import { updateWheelSettings } from "@/Configuration/mutations/updateWheelSettings";
-import App from "@/Wheel/App";
-import { queryGameSettings } from "@/Wheel/gql/queryGameSettings";
+import { useState } from "react";
+import { ReturnedWheelPartArrayElement } from "@/Configuration/WheelParts/ReturnedWheelPartArrayElement";
+import { mutationUpdateOrCreateWheelPart } from "@/Wheel/gql/mutationUpdateOrCreateWheelPart";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -41,6 +46,13 @@ export default function Config() {
   const [toggleDisabled] = useMutation(mutateToggleDisableWheelValue);
   const [updateDisplaySettings] = useMutation(updateDisplaysettings);
   const [updateWheelsettings] = useMutation(updateWheelSettings);
+
+  const [updateOrCreateWheelPart] = useMutation(
+    mutationUpdateOrCreateWheelPart
+  );
+
+  const [selectedWheelPart, setSelectedWheelPart] =
+    useState<ReturnedWheelPartArrayElement | null>(null);
 
   return (
     <>
@@ -119,8 +131,7 @@ export default function Config() {
                   title={"Anzeigeeinstellungen"}
                   item={displaySettings.displaySettings}
                   onSave={(next) => {
-                    const { __typename, ...rest } = next;
-                    updateDisplaySettings({ variables: { input: rest } });
+                    updateDisplaySettings({ variables: { input: next } });
                   }}
                 />
               ) : (
@@ -128,14 +139,32 @@ export default function Config() {
               )}
             </div>
             <div style={{ flex: 1 }}>
-              <h2>Abschnitte</h2>
-              <WheelPartArrayElementTable
-                onRowClicked={async (item) => {
-                  await toggleDisabled({ variables: { name: item.name } });
-                  await refetchGameSettings();
-                }}
-                items={values?.wheelParts || []}
-              />
+              {!selectedWheelPart ? (
+                <>
+                  <h2>Abschnitte</h2>
+                  <UpdateWheelPartTable
+                    onRowClicked={async (item) => {
+                      setSelectedWheelPart(item);
+                      // await toggleDisabled({ variables: { name: item.name } });
+                      // await refetchGameSettings();
+                    }}
+                    items={values?.wheelParts || []}
+                  />
+                </>
+              ) : (
+                <>
+                  <h2>Abschnitte</h2>
+                  <UpdateUpdateWheelPartForm
+                    item={selectedWheelPart}
+                    onSave={async (next) => {
+                      await updateOrCreateWheelPart({
+                        variables: { input: next },
+                      });
+                      setSelectedWheelPart(null);
+                    }}
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>

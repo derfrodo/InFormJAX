@@ -16,9 +16,9 @@ import { getClient } from "@/gql/getApolloClient";
 import { useMutation, useQuery } from "@apollo/client";
 import { AppContext } from "next/app";
 import { useState } from "react";
-import { CreateCreateContactForm, createDefaultCreateContactInput } from "@/Features/Contact/CreateContact.generated";
-import { queryContacts, mutateCreateContact } from "@/Features/Contact/queries/graphqlQueries";
-import { UpdateContactTable } from "@/Features/Contact/UpdateContact.generated";
+// import { CreateCreateContactForm, createDefaultCreateContactInput } from "@/Features/Contact/CreateContact.generated";
+// import { queryContacts, mutateCreateContact } from "@/Features/Contact/queries/graphqlQueries";
+// import { UpdateContactTable } from "@/Features/Contact/UpdateContact.generated";
 
 export async function getServerSideProps(context: AppContext["ctx"]) {
   const c = getClient(null, true);
@@ -47,12 +47,12 @@ export default function AppComponent() {
 
 
   
-  const { data: contactData,refetch: refetchContacts } = useQuery(queryContacts);
-  const [createContact] = useMutation(mutateCreateContact);
+  // const { data: contactData,refetch: refetchContacts } = useQuery(queryContacts);
+  // const [createContact] = useMutation(mutateCreateContact);
 
-  const [defaultCreateContact, setCreateContact] = useState(
-    createDefaultCreateContactInput()
-  );
+  // const [defaultCreateContact, setCreateContact] = useState(
+  //   createDefaultCreateContactInput()
+  // );
 
   return (
     <>
@@ -96,7 +96,7 @@ export default function AppComponent() {
               />
             </>
           )}
-          <h2>Contact</h2>
+          {/* <h2>Contact</h2>
           
           <CreateCreateContactForm
             item={defaultCreateContact}
@@ -113,7 +113,7 @@ export default function AppComponent() {
               items={contactData?.contacts ?? []}
               onRowClicked={() => {}}
             />
-          </>
+          </> */}
 
         </div>
       </main>

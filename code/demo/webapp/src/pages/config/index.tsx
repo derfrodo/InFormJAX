@@ -158,9 +158,9 @@ export default function Config() {
                   <UpdateWheelPartTable
                     actionsComponent={({ item }) => {
                       const isDisabled =
+                        !item.disabled &&
                         (values?.wheelParts || []).filter(
-                          (i) =>
-                            i.win === item.win && (!i.disabled || item.disabled)
+                          (i) => i.win === item.win && !i.disabled
                         ).length <= 1;
                       return (
                         <>

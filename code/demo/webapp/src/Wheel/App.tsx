@@ -366,7 +366,7 @@ function App(props: { values: WheelValue[] }) {
             right: "2vw",
           }}
         >
-          PRODly created by T. Lansing, S. Pauka & J. Neubauer{" "}
+          {/* PRODly created by T. Lansing, S. Pauka & J. Neubauer{" "} */}
           <Link href="/config" style={{ marginLeft: 8 }}>
             ⚙️
           </Link>

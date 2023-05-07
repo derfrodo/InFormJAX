@@ -187,7 +187,7 @@ function App(props: { values: WheelValue[] }) {
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Space") {
+      if (e.key === " ") {
         onstart(e);
       }
     };

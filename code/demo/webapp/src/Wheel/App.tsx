@@ -191,8 +191,8 @@ function App(props: { values: WheelValue[] }) {
         onstart(e);
       }
     };
-    document.addEventListener("keydown", handler);
-    return () => document.removeEventListener("keydown", handler);
+    document.addEventListener("keyup", handler);
+    return () => document.removeEventListener("keyup", handler);
   }, [onstart]);
 
   return (

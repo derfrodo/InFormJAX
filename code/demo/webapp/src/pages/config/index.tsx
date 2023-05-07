@@ -56,17 +56,16 @@ export default function Config() {
   const [selectedWheelPart, setSelectedWheelPart] =
     useState<ReturnedWheelPartArrayElement | null>(null);
 
-    const router = useRouter();
+  const { push } = useRouter();
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if( e.key === "Escape"){
-        router.push("/")
-      } 
-      // ? alert("WEG HIER") : undefined;
+      if (e.key === "Escape") {
+        push("/");
+      }
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
-  }, []);
+  }, [push]);
 
   return (
     <>
@@ -76,9 +75,7 @@ export default function Config() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main
-        style={{ padding: 16, position: "relative" }}
-      >
+      <main style={{ padding: 16, position: "relative" }}>
         <div
           style={{
             position: "absolute",

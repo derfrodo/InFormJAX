@@ -157,9 +157,15 @@ export default function Config() {
                   <h2>Abschnitte</h2>
                   <UpdateWheelPartTable
                     actionsComponent={({ item }) => {
+                      const isDisabled =
+                        (values?.wheelParts || []).filter(
+                          (i) =>
+                            i.win === item.win && (!i.disabled || item.disabled)
+                        ).length <= 1;
                       return (
                         <>
                           <button
+                            disabled={isDisabled}
                             onClick={async (e) => {
                               e.preventDefault();
                               e.stopPropagation();
@@ -194,6 +200,7 @@ export default function Config() {
                         variables: { input: next },
                       });
                       await refetchWheelParts();
+                      await refetchGameSettings();
                       setSelectedWheelPart(null);
                     }}
                   />

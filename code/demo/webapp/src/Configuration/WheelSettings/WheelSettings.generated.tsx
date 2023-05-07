@@ -5,12 +5,15 @@ import { useState, useEffect } from "react"
 import { UpdateWheelSettingsMutationReturnType } from "./UpdateWheelSettingsMutationReturnType"
 
 export const WheelSettingsTable = (props: { 
+    actionsComponent?: React.ComponentType<{ item: UpdateWheelSettingsMutationReturnType }>;
     items: UpdateWheelSettingsMutationReturnType[];
     onRowClicked?: (item: UpdateWheelSettingsMutationReturnType) => Promise<void> | void
 }) => {
+    const ActionsComponent = props.actionsComponent;
     return <table style={{ borderSpacing: 4, }}>
     <thead>
         <tr>
+            {ActionsComponent ? <th></th> : <></>}
             <th>radius</th>
             <th>rotationDurationInner</th>
             <th>rotationDurationNotPlaying</th>
@@ -21,6 +24,7 @@ export const WheelSettingsTable = (props: {
     <tbody>
         {props.items.map((item, index)=>
             <tr key={index} onClick={() => props.onRowClicked && props.onRowClicked(item)}>
+                {ActionsComponent ? <td><ActionsComponent item={item}/></td> : <></>}
                     <IntCell
                         item={item}
                         name={"radius"}

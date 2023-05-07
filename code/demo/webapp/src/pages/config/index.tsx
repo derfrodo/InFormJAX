@@ -38,7 +38,8 @@ export async function getServerSideProps(context: AppContext["ctx"]) {
 }
 
 export default function Config() {
-  const { data: values } = useQuery(queryWheelParts);
+  const { data: values, refetch: refetchWheelParts } =
+    useQuery(queryWheelParts);
   const { data: displaySettings } = useQuery(queryDisplaysettings);
   const { data: wheelSettings } = useQuery(queryWheelSettings);
   const { refetch: refetchGameSettings } = useQuery(queryGameSettings);
@@ -143,6 +144,24 @@ export default function Config() {
                 <>
                   <h2>Abschnitte</h2>
                   <UpdateWheelPartTable
+                    actionsComponent={({ item }) => {
+                      return (
+                        <>
+                          <button
+                            onClick={async (e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              await toggleDisabled({
+                                variables: { name: item.name },
+                              });
+                              await refetchGameSettings();
+                            }}
+                          >
+                            {item.disabled ? "✅":"🚫"}
+                          </button>
+                        </>
+                      );
+                    }}
                     onRowClicked={async (item) => {
                       setSelectedWheelPart(item);
                       // await toggleDisabled({ variables: { name: item.name } });
@@ -153,13 +172,16 @@ export default function Config() {
                 </>
               ) : (
                 <>
-                  <h2>Abschnitte</h2>
+                  <h2>
+                    Bearbeite Abschnitt (neuer Name {"=>"} neuer Abschnitt)
+                  </h2>
                   <UpdateUpdateWheelPartForm
                     item={selectedWheelPart}
                     onSave={async (next) => {
                       await updateOrCreateWheelPart({
                         variables: { input: next },
                       });
+                      await refetchWheelParts();
                       setSelectedWheelPart(null);
                     }}
                   />

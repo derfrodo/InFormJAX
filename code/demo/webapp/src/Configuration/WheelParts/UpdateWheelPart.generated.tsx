@@ -10,12 +10,15 @@ import { useState, useEffect } from "react"
 import { ReturnedWheelPartArrayElement } from "./ReturnedWheelPartArrayElement"
 
 export const UpdateWheelPartTable = (props: { 
+    actionsComponent?: React.ComponentType<{ item: ReturnedWheelPartArrayElement }>;
     items: ReturnedWheelPartArrayElement[];
     onRowClicked?: (item: ReturnedWheelPartArrayElement) => Promise<void> | void
 }) => {
+    const ActionsComponent = props.actionsComponent;
     return <table style={{ borderSpacing: 4, }}>
     <thead>
         <tr>
+            {ActionsComponent ? <th></th> : <></>}
             <th>win</th>
             <th>disabled</th>
             <th>name</th>
@@ -28,6 +31,7 @@ export const UpdateWheelPartTable = (props: {
     <tbody>
         {props.items.map((item, index)=>
             <tr key={index} onClick={() => props.onRowClicked && props.onRowClicked(item)}>
+                {ActionsComponent ? <td><ActionsComponent item={item}/></td> : <></>}
                     <BoolCell
                         item={item}
                         name={"win"}

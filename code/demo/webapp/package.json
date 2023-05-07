@@ -9,7 +9,8 @@
     "lint": "next lint",
     "generate": "npm run generateGql && npm run generateForms",
     "generateGql": "graphql-codegen",
-    "generateForms": "gen-inform --srcFolder ./src --globalSettingsFilesPattern \"GeneralSettings.ts\" --mappingFilesPattern \"Mapping.ts\" --templatesPath \"./inForm/templates\" --templatePartialsPath \"./inForm/partials\""
+    "generateForms": "gen-inform --srcFolder ./src --globalSettingsFilesPattern \"GeneralSettings.ts\" --mappingFilesPattern \"Mapping.ts\" --templatesPath \"./inForm/templates\" --templatePartialsPath \"./inForm/partials\"",
+    "generateFormsG": "gen-inform --srcFolder ./gqlInForm --globalSettingsFilesPattern \"GeneralSettings.ts\" --mappingFilesPattern \"Mapping.ts\" --templatesPath \"./gqlInForm/templates\" --templatePartialsPath \"./gqlInForm/partials\""
   },
   "dependencies": {
     "@apollo/client": "^3.7.13",

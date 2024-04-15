@@ -1,0 +1,49 @@
+{
+  "name": "service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "tsc",
+    "generateGql": "graphql-codegen",
+    "start": "npm run compile && node ./dist/index.js",
+    "dev": "node --loader ts-node/esm --trace-warnings ./src/index.mts",
+    "dev:watch": "nodemon --exec npm run dev",
+    "compile:watch": "nodemon --exec npm run compile"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "delay": "1500",
+    "ext": "ts,mts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@apollo/server": "^4.10.1",
+    "@prisma/client": "^5.11.0",
+    "dotenv": "^16.4.5",
+    "graphql": "^16.8.1",
+    "sqlite3": "^5.1.7",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/graphql-modules-preset": "^4.0.6",
+    "@graphql-codegen/typescript": "^4.0.6",
+    "@graphql-codegen/typescript-resolvers": "^4.0.6",
+    "@types/node": "^20.11.28",
+    "nodemon": "^3.1.0",
+    "typescript": "^5.4.2"
+  }
+}

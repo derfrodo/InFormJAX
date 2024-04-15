@@ -1,0 +1,25 @@
+{
+    "ts-node": {
+        "esm": true,
+    },
+    "compilerOptions": {
+        "outDir": "dist",
+        "lib": [
+            "es2020"
+        ],
+        "target": "ESNext",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "types": [
+            "node"
+        ],
+        "module": "ESNext",
+        "moduleResolution": "node",
+    },
+    "include": [
+        "./src"
+    ],
+    "files": [
+        "./src/index.mts"
+    ],
+}

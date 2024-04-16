@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import Digitalization from "./assets/Bild3.png";
 
@@ -171,8 +171,13 @@ function App(props: { values: WheelValue[] }) {
     return null;
   }, [lastWin, values]);
 
+  const linkRef = useRef<HTMLAnchorElement>(null);
+
   const onstart = useCallback(
-    (e: React.MouseEvent<any> | KeyboardEvent) => {
+    <T extends MouseEvent | React.MouseEvent<any> | KeyboardEvent>(e: T) => {
+      if(e.target === linkRef.current){
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       updatePlaying();
@@ -192,7 +197,12 @@ function App(props: { values: WheelValue[] }) {
       }
     };
     document.addEventListener("keyup", handler);
-    return () => document.removeEventListener("keyup", handler);
+    document.addEventListener("mouseup", onstart);
+    return () => {
+      document.removeEventListener("keyup", handler);
+      document.removeEventListener("mouseup", onstart);
+
+    }
   }, [onstart]);
 
   return (
@@ -377,7 +387,9 @@ function App(props: { values: WheelValue[] }) {
           }}
         >
           {/* PRODly created by T. Lansing, S. Pauka & J. Neubauer{" "} */}
-          <Link href="/config" style={{ marginLeft: 8 }}>
+          <Link 
+          ref={linkRef}
+          href="/config" style={{ marginLeft: 8 }}>
             ⚙️
           </Link>
           {/* <Link href="/highscore" style={{ marginLeft: 8 }}>

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import Digitalization from "./assets/Bild3.png";
+import Digitalization from "./assets/Bild3.jpg";
 
 import { useGetWheelSettings } from "@/Configuration/WheelSettings/useGetWheelSettings";
 import Link from "next/link";
@@ -17,6 +17,7 @@ import { WheelValue } from "../api/data/types/WheelValue";
 import { useDevicePixelRatio } from "./utils/getDevicePixelRatio";
 import { useQuery } from "@apollo/client";
 import { queryGameSettings } from "./gql/queryGameSettings";
+import { useRouter } from "next/router";
 
 // const wofAudio = new Audio(wofSound);
 
@@ -83,6 +84,7 @@ function getWinner(sumOfChances: number, values: WheelValue[]) {
 }
 
 function App(props: { values: WheelValue[] }) {
+  const router = useRouter();
   const { radius } = useGetWheelSettings();
   const { data } = useQuery(queryGameSettings);
 
@@ -175,7 +177,10 @@ function App(props: { values: WheelValue[] }) {
 
   const onstart = useCallback(
     <T extends MouseEvent | React.MouseEvent<any> | KeyboardEvent>(e: T) => {
-      if(e.target === linkRef.current){
+      if (e.target === linkRef.current) {
+        return;
+      }
+      if (router.route === "/config") {
         return;
       }
       e.preventDefault();
@@ -387,9 +392,9 @@ function App(props: { values: WheelValue[] }) {
           }}
         >
           {/* PRODly created by T. Lansing, S. Pauka & J. Neubauer{" "} */}
-          <Link 
-          ref={linkRef}
-          href="/config" style={{ marginLeft: 8 }}>
+          <Link
+            ref={linkRef}
+            href="/config" style={{ marginLeft: 8 }}>
             ⚙️
           </Link>
           {/* <Link href="/highscore" style={{ marginLeft: 8 }}>

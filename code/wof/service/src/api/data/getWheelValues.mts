@@ -4,7 +4,9 @@ import { WheelValue } from "./types/WheelValue.mjs";
 
 export const getWheelValues: () => Promise<WheelValueData[]> = async () => {
   const repo = await getWheelValuesRepo();
-  return (await repo.findAll()).map(v => v.dataValues);
+  const result = (await repo.findAll()).map(v => v.dataValues);
+  console.log({result})
+  return result;
 };
 
 export const updateOrAddWheelValue: (

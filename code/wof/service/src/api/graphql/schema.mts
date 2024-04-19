@@ -401,7 +401,7 @@ export const schema = new GraphQLSchema({
         resolve: async (source, args, context, info) => {
           const input: UpdateWheelPartInput = args["input"];
           if (input) {
-            await updateOrAddWheelValue(input);
+            await updateOrAddWheelValue({ ...input });
             return (await getWheelValues()).find((v) => v.name === input.name);
           }
           return null;

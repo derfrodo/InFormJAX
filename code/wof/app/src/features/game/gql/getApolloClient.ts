@@ -1,12 +1,11 @@
 import {
   ApolloClient,
-  InMemoryCache,
   HttpLink,
-  defaultDataIdFromObject,
-  split,
+  InMemoryCache,
+  split
 } from "@apollo/client";
-import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { getMainDefinition } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';
 
 let client: ApolloClient<unknown> | null = null;

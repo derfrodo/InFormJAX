@@ -57,12 +57,6 @@ export const updateWheelPartInputType = new GraphQLInputObjectType({
 export const wheelPartType = new GraphQLObjectType<WheelValue>({
   fields: {
     ...wheelPartFields,
-    disabled: {
-      type: new GraphQLNonNull(GraphQLBoolean),
-      resolve: function (source) {
-        return resolveDisabledWheelValue(source);
-      },
-    },
   },
   name: "WheelPart",
 });

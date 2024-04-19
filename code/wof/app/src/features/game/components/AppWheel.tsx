@@ -11,7 +11,7 @@ import { queryDisplaysettings } from "../../config/mutations/queryDisplaysetting
 export function AppWheel(props: {
   onClick: MouseEventHandler<HTMLCanvasElement> | undefined;
   playing: boolean;
-  lastValue: WheelValue & { id: number | string } | null;
+  lastValue: (WheelValue & { id: number | string }) | null;
   values: (WheelValue & { id: number | string })[];
 }) {
   const { data } = useQuery(queryDisplaysettings);

@@ -35,7 +35,6 @@ export type Game = {
   isRunning: Scalars['Boolean']['output'];
   lastUpdate: Scalars['Float']['output'];
   result?: Maybe<WheelPart>;
-  resultIndex?: Maybe<Scalars['Int']['output']>;
 };
 
 export type GameResult = {
@@ -93,7 +92,6 @@ export type MutationUpdateWheelSettingsArgs = {
 export type Query = {
   __typename?: 'Query';
   displaySettings?: Maybe<DisplaySettings>;
-  firstname?: Maybe<Scalars['String']['output']>;
   game?: Maybe<Game>;
   gameSettings?: Maybe<GameSettingsType>;
   statistics?: Maybe<Statistics>;

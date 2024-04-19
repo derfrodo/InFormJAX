@@ -19,6 +19,7 @@ export function Config() {
   const navigate = useNavigate();
   const { data: values, refetch: refetchWheelParts } =
     useQuery(queryWheelParts);
+  console.log({ values })
   const { data: displaySettings } = useQuery(queryDisplaysettings);
   const { data: wheelSettings } = useQuery(queryWheelSettings);
   const { refetch: refetchGameSettings } = useQuery(queryGameSettings);
@@ -150,8 +151,8 @@ export function Config() {
                     }}
                     onRowClicked={async (item) => {
                       setSelectedWheelPart(item);
-                      // await toggleDisabled({ variables: { name: item.name } });
-                      // await refetchGameSettings();
+                      await toggleDisabled({ variables: { name: item.name } });
+                      await refetchGameSettings();
                     }}
                     items={values?.wheelParts || []}
                   />

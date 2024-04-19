@@ -1,7 +1,6 @@
 import { WheelValueData } from "../../data/WheelValueData.mjs";
 import { getWheelValuesRepo } from "../../data/WheelValuesRepo.mjs";
 import { WheelValue } from "./types/WheelValue.mjs";
-let wheelParts: WheelValue[] = [];
 
 export const getWheelValues: () => Promise<WheelValueData[]> = async () => {
   const repo = await getWheelValuesRepo();

@@ -38,23 +38,7 @@ export const getClient = () => {
   // or if we are running on the server.
   if (!client) {
     // also read this: https://www.apollographql.com/docs/react/caching/cache-configuration/#customizing-identifier-generation-globally
-    const mc = new InMemoryCache({
-      dataIdFromObject(responseObject) {
-        switch (responseObject.__typename) {
-          case "WheelPart":
-            return `WheelPart:${responseObject.name}`;
-          case "DisplaySettings":
-            return `DisplaySettings`;
-          case "WheelSettings":
-            return `WheelSettings`;
-          case "gameSettings":
-            return `GameSettings`;
-
-          default:
-            return defaultDataIdFromObject(responseObject);
-        }
-      },
-    });
+    const mc = new InMemoryCache();
 
     client = new ApolloClient({
       link: splitLink,

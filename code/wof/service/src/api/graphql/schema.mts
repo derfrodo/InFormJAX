@@ -108,12 +108,14 @@ async function calculateWinner() {
   if (winner) {
     //WON!
     const winOptions = values.filter((value) => value.win);
+    console.log({ values, winOptions })
     const winOffset = getWinner(sumOfWinChance, winOptions);
     const winIndex = values.indexOf(winOffset);
     return { index: winIndex, result: values[winIndex] }
   } else {
     // LOST!
     const lostOptions = values.filter((value) => !value.win);
+    console.log({ values, lostOptions })
     const lostOffset = getWinner(sumOfLooseChance, lostOptions);
     const lostIndex = values.indexOf(lostOffset);
     return { index: lostIndex, result: values[lostIndex] }

@@ -56,9 +56,10 @@ async function createWheelValuesRepo(sequelize: Sequelize) {
 
     if (count.count === 0) {
         console.log("Initialize Default Wheel Values")
-        await repo.bulkCreate(
-            [(await getMaternaValue()), ...WHEELVALUES]
-        )
+        for (const value of [(await getMaternaValue()), ...WHEELVALUES]) {
+            await repo.findOrCreate({ where: { name: value.name }, defaults: { ...value } })
+        }
+
     }
     return repo;
 }

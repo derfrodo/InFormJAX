@@ -18,7 +18,7 @@ export const getDisplaySettingsRepo = async () => {
 }
 
 async function createDisplaySettingsRepo(sequelize: Sequelize) {
-    const repo = sequelize.define<DisplaySettingsModel>("WheelSettings", {
+    const repo = sequelize.define<DisplaySettingsModel>("DisplaySettings", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,

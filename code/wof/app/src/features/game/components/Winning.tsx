@@ -13,15 +13,13 @@ import { queryDisplaysettings } from "../../config/mutations/queryDisplaysetting
 
 export const Winning = <T extends WheelValue>(props: {
   hide: boolean;
-  selectedIndex: number;
-  values: T[];
+  lastValue: T | null;
 }) => {
   const { radius, } = useGetWheelSettings();
   const { data: displaySettings } = useQuery(queryDisplaysettings);
   const {
-    selectedIndex,
     hide,
-    values,
+    lastValue,
   } = props;
   const { reward } = useReward("rewardLeft", "confetti");
   const { reward: rewardR } = useReward("rewardRight", "confetti");
@@ -48,22 +46,16 @@ export const Winning = <T extends WheelValue>(props: {
     remojiR();
   };
 
-  const lastItem = useMemo(() => {
-    if (selectedIndex >= 0 && values.length > selectedIndex) {
-      return values[selectedIndex];
-    }
-    return null;
-  }, [selectedIndex, values]);
   const winLooseNone = useMemo(() => {
-    if (lastItem) {
-      if (lastItem.win) {
+    if (lastValue) {
+      if (lastValue.win) {
         return "win";
       } else {
         return "loose";
       }
     }
     return "none";
-  }, [lastItem]);
+  }, [lastValue]);
 
   useEffect(() => {
     if (!hide && winLooseNone !== "none") {
@@ -89,7 +81,6 @@ export const Winning = <T extends WheelValue>(props: {
     displaySettings?.displaySettings?.showResultAfterMS,
     displaySettings?.displaySettings?.showResultForMS,
     hide,
-    selectedIndex,
     winLooseNone,
   ]);
 
@@ -143,7 +134,7 @@ export const Winning = <T extends WheelValue>(props: {
           fontWeight: "bold",
         }}
       >
-        <div>{lastItem?.winText ?? ""}</div>
+        <div>{lastValue?.winText ?? ""}</div>
       </div>
       <div
         style={{

@@ -36,7 +36,6 @@ export type Game = {
   lastUpdate: number;
   isRoundDone: boolean;
   result: null | WheelValue;
-  resultIndex: null | number;
   readonly canToggle: boolean;
 };
 
@@ -45,7 +44,6 @@ const game: Game = {
   isRunning: false,
   lastUpdate: performance.now(),
   result: null,
-  resultIndex: null,
   get canToggle() {
     const now = performance.now();
     const diff = game.lastUpdate + sessionWheelSettings.minClickDelayMS - now;
@@ -155,12 +153,6 @@ export const gameType = new GraphQLObjectType({
         return game.result;
       },
     },
-    resultIndex: {
-      type: GraphQLInt,
-      async resolve() {
-        return game.resultIndex;
-      },
-    },
   },
 });
 const dateType = new GraphQLScalarType<string, string>({ name: "Date" });
@@ -180,6 +172,7 @@ import { PubSub } from 'graphql-subscriptions';
 import { CHECK_CHANCE } from "../data/constants/WIN_CHANCE";
 import { WheelValue } from "../data/types/WheelValue.mjs";
 import { getWheelValuesRepo } from "../../data/WheelValuesRepo.mjs";
+import { getDisplaySettingsRepo } from "../../data/DisplaySettingsRepo.mjs";
 
 const pubsub = new PubSub();
 
@@ -194,7 +187,6 @@ function verifyToggleable<T extends Game>(g: T) {
 
 async function startGame<T extends Game>(g: T, now: number) {
   g.result = null;
-  g.resultIndex = null;
   g.isRunning = true;
   g.lastUpdate = now;
   g.isRoundDone = false;
@@ -212,7 +204,6 @@ async function stopGame<T extends Game>(g: T, now: number) {
   const result = await calculateWinner();
   games.push({ ...result, resultId: result.result.id, date: new Date(Date.now()).toISOString() })
   g.result = result.result;
-  g.resultIndex = result.index;
   g.isRunning = false;
   g.lastUpdate = now;
   pubsub.publish('GAME_CHANGED', { gameChanged: g });
@@ -302,9 +293,7 @@ export const schema = new GraphQLSchema({
         type: displaySettingsType,
 
         async resolve() {
-          await new Promise<void>((r) => setTimeout(() => r(), 100));
-
-          return sessionDisplaySettings;
+          return (await (await getDisplaySettingsRepo()).findOne({ where: { id: 1 } })).dataValues
         },
       },
       wheelSettings: {
@@ -380,14 +369,12 @@ export const schema = new GraphQLSchema({
         resolve: async (source, args, context, info) => {
           const input: DisplaySettingsInput = args["input"];
           if (input) {
-            sessionDisplaySettings.showResultAfterMS =
-              input.showResultAfterMS ??
-              sessionDisplaySettings.showResultAfterMS;
-            sessionDisplaySettings.showResultForMS =
-              input.showResultForMS ?? sessionDisplaySettings.showResultForMS;
+            const repo = (await getDisplaySettingsRepo())
+            const settings = await repo.findOne({ where: { id: 1 } });
+            await settings.update({ ...input });
+            return settings.dataValues;
           }
-
-          return sessionDisplaySettings;
+          return null;
         },
       },
 

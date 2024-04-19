@@ -30,7 +30,7 @@ export const MATERNA_RED2 = "#c30a17";
 function App() {
   const { pathname } = useLocation();
   const { radius } = useGetWheelSettings();
-  const { data: wheelparts } = useQuery(queryWheelParts, { variables: { filter: { disabled: true } } });
+  const { data: wheelparts } = useQuery(queryWheelParts, { variables: { filter: { disabled: false } } });
   const { data, } = useSubscription(subscribeToGame, { shouldResubscribe: true })
   const [callStartWheel] = useMutation(startWheel)
   const [callStopWheel] = useMutation(stopWheel)
@@ -39,7 +39,10 @@ function App() {
 
   console.log({ changed: data?.gameChanged })
   const canClick = useMemo(() => data?.gameChanged?.canToggle ?? true, [data?.gameChanged?.canToggle])
-  const lastWin = useMemo(() => data?.gameChanged?.resultIndex ?? -1, [data?.gameChanged?.resultIndex])
+  const lastWin = useMemo(() => data?.gameChanged?.result?.id ?? -1, [data?.gameChanged?.result?.id])
+  const lastValue = useMemo(() =>
+    typeof lastWin === "string" || lastWin > -1 ? wheelparts?.wheelParts?.find(p => p.id === lastWin) ?? null : null,
+    [lastWin, wheelparts?.wheelParts])
 
   const playing = useMemo(() => data?.gameChanged?.isRunning ?? false, [data?.gameChanged?.isRunning])
 
@@ -136,7 +139,7 @@ function App() {
             key={devicePixelRatio}
             onClick={onstart}
             playing={playing}
-            lastWin={lastWin}
+            lastValue={lastValue}
             values={values}
           />
           : <></>}
@@ -239,9 +242,8 @@ function App() {
         </button>
 
         <Winning
-          hide={(data?.gameChanged?.isRoundDone ?? true)||(data?.gameChanged?.isRunning??false)}
-          selectedIndex={lastWin}
-          values={values}
+          hide={(data?.gameChanged?.isRoundDone ?? true) || (data?.gameChanged?.isRunning ?? false)}
+          lastValue={lastValue}
         ></Winning>
 
         <div

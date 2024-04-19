@@ -90,7 +90,6 @@ function App(props: { values: WheelValue[] }) {
   const { data } = useQuery(queryGameSettings);
   const { data: wheelData } = useQuery(queryWheelSettings);
 
-  const [lastClickTime, setLastClickTime] = useState<number | null>(null);
   const [canClick, setCanClick] = useState<boolean>(true);
   const [lastWin, setLastWin] = useState(0);
   const [roundDone, setRoundDone] = useState(true);

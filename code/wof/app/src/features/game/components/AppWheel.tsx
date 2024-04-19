@@ -1,4 +1,4 @@
-import { MouseEventHandler, useEffect, useRef, useState } from "react";
+import { MouseEventHandler, useEffect, useMemo, useRef, useState } from "react";
 import { anglePart } from "../../config/constants/anglePart";
 import { drawPieSections } from "../utils/drawPieSections";
 import { useDevicePixelRatio } from "../utils/getDevicePixelRatio";
@@ -11,15 +11,16 @@ import { queryDisplaysettings } from "../../config/mutations/queryDisplaysetting
 export function AppWheel(props: {
   onClick: MouseEventHandler<HTMLCanvasElement> | undefined;
   playing: boolean;
-  lastWin: number;
-  values: WheelValue[];
+  lastValue: WheelValue & { id: number | string } | null;
+  values: (WheelValue & { id: number | string })[];
 }) {
   const { data } = useQuery(queryDisplaysettings);
   const { radius, rotationDurationPlaying, rotationDurationNotPlaying } =
     useGetWheelSettings();
   const devicePixelRatio = useDevicePixelRatio();
-  const { onClick, playing, values, lastWin } = props;
-
+  const { onClick, playing, values, lastValue } = props;
+  const lastWinIndex = useMemo(() =>
+    lastValue !== null ? values.findIndex(v => v.id === lastValue?.id) ?? 0 : 0, [lastValue, values])
   const canvas = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -93,7 +94,7 @@ export function AppWheel(props: {
           animationIterationCount: "infinite",
           animationTimingFunction: "linear",
           animationDirection: playing ? "normal" : "reverse",
-          rotate: `${-(lastWin * anglePart) - Math.PI / 2}rad`,
+          rotate: `${-(lastWinIndex * anglePart) - Math.PI / 2}rad`,
         }}
         height={`${devicePixelRatio * radius * 2}px`}
         width={`${devicePixelRatio * radius * 2}px`}

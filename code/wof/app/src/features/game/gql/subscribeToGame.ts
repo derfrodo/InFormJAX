@@ -7,11 +7,11 @@ subscription GameChanged {
         isRoundDone
         canToggle
         result {
+          id
           win
           name
           winText
         }
-        resultIndex
     }
   }
 `)

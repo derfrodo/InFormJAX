@@ -2,7 +2,7 @@ import { GraphQLFloat, GraphQLNonNull, GraphQLObjectType } from "graphql";
 import { getFilteredWheelParts } from "../../data/disabledWheelValues.mjs";
 
 export async function getChanceToWin() {
-  const activeParts = await getFilteredWheelParts({ disabled: true });
+  const activeParts = await getFilteredWheelParts({ disabled: false });
   const fullChance = activeParts
     .map((p) => p.winChance)
     .reduce((p, c) => p + c, 0);
@@ -17,14 +17,14 @@ export async function getChanceToWin() {
 }
 
 export async function getSumOfChance() {
-  const activeParts = await getFilteredWheelParts({ disabled: true });
+  const activeParts = await getFilteredWheelParts({ disabled: false });
   const fullChance = activeParts
     .map((p) => p.winChance)
     .reduce((p, c) => p + c, 0);
   return fullChance;
 }
 export async function getSumOfLooseChance() {
-  const activeParts = await getFilteredWheelParts({ disabled: true });
+  const activeParts = await getFilteredWheelParts({ disabled: false });
 
   const winChance = activeParts
     .filter((w) => !w.win)
@@ -34,7 +34,7 @@ export async function getSumOfLooseChance() {
   return winChance;
 }
 export async function getSumOfWinChance() {
-  const activeParts = await getFilteredWheelParts({ disabled: true });
+  const activeParts = await getFilteredWheelParts({ disabled: false });
 
   const winChance = activeParts
     .filter((w) => w.win)

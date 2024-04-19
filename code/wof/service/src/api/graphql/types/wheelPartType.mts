@@ -1,6 +1,7 @@
 import {
   GraphQLBoolean,
   GraphQLFloat,
+  GraphQLID,
   GraphQLInputObjectType,
   GraphQLNonNull,
   GraphQLObjectType,
@@ -10,10 +11,16 @@ import type { WheelValue } from "../../data/types/WheelValue.mjs";
 import { resolveDisabledWheelValue } from "../../data/disabledWheelValues.mjs";
 
 const wheelPartFields = {
+  id: {
+    type: new GraphQLNonNull(GraphQLID),
+  },
   name: {
     type: new GraphQLNonNull(GraphQLString),
   },
   win: {
+    type: new GraphQLNonNull(GraphQLBoolean),
+  },
+  disabled: {
     type: new GraphQLNonNull(GraphQLBoolean),
   },
   imageText: {

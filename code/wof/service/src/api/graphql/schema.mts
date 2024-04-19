@@ -25,12 +25,13 @@ import { wheelSettingsType } from "./types/wheelSettingsType.mjs";
 
 const games: GameResult[] = []
 
-type GameResult = {
+export type GameResult = {
   result: WheelValue;
+  resultId: number;
   date: string;
 };
 
-type Game = {
+export type Game = {
   isRunning: boolean;
   lastUpdate: number;
   isRoundDone: boolean;
@@ -61,7 +62,7 @@ function isWinner(winChance: number) {
   return randomResult < winChance;
 }
 
-function getWinner(sumOfChances: number, values: WheelValue[]) {
+function getWinner<T extends WheelValue>(sumOfChances: number, values: T[]) {
   if (values.length === 0) {
     console.error("NO values to be found.");
   }
@@ -105,7 +106,7 @@ async function calculateWinner() {
     });
   }
 
-  const values: WheelValue[] = await getFilteredWheelParts({ disabled: false });
+  const values = await getFilteredWheelParts({ disabled: false });
   if (winner) {
     //WON!
     const winOptions = values.filter((value) => value.win);
@@ -178,8 +179,56 @@ export const gameResultType = new GraphQLObjectType({
 import { PubSub } from 'graphql-subscriptions';
 import { CHECK_CHANCE } from "../data/constants/WIN_CHANCE";
 import { WheelValue } from "../data/types/WheelValue.mjs";
+import { getWheelValuesRepo } from "../../data/WheelValuesRepo.mjs";
 
 const pubsub = new PubSub();
+
+function verifyToggleable<T extends Game>(g: T) {
+  const now = performance.now();
+  const diff = g.lastUpdate + sessionWheelSettings.minClickDelayMS - now;
+  if (diff > 0) {
+    throw new Error(`Wait for additional ${diff}ms`)
+  }
+  return now;
+}
+
+async function startGame<T extends Game>(g: T, now: number) {
+  g.result = null;
+  g.resultIndex = null;
+  g.isRunning = true;
+  g.lastUpdate = now;
+  g.isRoundDone = false;
+
+  pubsub.publish('GAME_CHANGED', { gameChanged: game });
+  setTimeout(() => {
+    pubsub.publish('GAME_CHANGED', { gameChanged: game });
+  },
+    sessionWheelSettings.minClickDelayMS + 100
+  )
+  return {};
+}
+async function stopGame<T extends Game>(g: T, now: number) {
+
+  const result = await calculateWinner();
+  games.push({ ...result, resultId: result.result.id, date: new Date(Date.now()).toISOString() })
+  g.result = result.result;
+  g.resultIndex = result.index;
+  g.isRunning = false;
+  g.lastUpdate = now;
+  pubsub.publish('GAME_CHANGED', { gameChanged: g });
+
+  setTimeout(() => {
+    g.isRoundDone = true;
+    pubsub.publish('GAME_CHANGED', { gameChanged: g });
+  }, sessionDisplaySettings.showResultAfterMS + sessionDisplaySettings.showResultForMS)
+
+  setTimeout(() => {
+    pubsub.publish('GAME_CHANGED', { gameChanged: g });
+  },
+    sessionWheelSettings.minClickDelayMS + 1
+  )
+  return {};
+}
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -299,56 +348,25 @@ export const schema = new GraphQLSchema({
       startWheel: {
         type: gameType,
         resolve: async (source, args, context, info) => {
-          const now = performance.now();
-          const diff = game.lastUpdate + sessionWheelSettings.minClickDelayMS - now;
-          if (diff > 0) {
-            throw new Error(`Wait for additional ${diff}ms`)
-          }
-          game.result = null;
-          game.resultIndex = null;
-          game.isRunning = true;
-          game.lastUpdate = now;
-          game.isRoundDone = false;
-
-          pubsub.publish('GAME_CHANGED', { gameChanged: game });
-          setTimeout(() => {
-            pubsub.publish('GAME_CHANGED', { gameChanged: game });
-          },
-            sessionWheelSettings.minClickDelayMS + 100
-          )
-          return {};
+          return startGame(game, verifyToggleable(game))
         },
       },
 
       stopWheel: {
         type: gameType,
         resolve: async (source, args, context, info) => {
-          const now = performance.now();
-          const diff = game.lastUpdate + sessionWheelSettings.minClickDelayMS - now;
-          if (diff > 0) {
-            throw new Error(`Wait for additional ${diff}ms`)
+          return stopGame(game, verifyToggleable(game))
+        },
+      },
+
+      toggleWheel: {
+        type: gameType,
+        resolve: async (source, args, context, info) => {
+          if (!game.isRunning) {
+            return startGame(game, verifyToggleable(game))
+          } else {
+            return stopGame(game, verifyToggleable(game))
           }
-
-          const result = await calculateWinner();
-          games.push({ ...result, date: new Date(Date.now()).toISOString() })
-          game.result = result.result;
-          game.resultIndex = result.index;
-          game.isRunning = false;
-
-          game.lastUpdate = now;
-          pubsub.publish('GAME_CHANGED', { gameChanged: game });
-          setTimeout(() => {
-            game.isRoundDone = true;
-
-            pubsub.publish('GAME_CHANGED', { gameChanged: game });
-
-          }, sessionDisplaySettings.showResultAfterMS + sessionDisplaySettings.showResultForMS)
-          setTimeout(() => {
-            pubsub.publish('GAME_CHANGED', { gameChanged: game });
-          },
-            sessionWheelSettings.minClickDelayMS + 1
-          )
-          return {};
         },
       },
 
@@ -427,24 +445,15 @@ export const schema = new GraphQLSchema({
           },
         },
         resolve: async (source, args, context, info) => {
+          const repo = await getWheelValuesRepo();
           const name = args["name"];
-
-          const v = (await getWheelValues()).find(
-            (value) => value.name === name
-          );
-          if (v) {
-            const inext = disabledWheelValues.findIndex(
-              (value) => value.name === v.name
-            );
-            if (inext >= 0) {
-              disabledWheelValues.splice(inext, 1);
-              return v;
-            } else {
-              disabledWheelValues.push(v);
-              return v;
-            }
+          if (typeof name !== "string" ||
+            name.length === 0) {
+            throw new Error("Name must not be empty")
           }
-          return null;
+          const item = await repo.findOne({ where: { name } });
+          await item.update({ disabled: !item.dataValues.disabled });
+          return item.dataValues;
         },
       },
     },

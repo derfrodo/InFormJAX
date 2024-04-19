@@ -4,20 +4,20 @@ import type { WheelValue } from "./types/WheelValue.mjs";
 
 export const disabledWheelValues: UpdateWheelPartInput[] = [
 
-  {
-    name: "Leider nix",
-    winText: "Vielleicht das nächste Mal.",
-    win: false,
-    imageText: "😢",
-    winChance: 0.5,
-  },
-  {
-    name: "Zauberwürfel",
-    winText: "Zauberhaft!",
-    win: true,
-    imageText: "🎲",
-    winChance: 0.05,
-  },
+  // {
+  //   name: "Leider nix",
+  //   winText: "Vielleicht das nächste Mal.",
+  //   win: false,
+  //   imageText: "😢",
+  //   winChance: 0.5,
+  // },
+  // {
+  //   name: "Zauberwürfel",
+  //   winText: "Zauberhaft!",
+  //   win: true,
+  //   imageText: "🎲",
+  //   winChance: 0.05,
+  // },
 
 ];
 

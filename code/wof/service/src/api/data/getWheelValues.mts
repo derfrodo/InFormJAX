@@ -1,35 +1,22 @@
+import { WheelValueData } from "../../data/WheelValueData.mjs";
+import { getWheelValuesRepo } from "../../data/WheelValuesRepo.mjs";
 import { WheelValue } from "./types/WheelValue.mjs";
-import { readFile } from "fs/promises";
-import { join } from "path";
-let initialized: boolean = false;
 let wheelParts: WheelValue[] = [];
 
-export const getWheelValues: () => Promise<WheelValue[]> = async () => {
-  if (!initialized) {
-    const maternaValue = await getMaternaValue();
-    wheelParts = [maternaValue, ...WHEELVALUES];
-    initialized = true;
-  }
-  return wheelParts;
+export const getWheelValues: () => Promise<WheelValueData[]> = async () => {
+  const repo = await getWheelValuesRepo();
+  return (await repo.findAll()).map(v => v.dataValues);
 };
 
 export const updateOrAddWheelValue: (
   value: WheelValue
-) => Promise<WheelValue[]> = async (value: WheelValue) => {
-  const values = await getWheelValues();
-  const index = values.findIndex((v) => v.name === value.name);
-  if (index >= 0) {
-    values.splice(index, 1, value);
-  } else {
-    values.push(value);
-  }
-  return wheelParts;
+) => Promise<WheelValueData[]> = async (value: WheelValueData) => {
+  const repo = await getWheelValuesRepo();
+  repo.update({ ...value, }, { limit: 1, where: { id: value.id } })
+  return (await repo.findAll()).map(v => v.dataValues);
 };
-// var bitmap = fs.readFileSync(file);
-// // convert binary data to base64 encoded string
-// return new Buffer(bitmap).toString('base64')
 
-const getMaternaValue: () => Promise<WheelValue> = async () => {
+export const getMaternaValue: () => Promise<WheelValue> = async () => {
   return {
     name: "Materna",
     winText: "Gewinne mit Materna!",
@@ -37,6 +24,7 @@ const getMaternaValue: () => Promise<WheelValue> = async () => {
     imagePath: "/assets_generated/logo.jpg",
     image: null,
     winChance: 0.45,
+    disabled: false,
   };
 };
 
@@ -47,6 +35,7 @@ export const WHEELVALUES: WheelValue[] = [
     win: true,
     imageText: "🎲",
     winChance: 0.05,
+    disabled: true,
   },
   {
     name: "Leider nix",
@@ -54,6 +43,7 @@ export const WHEELVALUES: WheelValue[] = [
     win: false,
     imageText: "😢",
     winChance: 0.5,
+    disabled: false,
   },
   {
     name: "Leider verloren",
@@ -61,5 +51,6 @@ export const WHEELVALUES: WheelValue[] = [
     win: false,
     imageText: "😒",
     winChance: 0.5,
+    disabled: true,
   },
 ];

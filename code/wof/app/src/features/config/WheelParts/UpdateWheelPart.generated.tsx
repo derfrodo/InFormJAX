@@ -1,11 +1,11 @@
 import { UpdateWheelPartInput } from "../../../generated-client/graphql"
+import { BoolInput,  } from "./../InForm/atoms/BoolInput"
 import { ImageCell,  } from "./../InForm/atoms/ImageCell"
 import { StringInput,  } from "./../InForm/atoms/StringInput"
-import { BoolInput,  } from "./../InForm/atoms/BoolInput"
 import { StringCell,  } from "./../InForm/atoms/StringCell"
 import { BoolCell,  } from "./../InForm/atoms/BoolCell"
 import { IntInput, IntCell,  } from "./../InForm/atoms/IntCell"
-import { InputMaybe, Scalars,  } from "./../../../generated-client/graphql"
+import { Scalars, InputMaybe,  } from "./../../../generated-client/graphql"
 import { useState, useEffect } from "react"
 import { ReturnedWheelPartArrayElement } from "./ReturnedWheelPartArrayElement"
 
@@ -25,6 +25,7 @@ export const UpdateWheelPartTable = (props: {
             <th>imagePath</th>
             <th>imageText</th>
             <th>winText</th>
+            <th>id</th>
             <th>winChance</th>
         </tr>
     </thead>
@@ -61,6 +62,11 @@ export const UpdateWheelPartTable = (props: {
                         item={item}
                         name={"winText"}
                         value={item.winText}
+                    />
+                    <StringCell
+                        item={item}
+                        name={"id"}
+                        value={item.id}
                     />
                     <IntCell
                         item={item}
@@ -110,6 +116,13 @@ export const UpdateUpdateWheelPartForm = (props: {
             name={"win"}
             value={current.win}
         />
+        <BoolInput
+            required={true}
+            onChange={(next) => setCurrent(p => ({ ...p, disabled: next }))}
+            item={item}
+            name={"disabled"}
+            value={current.disabled}
+        />
         <StringInput
             required={true}
             onChange={(next) => setCurrent(p => ({ ...p, name: next }))}
@@ -157,6 +170,8 @@ export const UpdateUpdateWheelPartForm = (props: {
 
 export function projectToUpdateWheelPartInput(details: ReturnedWheelPartArrayElement): UpdateWheelPartInput {
   return {
+    disabled: details.disabled,
+    id: details.id,
     imagePath: details.imagePath,
     imageText: details.imageText,
     name: details.name,

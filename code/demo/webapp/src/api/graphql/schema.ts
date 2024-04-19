@@ -122,6 +122,7 @@ export const schema = new GraphQLSchema({
           },
         },
         resolve: async (source, args, context, info) => {
+          
           const input: WheelSettingsInput = args["input"];
           if (input) {
             sessionWheelSettings.radius =

@@ -9,10 +9,14 @@ import express from 'express';
 import { schema } from "./api/graphql/schema.mjs";
 
 import { config } from "dotenv";
+import { useServer } from 'graphql-ws/lib/use/ws';
 import http from 'http';
 import { join } from "path";
 import { WebSocketServer } from 'ws';
-import { useServer } from 'graphql-ws/lib/use/ws';
+
+import { getLaunchInfoRepository } from "./data/LaunchInfoRepository.mjs";
+import { getWheelSettingsRepo } from "./data/WheelSettingsRepo.mjs";
+import { getWheelValuesRepo } from "./data/WheelValuesRepo.mjs";
 
 config();
 config({ path: join(process.cwd(), '.env.local') });
@@ -63,6 +67,16 @@ try {
     console.log('Create server')
     app.use('/', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
     // app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
+
+
+    (await getLaunchInfoRepository()).create({ initialized: true })
+    const wheelSettingsRepo = await getWheelSettingsRepo()
+    const settings = await wheelSettingsRepo.findOne({ where: { id: 1 } });
+    const settings2 = await wheelSettingsRepo.findAll();
+    console.log(JSON.stringify({
+        settings,
+        settings2,
+    }));
 
     await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve));
     console.log(`🚀 Server ready at http://localhost:4000/graphql`);

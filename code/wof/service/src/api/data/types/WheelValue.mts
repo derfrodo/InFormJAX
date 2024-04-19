@@ -1,10 +1,12 @@
 export type WheelValue = {
   name: string;
-  win: boolean;
+
   imageText?: string | null;
   imagePath?: string | null;
   winText?: string | null;
 
-
   winChance: number;
+  
+  win: boolean;
+  disabled: boolean;
 };

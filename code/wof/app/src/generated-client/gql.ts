@@ -17,10 +17,10 @@ const documents = {
     "\n  query wheelSettings {\n    wheelSettings {\n      radius\n      rotationDurationNotPlaying\n      rotationDurationPlaying\n      rotationDurationInner\n      minClickDelayMS\n    }\n  }\n": types.WheelSettingsDocument,
     "\n  mutation UpdateSettings($input: DisplaySettingsInput!) {\n    updateDisplaySettings(input: $input) {\n        showResultAfterMS\n        showResultForMS\n    }\n  }\n": types.UpdateSettingsDocument,
     "\nmutation UpdateWheelSettings($input: WheelSettingsInput!) {\n  updateWheelSettings(input: $input) {\n    radius\n    rotationDurationInner\n    rotationDurationNotPlaying\n    rotationDurationPlaying\n    minClickDelayMS\n  }\n}\n": types.UpdateWheelSettingsDocument,
-    "\n  mutation toggleDisableWheelValue($name: String!) {\n    toggleDisableWheelValue(name: $name) {\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n": types.ToggleDisableWheelValueDocument,
-    "\nmutation updateOrCreateWheelPart($input: UpdateWheelPartInput!) {\n  updateOrCreateWheelPart(input: $input) {\n    name\n    imagePath\n    imageText\n    win\n    winText\n    winChance\n    disabled\n  }\n}\n": types.UpdateOrCreateWheelPartDocument,
+    "\n  mutation toggleDisableWheelValue($name: String!) {\n    toggleDisableWheelValue(name: $name) {\n      id\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n": types.ToggleDisableWheelValueDocument,
+    "\nmutation updateOrCreateWheelPart($input: UpdateWheelPartInput!) {\n  updateOrCreateWheelPart(input: $input) {\n    id\n    name\n    imagePath\n    imageText\n    win\n    winText\n    winChance\n    disabled\n  }\n}\n": types.UpdateOrCreateWheelPartDocument,
     "\n  query GameSettings {\n    gameSettings {\n      chanceToWin\n      sumOfChances\n      sumOfWinChance\n      sumOfLooseChance\n    }\n  }\n": types.GameSettingsDocument,
-    "\n  query wheelParts($filter: wheelPartFilter) {\n    wheelParts(filter: $filter) {\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n": types.WheelPartsDocument,
+    "\n  query wheelParts($filter: wheelPartFilter) {\n    wheelParts(filter: $filter) {\n      id\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n": types.WheelPartsDocument,
     "\nmutation startWheel{\n    startWheel {\n      isRunning\n    }\n  }\n": types.StartWheelDocument,
     "\n  \n  mutation stopWheel {\n    stopWheel {\n      \n      isRunning\n    }\n  }\n": types.StopWheelDocument,
     "\nsubscription GameChanged {\n    gameChanged {\n        isRunning\n        isRoundDone\n        canToggle\n        result {\n          win\n          name\n          winText\n        }\n        resultIndex\n    }\n  }\n": types.GameChangedDocument,
@@ -59,11 +59,11 @@ export function graphql(source: "\nmutation UpdateWheelSettings($input: WheelSet
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation toggleDisableWheelValue($name: String!) {\n    toggleDisableWheelValue(name: $name) {\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n"): (typeof documents)["\n  mutation toggleDisableWheelValue($name: String!) {\n    toggleDisableWheelValue(name: $name) {\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n"];
+export function graphql(source: "\n  mutation toggleDisableWheelValue($name: String!) {\n    toggleDisableWheelValue(name: $name) {\n      id\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n"): (typeof documents)["\n  mutation toggleDisableWheelValue($name: String!) {\n    toggleDisableWheelValue(name: $name) {\n      id\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\nmutation updateOrCreateWheelPart($input: UpdateWheelPartInput!) {\n  updateOrCreateWheelPart(input: $input) {\n    name\n    imagePath\n    imageText\n    win\n    winText\n    winChance\n    disabled\n  }\n}\n"): (typeof documents)["\nmutation updateOrCreateWheelPart($input: UpdateWheelPartInput!) {\n  updateOrCreateWheelPart(input: $input) {\n    name\n    imagePath\n    imageText\n    win\n    winText\n    winChance\n    disabled\n  }\n}\n"];
+export function graphql(source: "\nmutation updateOrCreateWheelPart($input: UpdateWheelPartInput!) {\n  updateOrCreateWheelPart(input: $input) {\n    id\n    name\n    imagePath\n    imageText\n    win\n    winText\n    winChance\n    disabled\n  }\n}\n"): (typeof documents)["\nmutation updateOrCreateWheelPart($input: UpdateWheelPartInput!) {\n  updateOrCreateWheelPart(input: $input) {\n    id\n    name\n    imagePath\n    imageText\n    win\n    winText\n    winChance\n    disabled\n  }\n}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -71,7 +71,7 @@ export function graphql(source: "\n  query GameSettings {\n    gameSettings {\n 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query wheelParts($filter: wheelPartFilter) {\n    wheelParts(filter: $filter) {\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n"): (typeof documents)["\n  query wheelParts($filter: wheelPartFilter) {\n    wheelParts(filter: $filter) {\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n"];
+export function graphql(source: "\n  query wheelParts($filter: wheelPartFilter) {\n    wheelParts(filter: $filter) {\n      id\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n"): (typeof documents)["\n  query wheelParts($filter: wheelPartFilter) {\n    wheelParts(filter: $filter) {\n      id\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

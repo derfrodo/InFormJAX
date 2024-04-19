@@ -1,9 +1,9 @@
 import { UpdateWheelPartInput } from "../../../generated-client/graphql"
+import { BoolInput,  } from "./../InForm/atoms/BoolInput"
 import { ImageCell,  } from "./../InForm/atoms/ImageCell"
 import { StringInput,  } from "./../InForm/atoms/StringInput"
-import { BoolInput,  } from "./../InForm/atoms/BoolInput"
 import { IntInput,  } from "./../InForm/atoms/IntCell"
-import { InputMaybe, Scalars,  } from "./../../../generated-client/graphql"
+import { Scalars, InputMaybe,  } from "./../../../generated-client/graphql"
 import { useState, useEffect } from "react"
 
 
@@ -39,6 +39,13 @@ export const CreateCreateWheelPartForm = (props: {
         marginTop: -4,
         marginBottom: -8,
     }} >{title}</h3> : title}
+        <BoolInput
+            required={true}
+            onChange={(next) => setCurrent(p => ({ ...p, disabled: next }))}
+            item={item}
+            name={"disabled"}
+            value={current.disabled}
+        />
         <StringInput
             required={false}
             onChange={(next) => setCurrent(p => ({ ...p, imagePath: next }))}
@@ -93,6 +100,8 @@ export const CreateCreateWheelPartForm = (props: {
 
 export function createDefaultCreateWheelPartInput(): UpdateWheelPartInput {
   return {
+    disabled: false,
+    id: ,
     imagePath: "",
     imageText: "",
     name: "",

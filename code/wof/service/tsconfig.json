@@ -22,6 +22,8 @@
         "global.d.ts"
     ],
     "files": [
-        "./src/index.mts"
+        "./src/index.mts",
+        "./src/data/sequelize.mts",
+        "./src/data/WheelValueData.mts"
     ],
 }

@@ -173,6 +173,7 @@ import { CHECK_CHANCE } from "../data/constants/WIN_CHANCE";
 import { WheelValue } from "../data/types/WheelValue.mjs";
 import { getWheelValuesRepo } from "../../data/WheelValuesRepo.mjs";
 import { getDisplaySettingsRepo } from "../../data/DisplaySettingsRepo.mjs";
+import { getWheelSettingsRepo } from "../../data/WheelSettingsRepo.mjs";
 
 const pubsub = new PubSub();
 
@@ -293,16 +294,17 @@ export const schema = new GraphQLSchema({
         type: displaySettingsType,
 
         async resolve() {
-          return (await (await getDisplaySettingsRepo()).findOne({ where: { id: 1 } })).dataValues
+          const result = (await (await getDisplaySettingsRepo()).findOne({ where: { id: 1 } })).dataValues
+
+          return result
         },
       },
       wheelSettings: {
         type: wheelSettingsType,
 
         async resolve() {
-          await new Promise<void>((r) => setTimeout(() => r(), 100));
-
-          return sessionWheelSettings;
+          const result = (await (await getWheelSettingsRepo()).findOne({ where: { id: 1 } })).dataValues
+          return result
         },
       },
 
@@ -310,15 +312,6 @@ export const schema = new GraphQLSchema({
         type: gameSettingsType,
         resolve() {
           return {};
-        },
-      },
-
-      firstname: {
-        type: GraphQLString,
-        async resolve() {
-          await new Promise<void>((r) => setTimeout(() => r(), 100));
-
-          return "Stefan";
         },
       },
 
@@ -373,6 +366,7 @@ export const schema = new GraphQLSchema({
             const settings = await repo.findOne({ where: { id: 1 } });
             await settings.update({ ...input });
             return settings.dataValues;
+            console.log({ dv: settings.dataValues })
           }
           return null;
         },
@@ -388,24 +382,11 @@ export const schema = new GraphQLSchema({
         resolve: async (source, args, context, info) => {
           const input: WheelSettingsInput = args["input"];
           if (input) {
-            sessionWheelSettings.radius =
-              input.radius ?? sessionWheelSettings.radius;
-            sessionWheelSettings.rotationDurationInner =
-              input.rotationDurationInner ??
-              sessionWheelSettings.rotationDurationInner;
-            sessionWheelSettings.rotationDurationNotPlaying =
-              input.rotationDurationNotPlaying ??
-              sessionWheelSettings.rotationDurationNotPlaying;
-            sessionWheelSettings.rotationDurationPlaying =
-              input.rotationDurationPlaying ??
-              sessionWheelSettings.rotationDurationPlaying;
-            sessionWheelSettings.minClickDelayMS =
-              input.minClickDelayMS ??
-              sessionWheelSettings.minClickDelayMS;
-
+            const result = (await (await getWheelSettingsRepo()).findOne({ where: { id: 1 } }));
+            await result.update({ ...input })
+            return result.dataValues;
           }
-
-          return sessionWheelSettings;
+          return null;
         },
       },
       updateOrCreateWheelPart: {

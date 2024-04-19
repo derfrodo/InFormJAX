@@ -57,7 +57,7 @@ export const getClient = (pageProps?: any, forceReset = false) => {
     client = new ApolloClient({
       link: new HttpLink({
         uri: process.env.NODE_ENV === "development" ?
-          "http://localhost:3255/api/graphql" :
+          "http://localhost:4000/api/graphql" :
           "http://127.0.0.1:3000/api/graphql",
       }),
       cache:

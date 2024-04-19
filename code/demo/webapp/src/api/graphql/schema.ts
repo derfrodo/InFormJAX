@@ -135,6 +135,10 @@ export const schema = new GraphQLSchema({
             sessionWheelSettings.rotationDurationPlaying =
               input.rotationDurationPlaying ??
               sessionWheelSettings.rotationDurationPlaying;
+            sessionWheelSettings.minClickDelayMS =
+              input.minClickDelayMS ??
+              sessionWheelSettings.minClickDelayMS;
+
           }
 
           return sessionWheelSettings;

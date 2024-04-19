@@ -1,0 +1,54 @@
+export const {{#if detailsTypeInfo}}Update{{else}}Create{{/if}}{{name}}Form = (props: { 
+    title?: React.ReactNode;
+    item: {{#if detailsTypeInfo}}{{detailsTypeInfo.namedBinding}}{{else}}{{inputTypeInfo.namedBinding}}{{/if}}
+    onSave?: (next: {{inputTypeInfo.namedBinding}}) => Promise<void> | void
+}) => {
+    const { title, item, onSave = () => {} } = props;
+    const [current, setCurrent] = useState({ ...item });
+    useEffect(() => {
+    setCurrent({ ...item });
+    }, [item]);
+
+    return <form style={{#surroundWithCurlyBraces}}{ 
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+        flexWrap: "wrap",
+        borderRadius: 4,
+        padding: 8,
+        border: "1px solid black",
+        marginTop: 8,
+        maxWidth: 300,
+    }{{/surroundWithCurlyBraces}}
+    onSubmit={{#surroundWithCurlyBraces}}async (e) => {
+          e.preventDefault();
+          const next = {{#if detailsTypeInfo}}projectTo{{name}}Input(current){{else}}current{{/if}};
+          await onSave(next);
+        }{{/surroundWithCurlyBraces}}
+    >
+    {typeof title === "string" ? <h3 style={{#surroundWithCurlyBraces}}{ 
+        marginTop: -4,
+        marginBottom: -8,
+    }{{/surroundWithCurlyBraces}} >{title}</h3> : title}
+    {{#each byOrdering}}
+    {{#if input}}
+    {{#findElementByPropertyValueAndRegex input.mappedBy "key" "[^(CELL)]$"}}
+        <{{componentType.typeName}}
+            required={{#surroundWithCurlyBraces}}{{#ifIsEqual ../input.typeName "InputMaybe"}}false{{else}}true{{/ifIsEqual}}{{/surroundWithCurlyBraces}}
+            onChange={{#surroundWithCurlyBraces}}(next) => setCurrent(p => ({ ...p, {{../input.name}}: next })){{/surroundWithCurlyBraces}}
+            item={{surroundWithCurlyBraces "item"}}
+            name={{#surroundWithCurlyBraces}}"{{../input.name}}"{{/surroundWithCurlyBraces}}
+            value={{#surroundWithCurlyBraces}}current.{{../input.name}}{{/surroundWithCurlyBraces}}
+        />
+    {{/findElementByPropertyValueAndRegex}}
+    {{/if}}
+    {{/each}}
+      <button
+        style={{#surroundWithCurlyBraces}}{ 
+        width: 150,
+        borderRadius: 4,
+        padding: 8,
+    }{{/surroundWithCurlyBraces}}
+      >Save</button>
+    </form>;
+}

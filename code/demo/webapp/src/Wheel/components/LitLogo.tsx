@@ -1,13 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import { useMemo } from "react";
-import Materna from "../assets/Bild1.png";
+import Logo from "../../assets_generated/logo.jpg";
 
 
 export function LitLogo(
   props: {
     showLights: boolean;
     offset: number;
-    duration: number;
+    duration: number; 
     playing: boolean;
   }
 ) {
@@ -46,7 +46,7 @@ export function LitLogo(
   return (
     <>
       <img
-        src={Materna.src}
+        src={Logo.src}
         alt="Logo"
         style={{
           position: "absolute",

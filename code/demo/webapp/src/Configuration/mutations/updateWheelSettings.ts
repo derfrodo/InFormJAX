@@ -7,6 +7,7 @@ mutation UpdateWheelSettings($input: WheelSettingsInput!) {
     rotationDurationInner
     rotationDurationNotPlaying
     rotationDurationPlaying
+    minClickDelayMS
   }
 }
 `);

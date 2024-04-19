@@ -17,9 +17,10 @@ const config: CodegenConfig = {
     // generates the actual client
     "./src/gql/generated-client/": {
       preset: "client",
+
     },
   },
-  documents: ["src/**/*.tsx", "src/**/*.ts"],
+  documents: ["./src/**/*.(tsx|ts)"],
   //   hooks: { afterAllFileWrite: ['prettier --write'] },
   config: { numericEnums: true },
   schema: printSchema(schema),

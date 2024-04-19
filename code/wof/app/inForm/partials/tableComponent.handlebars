@@ -1,0 +1,36 @@
+export const {{name}}Table = (props: { 
+    actionsComponent?: React.ComponentType<{ item: {{detailsTypeInfo.namedBinding}} }>;
+    items: {{detailsTypeInfo.namedBinding}}[];
+    onRowClicked?: (item: {{detailsTypeInfo.namedBinding}}) => Promise<void> | void
+}) => {
+    const ActionsComponent = props.actionsComponent;
+    return <table style={{#surroundWithCurlyBraces}}{{#surroundWithCurlyBraces}} borderSpacing: 4, {{/surroundWithCurlyBraces}}{{/surroundWithCurlyBraces}}>
+    <thead>
+        <tr>
+            {ActionsComponent ? <th></th> : <></>}
+        {{#each byOrdering}}
+            {{#if detail}}
+            <th>{{detail.name}}</th>
+            {{/if}}
+        {{/each}}
+        </tr>
+    </thead>
+    <tbody>
+        {{#surroundWithCurlyBraces}}props.items.map((item, index)=>
+            <tr key={{#surroundWithCurlyBraces}}index{{/surroundWithCurlyBraces}} onClick={{#surroundWithCurlyBraces}}() => props.onRowClicked && props.onRowClicked(item){{/surroundWithCurlyBraces}}>
+                {ActionsComponent ? <td><ActionsComponent item={item}/></td> : <></>}
+                {{#each byOrdering}}
+                {{#if detail}}
+                {{#findElementByPropertyValueAndRegex detail.mappedBy "key" "CELL$"}}
+                    <{{componentType.typeName}}
+                        item={{surroundWithCurlyBraces "item"}}
+                        name={{#surroundWithCurlyBraces}}"{{../detail.name}}"{{/surroundWithCurlyBraces}}
+                        value={{#surroundWithCurlyBraces}}item.{{../detail.name}}{{/surroundWithCurlyBraces}}
+                    />
+                {{/findElementByPropertyValueAndRegex}}
+                {{/if}}
+                {{/each}}
+            </tr>){{/surroundWithCurlyBraces}}
+    </tbody>
+    </table>;
+}

@@ -1,6 +1,7 @@
 {
     "ts-node": {
         "esm": true,
+        
     },
     "compilerOptions": {
         "outDir": "dist",
@@ -17,7 +18,8 @@
         "moduleResolution": "node",
     },
     "include": [
-        "./src"
+        "./src",
+        "global.d.ts"
     ],
     "files": [
         "./src/index.mts"

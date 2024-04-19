@@ -26,7 +26,7 @@ export const updateOrAddWheelValue: (
 };
 
 const getMaternaValue: () => Promise<WheelValue> = async () => {
-  const imagePath = await import("./../../Wheel/assets/Bild1.png");
+  const imagePath = await import("./../../Wheel/assets/Bild1.jpg");
   return {
     name: "Materna",
     winText: "Gewinne mit Materna!",
@@ -59,10 +59,4 @@ export const WHEELVALUES: WheelValue[] = [
     imageText: "😒",
     winChance: 0.5,
   },
-  // {
-  //   name: "Geiz ist sparsam",
-  //   win: false,
-  //   imagePath: "https://blog.derfrodo.de/assets/derfrodoLogoBlender_720p.png",
-  //   winChance: 0.1,
-  // },
 ];

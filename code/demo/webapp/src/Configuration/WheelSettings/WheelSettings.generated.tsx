@@ -18,6 +18,7 @@ export const WheelSettingsTable = (props: {
             <th>rotationDurationInner</th>
             <th>rotationDurationNotPlaying</th>
             <th>rotationDurationPlaying</th>
+            <th>minClickDelayMS</th>
             <th>__typename</th>
         </tr>
     </thead>
@@ -44,6 +45,11 @@ export const WheelSettingsTable = (props: {
                         item={item}
                         name={"rotationDurationPlaying"}
                         value={item.rotationDurationPlaying}
+                    />
+                    <IntCell
+                        item={item}
+                        name={"minClickDelayMS"}
+                        value={item.minClickDelayMS}
                     />
             </tr>)}
     </tbody>
@@ -109,6 +115,13 @@ export const UpdateWheelSettingsForm = (props: {
             name={"rotationDurationPlaying"}
             value={current.rotationDurationPlaying}
         />
+        <IntInput
+            required={true}
+            onChange={(next) => setCurrent(p => ({ ...p, minClickDelayMS: next }))}
+            item={item}
+            name={"minClickDelayMS"}
+            value={current.minClickDelayMS}
+        />
       <button
         style={{ 
         width: 150,
@@ -121,6 +134,7 @@ export const UpdateWheelSettingsForm = (props: {
 
 export function projectToWheelSettingsInput(details: UpdateWheelSettingsMutationReturnType): UpdateWheelSettingsInputType {
   return {
+    minClickDelayMS: details.minClickDelayMS,
     radius: details.radius,
     rotationDurationInner: details.rotationDurationInner,
     rotationDurationNotPlaying: details.rotationDurationNotPlaying,

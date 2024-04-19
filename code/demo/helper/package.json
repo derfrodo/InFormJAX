@@ -1,0 +1,21 @@
+{
+  "name": "helper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "download:assets": "tsc --project ./tsconfig.json --noEmit && node --es-module-specifier-resolution=node --no-warnings=ExperimentalWarning --loader=ts-node/esm ./downloadAssets.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tsconfig/node20": "^20.1.4",
+    "request": "^2.88.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "@types/request": "^2.48.12"
+  }
+}

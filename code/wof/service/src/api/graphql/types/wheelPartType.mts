@@ -6,7 +6,8 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from "graphql";
-import { WheelValue } from "./WheelValue.mjs";
+import type { WheelValue } from "../../data/types/WheelValue.mjs";
+import { resolveDisabledWheelValue } from "../../data/disabledWheelValues.mjs";
 
 const wheelPartFields = {
   name: {
@@ -51,7 +52,9 @@ export const wheelPartType = new GraphQLObjectType<WheelValue>({
     ...wheelPartFields,
     disabled: {
       type: new GraphQLNonNull(GraphQLBoolean),
-
+      resolve: function (source) {
+        return resolveDisabledWheelValue(source);
+      },
     },
   },
   name: "WheelPart",

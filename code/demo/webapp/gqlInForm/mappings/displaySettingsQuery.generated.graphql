@@ -1,0 +1,12 @@
+
+query displaySettings {
+  displaySettings {
+    ...FullDisplaySettings 
+  }
+}
+
+
+fragment FullDisplaySettings on DisplaySettings{
+    showResultAfterMS
+    showResultForMS
+}

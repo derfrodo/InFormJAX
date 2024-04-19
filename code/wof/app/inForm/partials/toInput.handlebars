@@ -1,0 +1,18 @@
+{{#if detailsTypeInfo}}
+export function projectTo{{name}}Input(details: {{detailsTypeInfo.namedBinding}}): {{inputTypeInfo.namedBinding}} {
+  return {
+  {{#each matchingMembers}}
+    {{input.name}}: details.{{detail.name}},
+  {{/each}}
+  }
+}
+{{else}}
+export function createDefault{{name}}Input(): {{inputTypeInfo.namedBinding}} {
+  return {
+  {{#each mappedInputProperties}}
+    {{name}}: {{firstMapping.defaultValue.value}},
+  {{/each}}
+  }
+}
+
+{{/if}}

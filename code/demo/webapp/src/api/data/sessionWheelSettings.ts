@@ -8,4 +8,5 @@ export const sessionWheelSettings: UpdateWheelSettingsMutationReturnType = {
   rotationDurationInner: SPIN_INNER_DURATION,
   rotationDurationNotPlaying: Math.floor(SPIN_DURATION * 100),
   rotationDurationPlaying: SPIN_DURATION,
+  minClickDelayMS: 1000,
 };

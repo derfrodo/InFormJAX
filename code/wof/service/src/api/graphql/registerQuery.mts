@@ -1,44 +1,15 @@
-import { QueryResolvers, Resolver, Resolvers } from "../generated-types/graphql.mjs";
+import { ThunkObjMap, GraphQLFieldConfig } from "graphql";
+import { ObjMap } from "graphql/jsutils/ObjMap";
 
-export function getResolvers(): Resolvers {
-  return {
-    DisplaySettings: {
-      showResultAfterMS: {
-        resolve:
-          async (source, args, context, info) => {
-            return 100;
-          }
-      },
-    }
-  }
+export function registerToQuery(
+  name: string,
+  config: GraphQLFieldConfig<any, any>
+) {
+  REGISTERED_QUERIES[name] = config;
 }
 
-type PartialResolve<T> = { [key in keyof T]: T[key] extends Resolver<infer TR> ? Resolver<Partial<TR>> : T[key] };
+const REGISTERED_QUERIES: ObjMap<GraphQLFieldConfig<any, any>> = {};
 
-export function getQueryResolvers(): PartialResolve<QueryResolvers> {
-  return {
-    displaySettings: {
-      resolve:
-        async (source, args, context, info) => {
-          return { showResultAfterMS: 100, };
-        }
-    },
-    gameSettings: {
-      resolve() {
-        return {
-          maxSpins: 3,
-          chanceToWin: 0.5,
-          sumOfChances: 12,
-          sumOfLooseChance: 12,
-          sumOfWinChance: 12
-        };
-      }
-    },
-
-    firstname: {
-      resolve() {
-        return "Stefan"
-      }
-    },
-  };
+export function getQueries(): ThunkObjMap<GraphQLFieldConfig<any, any>> {
+  return { ...REGISTERED_QUERIES };
 }

@@ -1,45 +1,71 @@
 // The ApolloServer constructor requires two parameters: your schema
 import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 
-import { printSchema, } from "graphql";
-import { getQueryResolvers } from "./api/graphql/registerQuery.mjs";
+import { expressMiddleware } from '@apollo/server/express4';
+import cors from 'cors';
+import express from 'express';
+
 import { schema } from "./api/graphql/schema.mjs";
 
 import { config } from "dotenv";
+import http from 'http';
 import { join } from "path";
+import { WebSocketServer } from 'ws';
+import { useServer } from 'graphql-ws/lib/use/ws';
 
 config();
 config({ path: join(process.cwd(), '.env.local') });
+
 try {
+
+    console.log('Create express')
+    const app = express();
+    const httpServer = http.createServer(app);
+
+    console.log('Add websockets')
+    // Creating the WebSocket server
+    const wsServer = new WebSocketServer({
+        // This is the `httpServer` we created in a previous step.
+        server: httpServer,
+        // Pass a different path here if app.use
+        // serves expressMiddleware at a different path
+        path: "/graphql",
+        //   path: '/subscriptions',
+    });
+
+    // Hand in the schema we just created and have the
+    // WebSocketServer start listening.
+    const serverCleanup = useServer({ schema }, wsServer);
+
     console.log('Create server')
-
     const server = new ApolloServer({
-        typeDefs: printSchema(schema),
-        resolvers: {
-            Query: getQueryResolvers(),
-            DisplaySettings: {
-                showResultForMS: {
-                    resolve() { return 12000 }
-                }
-            }
-            // GameSettingsType?: GameSettingsTypeResolvers<ContextType>;
-            // Mutation?: MutationResolvers<ContextType>;
-            // Query?: QueryResolvers<ContextType>;
-            // WheelPart?: WheelPartResolvers<ContextType>;
-            // WheelSettings?: WheelSettingsResolvers<ContextType>;
-        }
+        schema,
+        plugins: [
+            // Proper shutdown for the HTTP server.
+            ApolloServerPluginDrainHttpServer({ httpServer }),
 
+            // Proper shutdown for the WebSocket server.
+            {
+                async serverWillStart() {
+                    return {
+                        async drainServer() {
+                            await serverCleanup.dispose();
+                        },
+                    };
+                },
+            },
+        ],
     });
-    // Passing an ApolloServer instance to the `startStandaloneServer` function:
-    //  1. creates an Express app
-    //  2. installs your ApolloServer instance as middleware
-    //  3. prepares your app to handle incoming requests
-    const { url } = await startStandaloneServer(server, {
-        listen: { port: 4000 },
-    });
+    // Note you must call `start()` on the `ApolloServer`
+    // instance before passing the instance to `expressMiddleware`
+    await server.start();
+    console.log('Create server')
+    app.use('/', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
+    // app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
 
-    console.log(`🚀  Server ready at: ${url}`);
+    await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve));
+    console.log(`🚀 Server ready at http://localhost:4000/graphql`);
 
 } catch (e) {
     console.log(`Application failed: ${e.message}`, e)

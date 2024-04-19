@@ -4,33 +4,35 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
 };
 
 export type DisplaySettings = {
   __typename?: 'DisplaySettings';
-  showResultAfterMS: Scalars['Int'];
-  showResultForMS: Scalars['Int'];
+  showResultAfterMS: Scalars['Int']['output'];
+  showResultForMS: Scalars['Int']['output'];
 };
 
 export type DisplaySettingsInput = {
-  showResultAfterMS: Scalars['Int'];
-  showResultForMS: Scalars['Int'];
+  showResultAfterMS: Scalars['Int']['input'];
+  showResultForMS: Scalars['Int']['input'];
 };
 
 export type GameSettingsType = {
   __typename?: 'GameSettingsType';
-  chanceToWin: Scalars['Float'];
-  sumOfChances: Scalars['Float'];
-  sumOfLooseChance: Scalars['Float'];
-  sumOfWinChance: Scalars['Float'];
+  chanceToWin: Scalars['Float']['output'];
+  sumOfChances: Scalars['Float']['output'];
+  sumOfLooseChance: Scalars['Float']['output'];
+  sumOfWinChance: Scalars['Float']['output'];
 };
 
 export type Mutation = {
@@ -43,7 +45,7 @@ export type Mutation = {
 
 
 export type MutationToggleDisableWheelValueArgs = {
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
 };
 
 
@@ -64,7 +66,7 @@ export type MutationUpdateWheelSettingsArgs = {
 export type Query = {
   __typename?: 'Query';
   displaySettings?: Maybe<DisplaySettings>;
-  firstname?: Maybe<Scalars['String']>;
+  firstname?: Maybe<Scalars['String']['output']>;
   gameSettings?: Maybe<GameSettingsType>;
   wheelParts?: Maybe<Array<WheelPart>>;
   wheelSettings?: Maybe<WheelSettings>;
@@ -76,42 +78,44 @@ export type QueryWheelPartsArgs = {
 };
 
 export type UpdateWheelPartInput = {
-  imagePath?: InputMaybe<Scalars['String']>;
-  imageText?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
-  win: Scalars['Boolean'];
-  winChance: Scalars['Float'];
-  winText?: InputMaybe<Scalars['String']>;
+  imagePath?: InputMaybe<Scalars['String']['input']>;
+  imageText?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  win: Scalars['Boolean']['input'];
+  winChance: Scalars['Float']['input'];
+  winText?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type WheelPart = {
   __typename?: 'WheelPart';
-  disabled: Scalars['Boolean'];
-  imagePath?: Maybe<Scalars['String']>;
-  imageText?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-  win: Scalars['Boolean'];
-  winChance: Scalars['Float'];
-  winText?: Maybe<Scalars['String']>;
+  disabled: Scalars['Boolean']['output'];
+  imagePath?: Maybe<Scalars['String']['output']>;
+  imageText?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  win: Scalars['Boolean']['output'];
+  winChance: Scalars['Float']['output'];
+  winText?: Maybe<Scalars['String']['output']>;
 };
 
 export type WheelSettings = {
   __typename?: 'WheelSettings';
-  radius: Scalars['Int'];
-  rotationDurationInner: Scalars['Int'];
-  rotationDurationNotPlaying: Scalars['Int'];
-  rotationDurationPlaying: Scalars['Int'];
+  minClickDelayMS: Scalars['Int']['output'];
+  radius: Scalars['Int']['output'];
+  rotationDurationInner: Scalars['Int']['output'];
+  rotationDurationNotPlaying: Scalars['Int']['output'];
+  rotationDurationPlaying: Scalars['Int']['output'];
 };
 
 export type WheelSettingsInput = {
-  radius: Scalars['Int'];
-  rotationDurationInner: Scalars['Int'];
-  rotationDurationNotPlaying: Scalars['Int'];
-  rotationDurationPlaying: Scalars['Int'];
+  minClickDelayMS: Scalars['Int']['input'];
+  radius: Scalars['Int']['input'];
+  rotationDurationInner: Scalars['Int']['input'];
+  rotationDurationNotPlaying: Scalars['Int']['input'];
+  rotationDurationPlaying: Scalars['Int']['input'];
 };
 
 export type WheelPartFilter = {
-  disabled?: InputMaybe<Scalars['Boolean']>;
+  disabled?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -185,15 +189,15 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   DisplaySettings: ResolverTypeWrapper<DisplaySettings>;
   DisplaySettingsInput: DisplaySettingsInput;
-  Float: ResolverTypeWrapper<Scalars['Float']>;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   GameSettingsType: ResolverTypeWrapper<GameSettingsType>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
-  String: ResolverTypeWrapper<Scalars['String']>;
+  String: ResolverTypeWrapper<Scalars['String']['output']>;
   UpdateWheelPartInput: UpdateWheelPartInput;
   WheelPart: ResolverTypeWrapper<WheelPart>;
   WheelSettings: ResolverTypeWrapper<WheelSettings>;
@@ -203,15 +207,15 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Boolean: Scalars['Boolean'];
+  Boolean: Scalars['Boolean']['output'];
   DisplaySettings: DisplaySettings;
   DisplaySettingsInput: DisplaySettingsInput;
-  Float: Scalars['Float'];
+  Float: Scalars['Float']['output'];
   GameSettingsType: GameSettingsType;
-  Int: Scalars['Int'];
+  Int: Scalars['Int']['output'];
   Mutation: {};
   Query: {};
-  String: Scalars['String'];
+  String: Scalars['String']['output'];
   UpdateWheelPartInput: UpdateWheelPartInput;
   WheelPart: WheelPart;
   WheelSettings: WheelSettings;
@@ -260,6 +264,7 @@ export type WheelPartResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type WheelSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['WheelSettings'] = ResolversParentTypes['WheelSettings']> = {
+  minClickDelayMS?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   radius?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   rotationDurationInner?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   rotationDurationNotPlaying?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;

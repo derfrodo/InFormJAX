@@ -13,5 +13,8 @@ export const wheelSettingsFields = {
     rotationDurationInner: {
       type: new GraphQLNonNull(GraphQLInt),
     },
+    minClickDelayMS:{
+      type: new GraphQLNonNull(GraphQLInt),
+    }
   };
   

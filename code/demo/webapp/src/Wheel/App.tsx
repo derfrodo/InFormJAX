@@ -1,25 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import Digitalization from "./assets/Bild3.jpg";
 
 import { useGetWheelSettings } from "@/Configuration/WheelSettings/useGetWheelSettings";
+import { useQuery } from "@apollo/client";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { WheelValue } from "../api/data/types/WheelValue";
 import { AppWheel } from "./components/AppWheel";
 import { InnerWheel } from "./components/InnerWheel";
-import { LitGraphics } from "./components/LitGraphics";
 import { LitLogo } from "./components/LitLogo";
 import { WheelLights } from "./components/WheelLights";
 import { WheelPointer } from "./components/WheelPointer";
 import { Winning } from "./components/Winning";
 import { CHECK_CHANCE } from "./constants/WIN_CHANCE";
-import { WheelValue } from "../api/data/types/WheelValue";
-import { useDevicePixelRatio } from "./utils/getDevicePixelRatio";
-import { useQuery } from "@apollo/client";
 import { queryGameSettings } from "./gql/queryGameSettings";
-import { useRouter } from "next/router";
+import { useDevicePixelRatio } from "./utils/getDevicePixelRatio";
 
-// const wofAudio = new Audio(wofSound);
+import { queryWheelSettings } from "@/Configuration/mutations/queryWheelSettings";
+import BackgroundImage from "../assets_generated/background_full.svg";
 
 const GRAPHICXWIDTH = 563;
 const GRAPHICXHEIGHT = 764;
@@ -83,11 +82,16 @@ function getWinner(sumOfChances: number, values: WheelValue[]) {
   return values[values.length - 1];
 }
 
+
+
 function App(props: { values: WheelValue[] }) {
   const router = useRouter();
   const { radius } = useGetWheelSettings();
   const { data } = useQuery(queryGameSettings);
+  const { data: wheelData } = useQuery(queryWheelSettings);
 
+  const [lastClickTime, setLastClickTime] = useState<number | null>(null);
+  const [canClick, setCanClick] = useState<boolean>(true);
   const [lastWin, setLastWin] = useState(0);
   const [roundDone, setRoundDone] = useState(true);
   const [playing, setPlaying] = useState(false);
@@ -95,6 +99,7 @@ function App(props: { values: WheelValue[] }) {
   const devicePixelRatio = useDevicePixelRatio();
 
   const { values } = props;
+  const minClickDelayMS = wheelData?.wheelSettings?.minClickDelayMS ?? 1000;
   const winChance = data?.gameSettings?.chanceToWin ?? 0;
   const sumOfLooseChance = data?.gameSettings?.sumOfLooseChance ?? 0;
   const sumOfWinChance = data?.gameSettings?.sumOfWinChance ?? 0;
@@ -183,6 +188,12 @@ function App(props: { values: WheelValue[] }) {
       if (router.route === "/config") {
         return;
       }
+      if (!canClick) {
+        return;
+      }
+      setCanClick(false);
+      setTimeout(() => { setCanClick(true) }, minClickDelayMS)
+
       e.preventDefault();
       e.stopPropagation();
       updatePlaying();
@@ -192,7 +203,7 @@ function App(props: { values: WheelValue[] }) {
         setLastWin(-1);
       }
     },
-    [calculateWinner, playing, updatePlaying]
+    [calculateWinner, canClick, minClickDelayMS, playing, router.route, updatePlaying]
   );
 
   useEffect(() => {
@@ -210,11 +221,12 @@ function App(props: { values: WheelValue[] }) {
     }
   }, [onstart]);
 
+  console.log({ BackgroundImage })
   return (
     <div
       className="App"
       style={{
-        // backgroundImage: `url(${Fair})`,
+        backgroundImage: `url(${BackgroundImage.src})`,
         backgroundRepeat: "no-repeat",
         backgroundPositionY: "bottom",
         backgroundSize: "cover",
@@ -225,30 +237,11 @@ function App(props: { values: WheelValue[] }) {
           position: "relative",
           height: "100vh",
           width: "100vw",
-          backgroundColor: "#00000099",
+          // backgroundColor: "#00000099",
           overflow: "hidden",
         }}
       >
         <LitLogo
-          duration={duration}
-          offset={offset}
-          playing={playing}
-          showLights={bulbWidth !== null}
-        />
-
-        <img
-          src={Digitalization.src}
-          alt="Logo"
-          style={{
-            position: "absolute",
-            background: "transparent",
-            width: "40%",
-            right: `0vw`,
-            bottom: `16vh`,
-          }}
-        ></img>
-
-        <LitGraphics
           duration={duration}
           offset={offset}
           playing={playing}
@@ -264,19 +257,6 @@ function App(props: { values: WheelValue[] }) {
         />
 
         <InnerWheel playing={playing} />
-        {/* 
-
-        <img
-          src={sloth.src}
-          style={{
-            position: "absolute",
-            height: RADIUS / 3,
-            width: RADIUS / 3,
-            left: `calc(50% - ${RADIUS / 6}px - .5px)`,
-            top: `calc(50% - ${RADIUS / 6}px + 5px)`,
-          }}
-          alt="INNERFIX"
-        /> */}
 
         {/* Borders */}
         <div
@@ -365,11 +345,12 @@ function App(props: { values: WheelValue[] }) {
             backgroundColor: MATERNA_RED2,
             color: "white",
             boxShadow: "inset 0 0px 4px black",
+            opacity: !roundDone || !canClick ? .1 : undefined
           }}
           onClick={onstart}
-          disabled={!roundDone}
+          disabled={!roundDone || !canClick}
         >
-          Spin and Win
+          Spin2Win
         </button>
 
         <Winning
@@ -404,6 +385,6 @@ function App(props: { values: WheelValue[] }) {
       </div>
     </div>
   );
-}
 
+}
 export default App;

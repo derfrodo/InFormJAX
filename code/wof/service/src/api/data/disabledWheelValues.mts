@@ -29,8 +29,8 @@ export const getFilteredWheelParts = async (filter: WheelPartFilter) => {
   return (await getWheelValues()).filter((value) =>
     typeof filter.disabled === "boolean"
       ? filter.disabled
-        ? disabledWheelValues.some((v) => v.name === value.name)
-        : disabledWheelValues.every((v) => v.name !== value.name)
+        ? !value.disabled
+        : value.disabled
       : true
   );
 };

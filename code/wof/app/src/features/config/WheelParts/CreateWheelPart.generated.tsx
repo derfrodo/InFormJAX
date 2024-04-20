@@ -1,8 +1,8 @@
 import { UpdateWheelPartInput } from "../../../generated-client/graphql"
 import { BoolInput,  } from "./../InForm/atoms/BoolInput"
+import { StringInput,  } from "./../InForm/atoms/StringInput"
 import { StringCell,  } from "./../InForm/atoms/StringCell"
 import { ImageCell,  } from "./../InForm/atoms/ImageCell"
-import { StringInput,  } from "./../InForm/atoms/StringInput"
 import { IntInput,  } from "./../InForm/atoms/IntCell"
 import { Scalars, InputMaybe,  } from "./../../../generated-client/graphql"
 import { useState, useEffect } from "react"
@@ -47,7 +47,7 @@ export const CreateCreateWheelPartForm = (props: {
             name={"disabled"}
             value={current.disabled}
         />
-        <StringCell
+        <StringInput
             required={true}
             onChange={(next) => setCurrent(p => ({ ...p, id: next }))}
             item={item}

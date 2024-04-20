@@ -355,7 +355,8 @@ export const schema = new GraphQLSchema({
         type: gameType,
         resolve: async (source, args, context, info) => {
           const g = (await getGame()).dataValues;
-          if (!g.isRunning) {
+          console.log(g)
+          if (g.isRunning) {
             return await stopGame(await verifyToggleable((await getGame()).dataValues))
           }
           throw new Error("Game is not running")

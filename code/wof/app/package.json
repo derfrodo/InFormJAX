@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "start:npx": "npx -y serve@14.2.1 -s ./dist",
+    "start": "serve -s ./dist",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "generate": "npm run generateGql && npm run generateForms",

@@ -340,14 +340,22 @@ export const schema = new GraphQLSchema({
       startWheel: {
         type: gameType,
         resolve: async (source, args, context, info) => {
-          return await startGame(await verifyToggleable((await getGame()).dataValues))
+          const g = (await getGame()).dataValues;
+          if (g.isRoundDone) {
+            return await startGame(await verifyToggleable((await getGame()).dataValues))
+          }
+          throw new Error("Round is not done yet")
         },
       },
 
       stopWheel: {
         type: gameType,
         resolve: async (source, args, context, info) => {
-          return await stopGame(await verifyToggleable((await getGame()).dataValues))
+          const g = (await getGame()).dataValues;
+          if (!g.isRunning) {
+            return await stopGame(await verifyToggleable((await getGame()).dataValues))
+          }
+          throw new Error("Game is not running")
         },
       },
 
@@ -355,11 +363,12 @@ export const schema = new GraphQLSchema({
         type: gameType,
         resolve: async (source, args, context, info) => {
           const g = (await getGame()).dataValues;
-          if (!g.isRunning) {
+          if (!g.isRunning && g.isRoundDone) {
             return await startGame(await verifyToggleable(g))
-          } else {
+          } else if (g.isRunning) {
             return await stopGame(await verifyToggleable(g))
           }
+          throw new Error("Toggle did not work. Neither start not stop makes sense.")
         },
       },
 
@@ -367,7 +376,7 @@ export const schema = new GraphQLSchema({
         type: gameType,
         resolve: async (source, args, context, info) => {
           const g = (await getGame()).dataValues;
-          if (!g.isRunning) {
+          if (!g.isRunning && g.isRoundDone) {
             const repo = await getWheelSettingsRepo();
             const { minClickDelayMS, minAutoplayDurationMS, autoplayAddMaxMS } = (await repo.findOne({ where: { id: 1 } })).dataValues;
             const delay = Math.floor(Math.random() * autoplayAddMaxMS) + minAutoplayDurationMS;

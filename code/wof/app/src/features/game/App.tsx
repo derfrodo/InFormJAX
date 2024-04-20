@@ -30,14 +30,14 @@ export const MATERNA_RED2 = "#c30a17";
 function App() {
   const { pathname } = useLocation();
   const { radius } = useGetWheelSettings();
-  const { data: wheelparts } = useQuery(queryWheelParts, { variables: { filter: { disabled: false } } });
+  const { data: wheelparts, refetch } = useQuery(queryWheelParts, { variables: { filter: { disabled: false } } });
   const { data, } = useSubscription(subscribeToGame, { shouldResubscribe: true })
   const [callStartWheel] = useMutation(startWheel)
   const [callStopWheel] = useMutation(stopWheel)
 
+  useEffect(() => { refetch() }, [])
   const values = useMemo(() => wheelparts?.wheelParts ?? [], [wheelparts?.wheelParts])
 
-  console.log({ changed: data?.gameChanged })
   const canClick = useMemo(() => data?.gameChanged?.canToggle ?? true, [data?.gameChanged?.canToggle])
   const lastWin = useMemo(() => data?.gameChanged?.resultId ?? -1, [data?.gameChanged?.resultId])
   const lastValue = useMemo(() =>

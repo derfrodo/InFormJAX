@@ -12,23 +12,22 @@ import {
   GraphQLString
 } from "graphql";
 
-import { getFilteredWheelParts } from "../data/disabledWheelValues.mjs";
-import { getWheelValues, updateOrAddWheelValue } from "../data/getWheelValues.mjs";
-import { sessionDisplaySettings } from "../data/sessionDisplaySettings.mjs";
-import { DisplaySettingsInput, UpdateWheelPartInput, WheelPartFilter, WheelSettingsInput } from "../generated-types/graphql.mjs";
-import { displaySettingsInputType } from "./types/displaySettingsInputType.mjs";
-import { displaySettingsType } from "./types/displaySettingsType.mjs";
-import { gameSettingsType, getChanceToWin, getSumOfLooseChance, getSumOfWinChance } from "./types/gameSettingsType.mjs";
-import { updateWheelPartInputType, wheelPartType } from "./types/wheelPartType.mjs";
-import { wheelSettingsInputType } from "./types/wheelSettingsInputType.mjs";
-import { wheelSettingsType } from "./types/wheelSettingsType.mjs";
 import { PubSub } from 'graphql-subscriptions';
 import { getDisplaySettingsRepo } from "../../data/DisplaySettingsRepo.mjs";
 import { Game, getGameRepo } from "../../data/GameRepo.mjs";
 import { getWheelSettingsRepo } from "../../data/WheelSettingsRepo.mjs";
 import { getWheelValuesRepo } from "../../data/WheelValuesRepo.mjs";
 import { CHECK_CHANCE } from "../data/constants/WIN_CHANCE";
+import { getFilteredWheelParts } from "../data/disabledWheelValues.mjs";
+import { getWheelValues, updateOrAddWheelValue } from "../data/getWheelValues.mjs";
 import { WheelValue } from "../data/types/WheelValue.mjs";
+import { DisplaySettingsInput, UpdateWheelPartInput, WheelPartFilter, WheelSettingsInput } from "../generated-types/graphql.mjs";
+import { displaySettingsInputType } from "./types/displaySettingsInputType.mjs";
+import { displaySettingsType } from "./types/displaySettingsType.mjs";
+import { gameInfoType, getChanceToWin, getSumOfLooseChance, getSumOfWinChance } from "./types/gameInfoType.mjs";
+import { updateWheelPartInputType, wheelPartType } from "./types/wheelPartType.mjs";
+import { wheelSettingsInputType } from "./types/wheelSettingsInputType.mjs";
+import { wheelSettingsType } from "./types/wheelSettingsType.mjs";
 
 const games: GameResult[] = []
 
@@ -157,7 +156,7 @@ export const gameResultType = new GraphQLObjectType({
 const pubsub = new PubSub();
 
 async function verifyToggleable<T extends Game>(g: T) {
-  if(!g.canToggle){
+  if (!g.canToggle) {
     throw new Error(`Please wait a sec... ;)`)
   }
   const minClickDelay = (await (await getWheelSettingsRepo()).findOne({ where: { id: 1 } })).dataValues.minClickDelayMS
@@ -169,7 +168,7 @@ async function verifyToggleable<T extends Game>(g: T) {
   return now;
 }
 
-async function startGame(now: number) {
+async function startGame(now: number, autoplayDoNotMakeToggleable = false) {
   const minClickDelay = (await (await getWheelSettingsRepo()).findOne({ where: { id: 1 } })).dataValues.minClickDelayMS
 
   const g = await getGame();
@@ -183,19 +182,22 @@ async function startGame(now: number) {
   });
 
   pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
+  if (!autoplayDoNotMakeToggleable) {
 
-  setTimeout(async () => {
-    const g = await getGame();
-    await g.update({
-      canToggle: true,
-    });
-    pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
-  },
-    minClickDelay
-  )
+    setTimeout(async () => {
+      const g = await getGame();
+      await g.update({
+        canToggle: true,
+      });
+      pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
+    },
+      minClickDelay
+    )
+  }
   return (await getGame()).dataValues;
 }
-async function stopGame<T extends Game>(now: number) {
+async function stopGame(now: number) {
+  const { showResultAfterMS, showResultForMS } = (await (await getDisplaySettingsRepo()).findOne({ where: { id: 1 } })).dataValues
   const minClickDelay = (await (await getWheelSettingsRepo()).findOne({ where: { id: 1 } })).dataValues.minClickDelayMS
 
   const g = await getGame();
@@ -216,7 +218,7 @@ async function stopGame<T extends Game>(now: number) {
       isRoundDone: true,
     });
     pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
-  }, sessionDisplaySettings.showResultAfterMS + sessionDisplaySettings.showResultForMS)
+  }, showResultAfterMS + showResultForMS)
 
   setTimeout(async () => {
     const g = await getGame();
@@ -316,8 +318,8 @@ export const schema = new GraphQLSchema({
         },
       },
 
-      gameSettings: {
-        type: gameSettingsType,
+      gameInfo: {
+        type: gameInfoType,
         resolve() {
           return {};
         },
@@ -358,6 +360,28 @@ export const schema = new GraphQLSchema({
           } else {
             return await stopGame(await verifyToggleable(g))
           }
+        },
+      },
+
+      startAutoplay: {
+        type: gameType,
+        resolve: async (source, args, context, info) => {
+          const g = (await getGame()).dataValues;
+          if (!g.isRunning) {
+            const repo = await getWheelSettingsRepo();
+            const { minClickDelayMS, minAutoplayDurationMS, autoplayAddMaxMS } = (await repo.findOne({ where: { id: 1 } })).dataValues;
+            const delay = Math.floor(Math.random() * autoplayAddMaxMS) + minAutoplayDurationMS;
+            console.log("Autoplay for ", delay)
+            await startGame(await verifyToggleable(g), true)
+            setTimeout(async () => {
+              const runningGame = (await getGame()).dataValues;
+              await stopGame(await verifyToggleable(runningGame))
+            }, delay < minClickDelayMS ? minClickDelayMS : delay)
+            return (await getGame()).dataValues
+          } else {
+            throw new Error("Game is already running")
+          }
+
         },
       },
 
@@ -443,7 +467,7 @@ export const schema = new GraphQLSchema({
         subscribe: () => {
           setTimeout(async () => {
             const g = (await getGame());
-            console.log({game: g.dataValues})
+            console.log({ game: g.dataValues })
             pubsub.publish('GAME_CHANGED', { gameChanged: g });
           }, 100)
           return pubsub.asyncIterator(['GAME_CHANGED'])

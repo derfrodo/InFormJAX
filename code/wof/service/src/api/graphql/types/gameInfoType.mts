@@ -44,8 +44,8 @@ export async function getSumOfWinChance() {
   return winChance;
 }
 
-export const gameSettingsType = new GraphQLObjectType({
-  name: "GameSettingsType",
+export const gameInfoType = new GraphQLObjectType({
+  name: "GameInfoType",
   fields: {
     chanceToWin: {
       type: new GraphQLNonNull(GraphQLFloat),

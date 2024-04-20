@@ -11,7 +11,7 @@ import { updateDisplaysettings } from "./mutations/updateDisplaySettings";
 import { updateWheelSettings } from "./mutations/updateWheelSettings";
 import { mutateToggleDisableWheelValue } from "../game/gql/mutateToggleDisableWheelValue";
 import { mutationUpdateOrCreateWheelPart } from "../game/gql/mutationUpdateOrCreateWheelPart";
-import { queryGameSettings } from "../game/gql/queryGameSettings";
+import { queryGameInfo } from "../game/gql/queryGameSettings";
 import { queryWheelParts } from "../game/gql/queryWheelParts";
 import { UpdateDisplaySettingsForm } from "./DisplaySettings/DisplaySettings.generated";
 
@@ -19,10 +19,11 @@ export function Config() {
   const navigate = useNavigate();
   const { data: values, refetch: refetchWheelParts } =
     useQuery(queryWheelParts);
-  console.log({ values })
+  const { refetch: refetchEnabled } = useQuery(queryWheelParts, { variables: { filter: { disabled: false } } });
+
   const { data: displaySettings } = useQuery(queryDisplaysettings);
   const { data: wheelSettings } = useQuery(queryWheelSettings);
-  const { refetch: refetchGameSettings } = useQuery(queryGameSettings);
+  const { refetch: refetchGameSettings } = useQuery(queryGameInfo);
 
   const [toggleDisabled] = useMutation(mutateToggleDisableWheelValue);
   const [updateDisplaySettings] = useMutation(updateDisplaysettings);
@@ -153,6 +154,8 @@ export function Config() {
                       setSelectedWheelPart(item);
                       await toggleDisabled({ variables: { name: item.name } });
                       await refetchGameSettings();
+                      await refetchWheelParts();
+                      await refetchEnabled()
                     }}
                     items={values?.wheelParts || []}
                   />
@@ -169,6 +172,8 @@ export function Config() {
                         variables: { input: next },
                       });
                       await refetchWheelParts();
+                      await refetchEnabled()
+
                       await refetchGameSettings();
                       setSelectedWheelPart(null);
                     }}

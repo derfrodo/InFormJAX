@@ -117,6 +117,20 @@ export const UpdateWheelSettingsForm = (props: {
         />
         <IntInput
             required={true}
+            onChange={(next) => setCurrent(p => ({ ...p, autoplayAddMaxMS: next }))}
+            item={item}
+            name={"autoplayAddMaxMS"}
+            value={current.autoplayAddMaxMS}
+        />
+        <IntInput
+            required={true}
+            onChange={(next) => setCurrent(p => ({ ...p, minAutoplayDurationMS: next }))}
+            item={item}
+            name={"minAutoplayDurationMS"}
+            value={current.minAutoplayDurationMS}
+        />
+        <IntInput
+            required={true}
             onChange={(next) => setCurrent(p => ({ ...p, minClickDelayMS: next }))}
             item={item}
             name={"minClickDelayMS"}

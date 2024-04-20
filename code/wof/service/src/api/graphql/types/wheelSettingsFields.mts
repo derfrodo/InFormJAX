@@ -15,6 +15,12 @@ export const wheelSettingsFields = {
     },
     minClickDelayMS:{
       type: new GraphQLNonNull(GraphQLInt),
+    },
+    minAutoplayDurationMS:{
+      type: new GraphQLNonNull(GraphQLInt),
+    },
+    autoplayAddMaxMS:{
+      type: new GraphQLNonNull(GraphQLInt),
     }
   };
   

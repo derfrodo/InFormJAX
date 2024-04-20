@@ -1,8 +1,7 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { sessionWheelSettings } from "../api/data/sessionWheelSettings.mjs";
-import { DisplaySettings, WheelSettings } from "../api/generated-types/graphql.mjs";
+import { defaultSessionDisplaySettings } from "../api/data/sessionDisplaySettings.mjs";
+import { DisplaySettings } from "../api/generated-types/graphql.mjs";
 import { getSequelize } from "./sequelize.mjs";
-import { sessionDisplaySettings } from "../api/data/sessionDisplaySettings.mjs";
 
 class DisplaySettingsModel extends Model<DisplaySettings & { id: number }> { }
 
@@ -37,7 +36,7 @@ async function createDisplaySettingsRepo(sequelize: Sequelize) {
             id: 1
         },
         defaults: {
-            ...sessionDisplaySettings
+            ...defaultSessionDisplaySettings
         }
     });
     return repo;

@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { sessionWheelSettings } from "../api/data/sessionWheelSettings.mjs";
+import { defaultSessionWheelSettings } from "../api/data/sessionWheelSettings.mjs";
 import { WheelSettings } from "../api/generated-types/graphql.mjs";
 import { getSequelize } from "./sequelize.mjs";
 
@@ -26,6 +26,13 @@ async function createWheelSettingsRepo(sequelize: Sequelize) {
         minClickDelayMS: {
             type: DataTypes.INTEGER
         },
+
+        minAutoplayDurationMS: {
+            type: DataTypes.INTEGER
+        },
+        autoplayAddMaxMS: {
+            type: DataTypes.INTEGER
+        },
         radius: {
             type: DataTypes.INTEGER
         },
@@ -45,7 +52,7 @@ async function createWheelSettingsRepo(sequelize: Sequelize) {
             id: 1
         },
         defaults: {
-            ...sessionWheelSettings
+            ...defaultSessionWheelSettings
         }
     });
     return repo;

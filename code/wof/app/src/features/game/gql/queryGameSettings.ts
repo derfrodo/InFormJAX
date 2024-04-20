@@ -1,9 +1,9 @@
 import { graphql } from "../../../generated-client";
 
 
-export const queryGameSettings = graphql(`
-  query GameSettings {
-    gameSettings {
+export const queryGameInfo = graphql(`
+  query gameInfo {
+    gameInfo {
       chanceToWin
       sumOfChances
       sumOfWinChance

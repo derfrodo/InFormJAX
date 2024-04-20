@@ -4,8 +4,8 @@ import { writeFile, mkdir } from "fs/promises"
 import { join } from "path";
 
 const pathsToAssetFolder = [
-    "../../wof/app/src/assets_generated",
-    "../../wof/app/public/assets_generated",
+    "../app/src/assets_generated",
+    "../app/public/assets_generated",
 ]
 for (const pathToAssetFolder of pathsToAssetFolder) {
     await mkdir(pathToAssetFolder, { recursive: true })

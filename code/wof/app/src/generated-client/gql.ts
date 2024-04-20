@@ -16,7 +16,7 @@ const documents = {
     "\nquery DisplaySettings {\n    displaySettings {\n        showResultAfterMS\n        showResultForMS\n    }\n  }\n": types.DisplaySettingsDocument,
     "\n  query wheelSettings {\n    wheelSettings {\n      radius\n      rotationDurationNotPlaying\n      rotationDurationPlaying\n      rotationDurationInner\n      minClickDelayMS\n      minAutoplayDurationMS\n      autoplayAddMaxMS\n    }\n  }\n": types.WheelSettingsDocument,
     "\n  mutation UpdateSettings($input: DisplaySettingsInput!) {\n    updateDisplaySettings(input: $input) {\n        showResultAfterMS\n        showResultForMS\n    }\n  }\n": types.UpdateSettingsDocument,
-    "\nmutation UpdateWheelSettings($input: WheelSettingsInput!) {\n  updateWheelSettings(input: $input) {\n    radius\n    rotationDurationInner\n    rotationDurationNotPlaying\n    rotationDurationPlaying\n    minClickDelayMS\n  }\n}\n": types.UpdateWheelSettingsDocument,
+    "\nmutation UpdateWheelSettings($input: WheelSettingsInput!) {\n  updateWheelSettings(input: $input) {\n    radius\n    rotationDurationNotPlaying\n    rotationDurationPlaying\n    rotationDurationInner\n    minClickDelayMS\n    minAutoplayDurationMS\n    autoplayAddMaxMS\n  }\n}\n": types.UpdateWheelSettingsDocument,
     "\n  mutation toggleDisableWheelValue($name: String!) {\n    toggleDisableWheelValue(name: $name) {\n      id\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n": types.ToggleDisableWheelValueDocument,
     "\nmutation updateOrCreateWheelPart($input: UpdateWheelPartInput!) {\n  updateOrCreateWheelPart(input: $input) {\n    id\n    name\n    imagePath\n    imageText\n    win\n    winText\n    winChance\n    disabled\n  }\n}\n": types.UpdateOrCreateWheelPartDocument,
     "\n  query gameInfo {\n    gameInfo {\n      chanceToWin\n      sumOfChances\n      sumOfWinChance\n      sumOfLooseChance\n    }\n  }\n": types.GameInfoDocument,
@@ -55,7 +55,7 @@ export function graphql(source: "\n  mutation UpdateSettings($input: DisplaySett
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\nmutation UpdateWheelSettings($input: WheelSettingsInput!) {\n  updateWheelSettings(input: $input) {\n    radius\n    rotationDurationInner\n    rotationDurationNotPlaying\n    rotationDurationPlaying\n    minClickDelayMS\n  }\n}\n"): (typeof documents)["\nmutation UpdateWheelSettings($input: WheelSettingsInput!) {\n  updateWheelSettings(input: $input) {\n    radius\n    rotationDurationInner\n    rotationDurationNotPlaying\n    rotationDurationPlaying\n    minClickDelayMS\n  }\n}\n"];
+export function graphql(source: "\nmutation UpdateWheelSettings($input: WheelSettingsInput!) {\n  updateWheelSettings(input: $input) {\n    radius\n    rotationDurationNotPlaying\n    rotationDurationPlaying\n    rotationDurationInner\n    minClickDelayMS\n    minAutoplayDurationMS\n    autoplayAddMaxMS\n  }\n}\n"): (typeof documents)["\nmutation UpdateWheelSettings($input: WheelSettingsInput!) {\n  updateWheelSettings(input: $input) {\n    radius\n    rotationDurationNotPlaying\n    rotationDurationPlaying\n    rotationDurationInner\n    minClickDelayMS\n    minAutoplayDurationMS\n    autoplayAddMaxMS\n  }\n}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

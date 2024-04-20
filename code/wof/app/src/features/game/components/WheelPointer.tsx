@@ -3,6 +3,28 @@ import { useDevicePixelRatio } from "../utils/getDevicePixelRatio";
 import { MATERNA_RED, MATERNA_GREY } from "../App";
 import { useGetWheelSettings } from "../../config/WheelSettings/useGetWheelSettings";
 
+
+function drawPointer(current: HTMLCanvasElement) {
+  const context = current.getContext("2d");
+  if (context) {
+    const lineWidth = 6;
+    context.strokeStyle = MATERNA_RED;
+    context.lineWidth = lineWidth;
+    context.fillStyle = MATERNA_GREY;
+    context.moveTo(lineWidth, lineWidth);
+    context.beginPath();
+    context.lineTo(lineWidth, lineWidth);
+    context.lineTo(current.width - lineWidth, lineWidth);
+    context.lineTo(
+      (current.width - lineWidth) / 2,
+      current.height - lineWidth
+    );
+    context.closePath();
+    context.fill();
+    context.stroke();
+
+  }
+}
 export function WheelPointer(props: { playing: boolean }) {
   const { radius, rotationDurationPlaying } = useGetWheelSettings();
   const { playing } = props;
@@ -19,28 +41,11 @@ export function WheelPointer(props: { playing: boolean }) {
   useEffect(() => {
     const current = canvas2.current;
     if (current) {
-      const context = current.getContext("2d");
-      if (context) {
-        const lineWidth = 6;
-        context.strokeStyle = MATERNA_RED;
-        context.lineWidth = lineWidth;
-        context.fillStyle = MATERNA_GREY;
-        context.moveTo(lineWidth, lineWidth);
-        context.beginPath();
-        context.lineTo(lineWidth, lineWidth);
-        context.lineTo(current.width - lineWidth, lineWidth);
-        context.lineTo(
-          (current.width - lineWidth) / 2,
-          current.height - lineWidth
-        );
-        context.closePath();
-        context.fill();
-        context.stroke();
-
-        // context.fillRect(0, 0, 1000000, 1000000);
-      }
+      drawPointer(current)
     }
   }, [devicePixelRatio]);
+
+
   return (
     <>
       {/* Canvas inner Wheel */}
@@ -61,7 +66,12 @@ export function WheelPointer(props: { playing: boolean }) {
         }}
         height={`5rem`}
         width={`3rem`}
-        ref={canvas2}
+        ref={o => {
+          if (!canvas2.current && o) {
+            drawPointer(o);
+          }
+          canvas2.current = o;
+        }}
       ></canvas>
     </>
   );

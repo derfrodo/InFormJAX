@@ -18,6 +18,8 @@ export const WheelSettingsTable = (props: {
             <th>rotationDurationInner</th>
             <th>rotationDurationNotPlaying</th>
             <th>rotationDurationPlaying</th>
+            <th>autoplayAddMaxMS</th>
+            <th>minAutoplayDurationMS</th>
             <th>minClickDelayMS</th>
             <th>__typename</th>
         </tr>
@@ -45,6 +47,16 @@ export const WheelSettingsTable = (props: {
                         item={item}
                         name={"rotationDurationPlaying"}
                         value={item.rotationDurationPlaying}
+                    />
+                    <IntCell
+                        item={item}
+                        name={"autoplayAddMaxMS"}
+                        value={item.autoplayAddMaxMS}
+                    />
+                    <IntCell
+                        item={item}
+                        name={"minAutoplayDurationMS"}
+                        value={item.minAutoplayDurationMS}
                     />
                     <IntCell
                         item={item}
@@ -148,6 +160,8 @@ export const UpdateWheelSettingsForm = (props: {
 
 export function projectToWheelSettingsInput(details: UpdateWheelSettingsMutationReturnType): UpdateWheelSettingsInputType {
   return {
+    autoplayAddMaxMS: details.autoplayAddMaxMS,
+    minAutoplayDurationMS: details.minAutoplayDurationMS,
     minClickDelayMS: details.minClickDelayMS,
     radius: details.radius,
     rotationDurationInner: details.rotationDurationInner,

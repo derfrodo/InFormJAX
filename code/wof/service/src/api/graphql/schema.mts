@@ -374,9 +374,8 @@ export const schema = new GraphQLSchema({
             console.log("Autoplay for ", delay)
             await startGame(await verifyToggleable(g), true)
             setTimeout(async () => {
-              const runningGame = (await getGame()).dataValues;
-              await stopGame(await verifyToggleable(runningGame))
-            }, delay < minClickDelayMS ? minClickDelayMS : delay)
+              await stopGame(performance.now())
+            }, delay)
             return (await getGame()).dataValues
           } else {
             throw new Error("Game is already running")

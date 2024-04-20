@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { DisplaySettingsInput } from "../../../generated-client/graphql"
 import { IntInput, IntCell,  } from "./../InForm/atoms/IntCell"
 import { Scalars,  } from "./../../../generated-client/graphql"

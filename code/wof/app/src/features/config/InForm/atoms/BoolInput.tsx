@@ -19,10 +19,10 @@ export function BoolInput<
       <input
         id={id}
         // required={required}
-        
+
         type="checkbox"
         checked={value ?? false}
-        onChange={(e) => onChange(!value as TV)}
+        onChange={() => onChange(!value as TV)}
       />
     </>
   );

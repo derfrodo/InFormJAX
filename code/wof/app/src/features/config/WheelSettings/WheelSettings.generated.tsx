@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { UpdateWheelSettingsInputType } from "./UpdateWheelSettingsMutationReturnType"
 import { IntInput, IntCell,  } from "./../InForm/atoms/IntCell"
 import { Scalars,  } from "./../../../generated-client/graphql"

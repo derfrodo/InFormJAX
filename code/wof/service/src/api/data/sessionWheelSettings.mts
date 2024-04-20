@@ -1,4 +1,4 @@
-import { WheelSettings } from "../generated-types/graphql.mjs";
+import type { WheelSettings } from "../generated-types/graphql.mjs";
 import { RADIUS } from "./constants/RADIUS";
 import { SPIN_DURATION } from "./constants/SPIN_DURATION";
 import { SPIN_INNER_DURATION } from "./constants/SPIN_INNER_DURATION";

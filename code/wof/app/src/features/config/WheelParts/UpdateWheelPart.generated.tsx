@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { UpdateWheelPartInput } from "../../../generated-client/graphql"
 import { BoolInput,  } from "./../InForm/atoms/BoolInput"
 import { StringInput,  } from "./../InForm/atoms/StringInput"

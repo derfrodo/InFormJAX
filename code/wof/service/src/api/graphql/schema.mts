@@ -212,23 +212,26 @@ async function stopGame(now: number) {
   });
   pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
 
+  const doneDelay = showResultAfterMS + showResultForMS;
   setTimeout(async () => {
     const g = await getGame();
     await g.update({
       isRoundDone: true,
-    });
-    pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
-  }, showResultAfterMS + showResultForMS)
+      canToggle: minClickDelay <= doneDelay,
 
-  setTimeout(async () => {
-    const g = await getGame();
-    await g.update({
-      canToggle: true,
     });
     pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
-  },
-    minClickDelay
-  )
+  }, doneDelay)
+
+  if (minClickDelay > doneDelay) {
+    setTimeout(async () => {
+      const g = await getGame();
+      await g.update({
+        canToggle: true,
+      });
+      pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
+    }, minClickDelay)
+  }
   return (await getGame()).dataValues;
 }
 

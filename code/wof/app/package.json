@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "start": "npx -y serve@14.2.1 -s ./dist",
+    "start:npx": "npx -y serve@14.2.1 -s ./dist",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "generate": "npm run generateGql && npm run generateForms",
@@ -21,6 +21,7 @@
     "react-helmet": "^6.1.0",
     "react-rewards": "^2.0.4",
     "react-router-dom": "^6.22.3",
+    "serve": "^14.2.1",
     "service": "file:../service"
   },
   "devDependencies": {

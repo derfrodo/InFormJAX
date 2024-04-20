@@ -17,6 +17,7 @@ import { queryWheelParts } from "./gql/queryWheelParts";
 import { startWheel } from "./gql/startWheel";
 import { stopWheel } from "./gql/stopWheel";
 import { subscribeToGame } from "./gql/subscribeToGame";
+import { startAutoplay } from "./gql/startAutoplay";
 
 const GRAPHICXWIDTH = 563;
 const GRAPHICXHEIGHT = 764;
@@ -34,6 +35,8 @@ function App() {
   const { data, } = useSubscription(subscribeToGame, { shouldResubscribe: true })
   const [callStartWheel] = useMutation(startWheel)
   const [callStopWheel] = useMutation(stopWheel)
+  const [callStartAutoplay] = useMutation(startAutoplay)
+
 
   useEffect(() => { refetch() }, [])
   const values = useMemo(() => wheelparts?.wheelParts ?? [], [wheelparts?.wheelParts])
@@ -47,11 +50,15 @@ function App() {
   const playing = useMemo(() => data?.gameChanged?.isRunning ?? false, [data?.gameChanged?.isRunning])
 
   const devicePixelRatio = useDevicePixelRatio();
-  const updatePlaying = useCallback(() => {
-    if (!data?.gameChanged?.isRunning) {
-      callStartWheel()
-    } else {
-      callStopWheel()
+  const updatePlaying = useCallback(async () => {
+    if (await import.meta.env.VITE_USE_AUTOPLAY === "true") { 
+      callStartAutoplay();
+     } else {
+      if (!data?.gameChanged?.isRunning) {
+        callStartWheel()
+      } else {
+        callStopWheel()
+      }
     }
   }, [callStartWheel, callStopWheel, data?.gameChanged?.isRunning]);
 

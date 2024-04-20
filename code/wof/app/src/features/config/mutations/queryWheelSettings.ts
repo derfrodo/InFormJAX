@@ -9,6 +9,8 @@ export const queryWheelSettings = graphql(`
       rotationDurationPlaying
       rotationDurationInner
       minClickDelayMS
+      minAutoplayDurationMS
+      autoplayAddMaxMS
     }
   }
 `);

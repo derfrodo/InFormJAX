@@ -6,12 +6,9 @@ subscription GameChanged {
         isRunning
         isRoundDone
         canToggle
-        result {
-          id
-          win
-          name
-          winText
-        }
+        resultId
+        date
+        lastUpdate
     }
   }
 `)

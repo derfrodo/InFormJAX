@@ -58,6 +58,20 @@ interface FM extends InFormDataTypes<string, string> {
     typeof StringCell
   >;
 
+
+  ["ID"]: InFormDataTypeWithDefaultValueAndComponent<
+    "ID",
+    Scalars['ID']['input'],
+    '""',
+    typeof StringCell
+  >;
+
+  ["IDCell"]: InFormDataTypeWithDefaultValueAndComponent<
+    "IDCELL",
+    Scalars['ID']['input'],
+    '""',
+    typeof StringCell
+  >;
   ["String"]: InFormDataTypeWithDefaultValueAndComponent<
     "STRING",
     string,

@@ -39,7 +39,7 @@ function App() {
 
   console.log({ changed: data?.gameChanged })
   const canClick = useMemo(() => data?.gameChanged?.canToggle ?? true, [data?.gameChanged?.canToggle])
-  const lastWin = useMemo(() => data?.gameChanged?.result?.id ?? -1, [data?.gameChanged?.result?.id])
+  const lastWin = useMemo(() => data?.gameChanged?.resultId ?? -1, [data?.gameChanged?.resultId])
   const lastValue = useMemo(() =>
     typeof lastWin === "string" || lastWin > -1 ? wheelparts?.wheelParts?.find(p => p.id === lastWin) ?? null : null,
     [lastWin, wheelparts?.wheelParts])
@@ -216,7 +216,7 @@ function App() {
           showLights={bulbWidth !== null}
           bulbWidth={bulbWidth}
           roundDone={data?.gameChanged?.isRoundDone ?? true}
-          lastItem={data?.gameChanged?.result ?? null}
+          lastItem={lastValue ?? null}
         />
 
         {/* Controls */}

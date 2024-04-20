@@ -23,7 +23,7 @@ const documents = {
     "\n  query wheelParts($filter: wheelPartFilter) {\n    wheelParts(filter: $filter) {\n      id\n      name\n      imagePath\n      imageText\n      win\n      winText\n      winChance\n      disabled\n    }\n  }\n": types.WheelPartsDocument,
     "\nmutation startWheel{\n    startWheel {\n      isRunning\n    }\n  }\n": types.StartWheelDocument,
     "\n  \n  mutation stopWheel {\n    stopWheel {\n      \n      isRunning\n    }\n  }\n": types.StopWheelDocument,
-    "\nsubscription GameChanged {\n    gameChanged {\n        isRunning\n        isRoundDone\n        canToggle\n        result {\n          id\n          win\n          name\n          winText\n        }\n    }\n  }\n": types.GameChangedDocument,
+    "\nsubscription GameChanged {\n    gameChanged {\n        isRunning\n        isRoundDone\n        canToggle\n        resultId\n        date\n        lastUpdate\n    }\n  }\n": types.GameChangedDocument,
 };
 
 /**
@@ -83,7 +83,7 @@ export function graphql(source: "\n  \n  mutation stopWheel {\n    stopWheel {\n
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\nsubscription GameChanged {\n    gameChanged {\n        isRunning\n        isRoundDone\n        canToggle\n        result {\n          id\n          win\n          name\n          winText\n        }\n    }\n  }\n"): (typeof documents)["\nsubscription GameChanged {\n    gameChanged {\n        isRunning\n        isRoundDone\n        canToggle\n        result {\n          id\n          win\n          name\n          winText\n        }\n    }\n  }\n"];
+export function graphql(source: "\nsubscription GameChanged {\n    gameChanged {\n        isRunning\n        isRoundDone\n        canToggle\n        resultId\n        date\n        lastUpdate\n    }\n  }\n"): (typeof documents)["\nsubscription GameChanged {\n    gameChanged {\n        isRunning\n        isRoundDone\n        canToggle\n        resultId\n        date\n        lastUpdate\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

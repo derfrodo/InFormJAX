@@ -6,7 +6,7 @@ import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import express from 'express';
 
-import { schema } from "./api/graphql/schema.mjs";
+import { getGame, schema } from "./api/graphql/schema.mjs";
 
 import { config } from "dotenv";
 import { useServer } from 'graphql-ws/lib/use/ws';
@@ -17,6 +17,7 @@ import { WebSocketServer } from 'ws';
 import { getLaunchInfoRepository } from "./data/LaunchInfoRepository.mjs";
 import { getWheelSettingsRepo } from "./data/WheelSettingsRepo.mjs";
 import { getWheelValuesRepo } from "./data/WheelValuesRepo.mjs";
+import { getGameRepo } from "./data/GameRepo.mjs";
 
 config();
 config({ path: join(process.cwd(), '.env.local') });
@@ -68,6 +69,14 @@ try {
     app.use('/', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
     // app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
 
+    const game = await getGame();
+    await game.update({
+        isRunning: false,
+        lastUpdate: performance.now(),
+        isRoundDone: true,
+        resultId: null,
+        canToggle: true,
+    });
 
     (await getLaunchInfoRepository()).create({ initialized: true })
     const wheelSettingsRepo = await getWheelSettingsRepo()

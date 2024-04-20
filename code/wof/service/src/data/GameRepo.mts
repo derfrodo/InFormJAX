@@ -1,12 +1,13 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { getSequelize } from "./sequelize.mjs";
 
-type Game = {
+export type Game = {
     lastUpdate: number;
     date: string;
     isRunning: boolean;
     isRoundDone: boolean;
     canToggle: boolean;
+    resultId: null | string | number;
 };
 
 class GameModel extends Model<Game & { id: number }> { }
@@ -29,9 +30,13 @@ async function createGameRepo(sequelize: Sequelize) {
             primaryKey: true,
             autoIncrement: true,
         },
+        resultId: {
+            type: DataTypes.INTEGER,
+        },
         date: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
+            allowNull: false
         },
         lastUpdate: {
             type: DataTypes.DATE,
@@ -52,10 +57,15 @@ async function createGameRepo(sequelize: Sequelize) {
     });
 
     await repo.sync({});
-    repo.findOrCreate({
+    await repo.findOrCreate({
         where: { id: 1 },
         defaults: {
+            isRoundDone: true,
+            isRunning: false,
+            lastUpdate: performance.now(),
+            canToggle: true,
+            resultId: null
         }
-    })
+    });
     return repo;
 }

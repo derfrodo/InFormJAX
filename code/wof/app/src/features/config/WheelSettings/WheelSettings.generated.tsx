@@ -83,13 +83,12 @@ export const UpdateWheelSettingsForm = (props: {
     return <form style={{ 
         display: "flex",
         flexDirection: "column",
-        gap: 16,
+        gap: 4,
         flexWrap: "wrap",
         borderRadius: 4,
-        padding: 8,
+        padding: 4,
         border: "1px solid black",
         marginTop: 8,
-        maxWidth: 300,
     }}
     onSubmit={async (e) => {
           e.preventDefault();

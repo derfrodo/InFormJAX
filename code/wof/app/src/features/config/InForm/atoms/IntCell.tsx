@@ -24,7 +24,6 @@ export function IntInput<
   const id = useRandomId();
   return (
     <div>
-      <label htmlFor={id}>{typeof name === "string" ? name : ""}</label>
       <input
         required={required}
         type="number"
@@ -35,7 +34,9 @@ export function IntInput<
             ? props.onChange(Number(e.target.value.replace(",", ".")) as TV)
             : undefined
         }
+        style={{ width: 64 }}
       ></input>
+      <label style={{ display: "block", fontSize: "smaller", marginTop: -2 }} htmlFor={id}>{typeof name === "string" ? name : ""}</label>
     </div>
   );
 }

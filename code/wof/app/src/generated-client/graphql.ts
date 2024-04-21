@@ -49,14 +49,9 @@ export type GameInfoType = {
 export type GameResult = {
   __typename?: 'GameResult';
   date?: Maybe<Scalars['Date']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
   result?: Maybe<WheelPart>;
-};
-
-export type GameStatistics = {
-  __typename?: 'GameStatistics';
-  loose?: Maybe<Scalars['Int']['output']>;
-  total?: Maybe<Scalars['Int']['output']>;
-  won?: Maybe<Scalars['Int']['output']>;
+  resultId?: Maybe<Scalars['ID']['output']>;
 };
 
 export type Mutation = {
@@ -108,8 +103,10 @@ export type QueryWheelPartsArgs = {
 
 export type Statistics = {
   __typename?: 'Statistics';
-  games?: Maybe<GameStatistics>;
+  loose?: Maybe<Scalars['Int']['output']>;
   results?: Maybe<Array<GameResult>>;
+  total?: Maybe<Scalars['Int']['output']>;
+  won?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Subscription = {

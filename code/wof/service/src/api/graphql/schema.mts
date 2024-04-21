@@ -15,6 +15,7 @@ import {
 import { PubSub } from 'graphql-subscriptions';
 import { getDisplaySettingsRepo } from "../../data/DisplaySettingsRepo.mjs";
 import { Game, getGameRepo } from "../../data/GameRepo.mjs";
+import { getGameResultsRepo, GameResult } from "../../data/GameResultsRepo.mjs";
 import { getWheelSettingsRepo } from "../../data/WheelSettingsRepo.mjs";
 import { getWheelValuesRepo } from "../../data/WheelValuesRepo.mjs";
 import { CHECK_CHANCE } from "../data/constants/WIN_CHANCE";
@@ -30,12 +31,6 @@ import { wheelSettingsInputType } from "./types/wheelSettingsInputType.mjs";
 import { wheelSettingsType } from "./types/wheelSettingsType.mjs";
 
 const games: GameResult[] = []
-
-export type GameResult = {
-  result: WheelValue;
-  resultId: number;
-  date: string;
-};
 
 export async function getGame() {
   const repo = await (getGameRepo());
@@ -140,18 +135,6 @@ export const gameType = new GraphQLObjectType({
 
   },
 });
-export const gameResultType = new GraphQLObjectType({
-  name: "GameResult",
-  fields: {
-    result: {
-      type: wheelPartType,
-    },
-    date: {
-      type: dateType,
-    },
-  },
-});
-
 
 const pubsub = new PubSub();
 
@@ -202,12 +185,19 @@ async function stopGame(now: number) {
 
   const g = await getGame();
   const result = await calculateWinner();
-  games.push({ ...result, resultId: result.result.id, date: new Date(Date.now()).toISOString() })
+
+  const resultRepo = await getGameResultsRepo()
+  const createdResult = await resultRepo.create({
+    resultId: result.result.id,
+    date: new Date(Date.now()).toISOString(),
+    win: result.result.win
+  })
+
   await g.update({
     isRunning: false,
     lastUpdate: now,
     isRoundDone: false,
-    resultId: result.result.id,
+    resultId: createdResult.dataValues.resultId,
     canToggle: false,
   });
   pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
@@ -235,6 +225,29 @@ async function stopGame(now: number) {
   return (await getGame()).dataValues;
 }
 
+const gameResultType = new GraphQLObjectType<GameResult>({
+  name: "GameResult",
+  fields: {
+    id: {
+      type: GraphQLID,
+    },
+    resultId: {
+      type: GraphQLID,
+    },
+    date: {
+      type: dateType,
+    },
+    result: {
+      type: wheelPartType,
+      async resolve(src) {
+        const repo = await getWheelValuesRepo();
+        return await repo.findOne({ where: { id: src.resultId } });
+      }
+    }
+
+  }
+})
+
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: "Query",
@@ -245,36 +258,32 @@ export const schema = new GraphQLSchema({
           fields: {
             results: {
               type: new GraphQLList(new GraphQLNonNull(gameResultType)),
-              resolve() {
-                return games;
+              async resolve() {
+                const repo = await getGameResultsRepo();
+                return await repo.findAll();
               }
             },
-            games: {
-              type: new GraphQLObjectType({
-                name: "GameStatistics",
-                fields: {
-                  total: {
-                    type: GraphQLInt,
-                    resolve() {
-                      return games.length;
-                    }
-                  },
-                  won: {
-                    type: GraphQLInt,
-                    resolve() {
-                      return games.filter(r => r.result.win).length;
-                    }
-                  },
-                  loose: {
-                    type: GraphQLInt,
-                    resolve() {
-                      return games.filter(r => !r.result.win).length;
-                    }
-                  }
-                }
-              }),
-              resolve() { return {} }
+            total: {
+              type: GraphQLInt,
+              async resolve() {
+                const repo = await getGameResultsRepo();
+                return await repo.count();
+              }
             },
+            won: {
+              type: GraphQLInt,
+              async resolve() {
+                const repo = await getGameResultsRepo();
+                return await repo.count({ where: { win: true } });
+              }
+            },
+            loose: {
+              type: GraphQLInt,
+              async resolve() {
+                const repo = await getGameResultsRepo();
+                return await repo.count({ where: { win: false } });
+              }
+            }
           },
         }),
         resolve() { return {} }
@@ -355,7 +364,6 @@ export const schema = new GraphQLSchema({
         type: gameType,
         resolve: async (source, args, context, info) => {
           const g = (await getGame()).dataValues;
-          console.log(g)
           if (g.isRunning) {
             return await stopGame(await verifyToggleable((await getGame()).dataValues))
           }

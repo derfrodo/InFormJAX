@@ -96,7 +96,7 @@ export function Config() {
           </div>
 
           <div style={{ display: "flex", gap: 32 }}>
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1, display: "flex", gap: 8 }}>
               {wheelSettings?.wheelSettings ? (
                 <UpdateWheelSettingsForm
                   title={"Einstellungen am Rad"}
@@ -162,10 +162,15 @@ export function Config() {
                 </>
               ) : (
                 <>
-                  <h2>
-                    Bearbeite Abschnitt (neuer Name {"=>"} neuer Abschnitt)
-                  </h2>
                   <UpdateUpdateWheelPartForm
+                    title={<>
+                      <h2 style={{ margin: 0 }}>
+                        Bearbeite Abschnitt
+                      </h2>
+                      <div style={{marginTop:-4, marginBottom:16,fontSize: "smaller", fontStyle: "italic" }}>
+                        neuer Name {"=>"} neuer Abschnitt
+                      </div>
+                    </>}
                     item={selectedWheelPart}
                     onSave={async (next) => {
                       await updateOrCreateWheelPart({

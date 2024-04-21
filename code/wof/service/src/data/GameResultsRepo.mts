@@ -2,12 +2,14 @@ import { DataTypes, Model, Sequelize } from "sequelize";
 import { getSequelize } from "./sequelize.mjs";
 import { getGameRepo } from "./GameRepo.mjs";
 
-type GameResult = {
+export type GameResult = {
     resultId: number;
+    win: boolean;
     date: string;
+    id: number;
 }
 
-class GameResultModel extends Model<GameResult & { id: number }> {
+class GameResultModel extends Model<GameResult> {
 
 }
 
@@ -36,10 +38,14 @@ async function createGameResultsRepo(sequelize: Sequelize) {
         resultId: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        }
+        },
+        win: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        },
     });
 
-    repo.belongsTo(await getGameRepo())
+    // repo.belongsTo(await getGameRepo())
 
     await repo.sync({});
     return repo;

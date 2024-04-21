@@ -11,6 +11,7 @@ const groupAndOrderFields: GroupAndOrderTypes<ReturnedWheelPartArrayElement> = {
     name: { ordinal: 10 },
     imagePath: { ordinal: 10 },
     imageText: { ordinal: 10 },
+    id: { ordinal: 10, isHidden: true },
     win: { ordinal: 1 },
     winText: { ordinal: 10 },
     disabled: { ordinal: 2 },

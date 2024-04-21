@@ -14,8 +14,7 @@ export function StringInput<
   const { name, value, required } = props;
   const id = useRandomId();
   return (
-    <>
-      <label htmlFor={id}>{typeof name === "string" ? name : ""}</label>
+    <div>
       <input
         id={id}
         required={required}
@@ -26,6 +25,7 @@ export function StringInput<
             : undefined
         }
       ></input>
-    </>
+      <label style={{ display: "block", fontSize: "smaller", marginTop: -2 }} htmlFor={id}>{typeof name === "string" ? name : ""}</label>
+    </div>
   );
 }

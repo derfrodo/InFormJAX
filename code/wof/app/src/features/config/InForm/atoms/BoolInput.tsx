@@ -14,16 +14,15 @@ export function BoolInput<
   const { name, value, required, onChange } = props;
   const id = useRandomId();
   return (
-    <>
-      <label htmlFor={id}>{typeof name === "string" ? name : ""}</label>
+    <div style={{ display: "flex", alignItems: "center", height: "1.5em" }}>
       <input
         id={id}
-        // required={required}
-
         type="checkbox"
         checked={value ?? false}
         onChange={() => onChange(!value as TV)}
       />
-    </>
+      <label style={{ display: "block", fontSize: "smaller", marginTop: -2 }} htmlFor={id}>{typeof name === "string" ? name : ""}</label>
+
+    </div>
   );
 }

@@ -24,6 +24,17 @@
     "files": [
         "./src/index.mts",
         "./src/data/sequelize.mts",
-        "./src/data/WheelValueData.mts"
+        "./src/data/WheelValueData.mts",
+        "src/api/graphql/types/gameResultType.mts",
+        "src/api/utils/stopGame.mts",
+        "src/api/utils/startGame.mts",
+        "src/api/utils/verifyToggleable.mts",
+        "src/api/utils/pubsub.mts",
+        "src/api/graphql/types/gameType.mts",
+        "src/api/graphql/types/dateType.mts",
+        "src/api/utils/calculateWinner.mts",
+        "src/api/utils/getWinner.mts",
+        "src/api/utils/isWinner.mts",
+        "src/api/utils/getGame.mts"
     ],
 }

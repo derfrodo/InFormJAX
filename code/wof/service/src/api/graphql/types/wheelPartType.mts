@@ -3,12 +3,15 @@ import {
   GraphQLFloat,
   GraphQLID,
   GraphQLInputObjectType,
+  GraphQLInt,
+  GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLString,
+  GraphQLString
 } from "graphql";
-import type { WheelValue } from "../../data/types/WheelValue.mjs";
-import { resolveDisabledWheelValue } from "../../data/disabledWheelValues.mjs";
+import { getGameResultsRepo } from "../../../data/GameResultsRepo.mjs";
+import { WheelValueData } from "../../../data/WheelValueData.mjs";
+import { gameResultType } from "./gameResultType.mjs";
 
 const wheelPartFields = {
   id: {
@@ -54,9 +57,25 @@ export const updateWheelPartInputType = new GraphQLInputObjectType({
   name: "UpdateWheelPartInput",
 });
 
-export const wheelPartType = new GraphQLObjectType<WheelValue>({
-  fields: {
+export const wheelPartType = new GraphQLObjectType<WheelValueData>({
+  fields: () => ({
     ...wheelPartFields,
-  },
+
+    resultCount: {
+      type: new GraphQLNonNull(GraphQLInt),
+      async resolve(src) {
+        const repo = await getGameResultsRepo();
+        return (await repo.count({ where: { resultId: src.id } }));
+      }
+    },
+    occurances: {
+      type: new GraphQLNonNull(new GraphQLList(gameResultType)),
+      async resolve(src) {
+        const repo = await getGameResultsRepo();
+        return (await repo.findAll({ where: { resultId: src.id } })).map(v => v.dataValues);
+      }
+    }
+  }),
+
   name: "WheelPart",
 });

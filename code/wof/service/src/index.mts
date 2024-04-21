@@ -6,7 +6,8 @@ import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import express from 'express';
 
-import { getGame, schema } from "./api/graphql/schema.mjs";
+import { schema } from "./api/graphql/schema.mjs";
+import { getGame } from "./api/utils/getGame.mjs";
 
 import { config } from "dotenv";
 import { useServer } from 'graphql-ws/lib/use/ws';

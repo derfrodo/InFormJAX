@@ -12,6 +12,7 @@ import { Helmet } from "react-helmet"
 import { ApolloProvider } from '@apollo/client';
 import { getClient } from './features/game/gql/getApolloClient.ts';
 import { Config } from './features/config/index.tsx';
+import { Statistics } from './features/statistics/Statistics.tsx';
 
 const router = createBrowserRouter([
   {
@@ -19,8 +20,8 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "about",
-    element: <div>About</div>,
+    path: "statistics",
+    element: <Statistics />,
   },
   {
     path: "config",

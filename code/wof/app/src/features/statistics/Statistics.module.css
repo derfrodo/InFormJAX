@@ -1,0 +1,17 @@
+.statisticsContainer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: calc(100vh - 32px);
+    width: calc(100vw - 32px);
+    overflow: hidden;
+    padding: 16px;
+}
+
+.flexContainer {
+    display: flex;
+}
+
+th{
+    text-align: right;
+}

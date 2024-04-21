@@ -1,252 +1,34 @@
 import {
   GraphQLBoolean,
-  GraphQLFloat,
-  GraphQLID,
   GraphQLInputObjectType,
   GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLScalarType,
   GraphQLSchema,
   GraphQLString
 } from "graphql";
 
-import { PubSub } from 'graphql-subscriptions';
 import { getDisplaySettingsRepo } from "../../data/DisplaySettingsRepo.mjs";
-import { Game, getGameRepo } from "../../data/GameRepo.mjs";
-import { getGameResultsRepo, GameResult } from "../../data/GameResultsRepo.mjs";
+import { getGameResultsRepo } from "../../data/GameResultsRepo.mjs";
 import { getWheelSettingsRepo } from "../../data/WheelSettingsRepo.mjs";
 import { getWheelValuesRepo } from "../../data/WheelValuesRepo.mjs";
-import { CHECK_CHANCE } from "../data/constants/WIN_CHANCE";
 import { getFilteredWheelParts } from "../data/disabledWheelValues.mjs";
 import { getWheelValues, updateOrAddWheelValue } from "../data/getWheelValues.mjs";
-import { WheelValue } from "../data/types/WheelValue.mjs";
 import { DisplaySettingsInput, UpdateWheelPartInput, WheelPartFilter, WheelSettingsInput } from "../generated-types/graphql.mjs";
+import { getGame } from "../utils/getGame.mjs";
+import { pubsub } from "../utils/pubsub.mjs";
+import { startGame } from "../utils/startGame.mjs";
+import { stopGame } from "../utils/stopGame.mjs";
+import { verifyToggleable } from "../utils/verifyToggleable.mjs";
 import { displaySettingsInputType } from "./types/displaySettingsInputType.mjs";
 import { displaySettingsType } from "./types/displaySettingsType.mjs";
-import { gameInfoType, getChanceToWin, getSumOfLooseChance, getSumOfWinChance } from "./types/gameInfoType.mjs";
+import { gameInfoType } from "./types/gameInfoType.mjs";
+import { gameResultType } from "./types/gameResultType.mjs";
+import { gameType } from "./types/gameType.mjs";
 import { updateWheelPartInputType, wheelPartType } from "./types/wheelPartType.mjs";
 import { wheelSettingsInputType } from "./types/wheelSettingsInputType.mjs";
 import { wheelSettingsType } from "./types/wheelSettingsType.mjs";
-
-const games: GameResult[] = []
-
-export async function getGame() {
-  const repo = await (getGameRepo());
-  const result = await repo.findOne({ where: { id: 1 } })
-  return result;
-}
-
-
-function isWinner(winChance: number) {
-  if (winChance > 1) {
-    console.error("Chance of winning must be between 0 and 1");
-  }
-  const randomResult = Math.random();
-
-  return randomResult < winChance;
-}
-
-function getWinner<T extends WheelValue>(sumOfChances: number, values: T[]) {
-  if (values.length === 0) {
-    console.error("NO values to be found.");
-  }
-  const randomResult = Math.random() * sumOfChances;
-
-  let currentChance = 0;
-  for (const value of values) {
-    currentChance += value.winChance;
-    if (currentChance > randomResult) {
-      return value;
-    }
-  }
-
-  return values[values.length - 1];
-}
-
-async function calculateWinner() {
-
-  const winChance = await getChanceToWin();
-  const sumOfLooseChance = await getSumOfLooseChance();
-  const sumOfWinChance = await getSumOfWinChance();
-  console.log("Calculate winner with chance", winChance);
-  const winner = isWinner(winChance);
-
-  if (CHECK_CHANCE) {
-    let won = 0;
-    let lost = 0;
-    for (let i = 0; i < 1000000; i++) {
-      if (isWinner(winChance)) {
-        won++;
-      } else {
-        lost++;
-      }
-    }
-    console.log("Checked chance", {
-      won,
-      lost,
-      all: won + lost,
-      winChance,
-      actual: won / (won + lost),
-    });
-  }
-
-  const values = await getFilteredWheelParts({ disabled: false });
-  if (winner) {
-    //WON!
-    const winOptions = values.filter((value) => value.win);
-    console.log({ values, winOptions })
-    const winOffset = getWinner(sumOfWinChance, winOptions);
-    const winIndex = values.indexOf(winOffset);
-    return { index: winIndex, result: values[winIndex] }
-  } else {
-    // LOST!
-    const lostOptions = values.filter((value) => !value.win);
-    console.log({ values, lostOptions })
-    const lostOffset = getWinner(sumOfLooseChance, lostOptions);
-    const lostIndex = values.indexOf(lostOffset);
-    return { index: lostIndex, result: values[lostIndex] }
-  }
-}
-const dateType = new GraphQLScalarType<string, string>({ name: "Date" });
-
-export const gameType = new GraphQLObjectType({
-  name: "Game",
-  fields: {
-    isRunning: {
-      type: new GraphQLNonNull(GraphQLBoolean),
-    },
-    isRoundDone: {
-      type: new GraphQLNonNull(GraphQLBoolean),
-    },
-    lastUpdate: {
-      type: new GraphQLNonNull(GraphQLFloat),
-    },
-    canToggle: {
-      type: new GraphQLNonNull(GraphQLBoolean),
-    },
-    date: {
-      type: new GraphQLNonNull(dateType),
-    },
-    resultId: {
-      type: GraphQLID,
-    },
-
-  },
-});
-
-const pubsub = new PubSub();
-
-async function verifyToggleable<T extends Game>(g: T) {
-  if (!g.canToggle) {
-    throw new Error(`Please wait a sec... ;)`)
-  }
-  const minClickDelay = (await (await getWheelSettingsRepo()).findOne({ where: { id: 1 } })).dataValues.minClickDelayMS
-  const now = performance.now();
-  const diff = g.lastUpdate + minClickDelay - now;
-  if (diff > 0) {
-    throw new Error(`Wait for additional ${diff}ms`)
-  }
-  return now;
-}
-
-async function startGame(now: number, autoplayDoNotMakeToggleable = false) {
-  const minClickDelay = (await (await getWheelSettingsRepo()).findOne({ where: { id: 1 } })).dataValues.minClickDelayMS
-
-  const g = await getGame();
-
-  await g.update({
-    isRunning: true,
-    lastUpdate: now,
-    isRoundDone: false,
-    resultId: null,
-    canToggle: false,
-  });
-
-  pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
-  if (!autoplayDoNotMakeToggleable) {
-
-    setTimeout(async () => {
-      const g = await getGame();
-      await g.update({
-        canToggle: true,
-      });
-      pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
-    },
-      minClickDelay
-    )
-  }
-  return (await getGame()).dataValues;
-}
-async function stopGame(now: number) {
-  const { showResultAfterMS, showResultForMS } = (await (await getDisplaySettingsRepo()).findOne({ where: { id: 1 } })).dataValues
-  const minClickDelay = (await (await getWheelSettingsRepo()).findOne({ where: { id: 1 } })).dataValues.minClickDelayMS
-
-  const g = await getGame();
-  const result = await calculateWinner();
-
-  const resultRepo = await getGameResultsRepo()
-  const createdResult = await resultRepo.create({
-    resultId: result.result.id,
-    date: new Date(Date.now()).toISOString(),
-    win: result.result.win
-  })
-
-  await g.update({
-    isRunning: false,
-    lastUpdate: now,
-    isRoundDone: false,
-    resultId: createdResult.dataValues.resultId,
-    canToggle: false,
-  });
-  pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
-
-  const doneDelay = showResultAfterMS + showResultForMS;
-  setTimeout(async () => {
-    const g = await getGame();
-    await g.update({
-      isRoundDone: true,
-      canToggle: minClickDelay <= doneDelay,
-
-    });
-    pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
-  }, doneDelay)
-
-  if (minClickDelay > doneDelay) {
-    setTimeout(async () => {
-      const g = await getGame();
-      await g.update({
-        canToggle: true,
-      });
-      pubsub.publish('GAME_CHANGED', { gameChanged: g.dataValues });
-    }, minClickDelay)
-  }
-  return (await getGame()).dataValues;
-}
-
-const gameResultType = new GraphQLObjectType<GameResult>({
-  name: "GameResult",
-  fields: {
-    id: {
-      type: GraphQLID,
-    },
-    resultId: {
-      type: GraphQLID,
-    },
-    date: {
-      type: dateType,
-    },
-    result: {
-      type: wheelPartType,
-      async resolve(src) {
-        const repo = await getWheelValuesRepo();
-        return await repo.findOne({ where: { id: src.resultId } });
-      }
-    }
-
-  }
-})
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
